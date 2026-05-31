@@ -1,26 +1,458 @@
 @import "tailwindcss";
 
+/* ─────────────────────────────────────────────
+   DESIGN TOKENS
+   Cool dark-premium palette. Gold accent stays
+   for brand identity; backgrounds / borders go
+   blue-black to read "technical, not artisan".
+───────────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Surfaces */
+  --background:        #070a10;
+  --surface:           #0c1520;
+  --surface-elevated:  #121d2e;
+
+  /* Text */
+  --foreground:        #e8e1cf;
+  --surface-foreground:#b2ab9a;
+  --muted:             #7c8595;
+
+  /* Borders */
+  --border:            #1c2a3c;
+  --border-hover:      #283c55;
+
+  /* Accent – gold (primary brand) */
+  --primary:           #c8985a;
+  --primary-hover:     #d8a86a;
+  --on-primary:        #08060a;
+  --secondary:         #8a6e3e;
+  --accent-soft:       rgba(200,152,90,0.1);
+
+  /* Accent – technical cyan */
+  --accent-cyan:       #52d0dc;
+  --accent-cyan-soft:  rgba(82,208,220,0.1);
+
+  /* Semantic */
+  --success:           #4dc4b4;
+  --error:             #d05a50;
+
+  /* Legacy aliases kept for backwards compat */
+  --outline: var(--border);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background:       var(--background);
+  --color-foreground:       var(--foreground);
+  --color-surface:          var(--surface);
+  --color-surface-elevated: var(--surface-elevated);
+  --color-primary:          var(--primary);
+  --color-secondary:        var(--secondary);
+  --color-accent-cyan:      var(--accent-cyan);
+  --color-muted:            var(--muted);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ─────────────────────────────────────────────
+   RESET & BASE
+───────────────────────────────────────────── */
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  background: var(--background);
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
+
+html.lenis,
+html.lenis body { height: auto; }
+
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* prevent overflow on every descendant */
+.page-shell,
+.page-shell main,
+.page-shell section,
+.page-shell article,
+.page-shell div { min-width: 0; }
+
+.page-shell p,
+.page-shell h1,
+.page-shell h2,
+.page-shell h3,
+.page-shell h4,
+.page-shell li,
+.page-shell span { overflow-wrap: break-word; }
+
+::selection {
+  background: rgba(200, 152, 90, 0.32);
+  color: var(--foreground);
+}
+
+a {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+/* Global focus-visible ring — consistent across all interactive elements */
+:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+button, input, textarea, select { font: inherit; }
+
+/* ─────────────────────────────────────────────
+   LAYOUT CONTAINMENT
+───────────────────────────────────────────── */
+.section-band,
+.section-band-alt {
+  contain: layout;
+}
+
+/* ─────────────────────────────────────────────
+   PAGE SHELL
+   Atmosphere is handled by <PageBackground />.
+   Shell is intentionally transparent so orbs
+   show through. body background acts as fallback.
+───────────────────────────────────────────── */
+.page-shell {
+  /* transparent — PageBackground is the visual layer */
+}
+
+/* ─────────────────────────────────────────────
+   SECTION BANDS
+   Semi-transparent so PageBackground orbs bleed
+   through at section edges. Enough opacity to
+   keep text fully readable.
+───────────────────────────────────────────── */
+.section-band {
+  border-top: 1px solid var(--border);
+  background: linear-gradient(
+    180deg,
+    rgba(7, 10, 16, 0.84) 0%,
+    rgba(7, 10, 16, 0.93) 100%
+  );
+}
+
+.section-band-alt {
+  border-top: 1px solid var(--border);
+  background: linear-gradient(
+    180deg,
+    rgba(11, 18, 28, 0.82) 0%,
+    rgba(8, 13, 22, 0.92) 100%
+  );
+}
+
+/* ─────────────────────────────────────────────
+   PAGE BACKGROUND SYSTEM
+   All orb transforms are GPU-only (transform +
+   opacity). The motion.div wrappers handle
+   scroll-linked parallax via useTransform.
+───────────────────────────────────────────── */
+
+/* Root container — fixed full-viewport layer */
+.page-bg-root {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background: var(--background);
+  contain: paint; /* clip at viewport edges */
+}
+
+/* Orb anchors — positioned absolutely, carry parallax y */
+.page-bg-orb-anchor {
+  position: absolute;
+  pointer-events: none;
+}
+
+/* Orb base — shared blur */
+.page-bg-orb {
+  border-radius: 50%;
+  filter: blur(56px);
+}
+
+/* ── Individual orb colours ── */
+.orb-gold-hero {
+  background: radial-gradient(
+    circle at 42% 38%,
+    rgba(195, 147, 86, 0.30) 0%,
+    rgba(195, 147, 86, 0.10) 38%,
+    transparent 64%
+  );
+  animation: orb-a 24s ease-in-out infinite;
+}
+
+.orb-cyan-hero {
+  background: radial-gradient(
+    circle at 56% 40%,
+    rgba(82, 208, 220, 0.24) 0%,
+    rgba(82, 208, 220, 0.07) 42%,
+    transparent 64%
+  );
+  animation: orb-b 30s ease-in-out infinite;
+}
+
+.orb-gold-mid {
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(195, 147, 86, 0.18) 0%,
+    transparent 62%
+  );
+  animation: orb-c 38s ease-in-out infinite;
+}
+
+.orb-cyan-low {
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(82, 208, 220, 0.16) 0%,
+    transparent 62%
+  );
+  animation: orb-d 42s ease-in-out infinite;
+}
+
+/* ── Orb drift keyframes ── */
+@keyframes orb-a {
+  0%, 100% { transform: translate(0,    0)    scale(1);    }
+  25%       { transform: translate(5%,  -8%)  scale(1.07); }
+  50%       { transform: translate(8%,  -2%)  scale(0.96); }
+  75%       { transform: translate(2%,  -11%) scale(1.04); }
+}
+@keyframes orb-b {
+  0%, 100% { transform: translate(0,    0)   scale(1);    }
+  25%       { transform: translate(-6%, 5%)  scale(1.09); }
+  50%       { transform: translate(-9%, -3%) scale(0.93); }
+  75%       { transform: translate(-3%, 8%)  scale(1.06); }
+}
+@keyframes orb-c {
+  0%, 100% { transform: translate(0,   0)   scale(1);    }
+  33%       { transform: translate(7%,  6%) scale(1.12); }
+  66%       { transform: translate(-5%, 9%) scale(0.91); }
+}
+@keyframes orb-d {
+  0%, 100% { transform: translate(0,    0)   scale(1);    }
+  33%       { transform: translate(-8%, -5%) scale(1.08); }
+  66%       { transform: translate(6%,  -8%) scale(0.95); }
+}
+
+/* Dot grid — 40px period, very subtle (diffuse, not grid-like) */
+.page-bg-dots {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    circle,
+    rgba(200, 215, 235, 0.038) 1px,
+    transparent 1px
+  );
+  background-size: 40px 40px;
+}
+
+/* Scanlines — 4px repeating bands, CRT texture at 1.5% */
+.page-bg-scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.015) 0px,
+    rgba(0, 0, 0, 0.015) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+}
+
+/* Radial vignette — draws eye to center, softens corners */
+.page-bg-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 130% 90% at 50% 50%,
+    transparent 20%,
+    rgba(7, 10, 16, 0.48) 100%
+  );
+}
+
+/* ── Hero beam — atmospheric top haze ── */
+.hero-beam-top {
+  background:
+    radial-gradient(ellipse 88% 52% at 50% 0%, rgba(82, 208, 220, 0.1) 0%, transparent 70%),
+    radial-gradient(ellipse 56% 38% at 80% -5%, rgba(195, 147, 86, 0.1) 0%, transparent 65%);
+}
+
+/* Disable all orb animations for reduced-motion users */
+@media (prefers-reduced-motion: reduce) {
+  .page-bg-orb { animation: none !important; }
+}
+
+/* ─────────────────────────────────────────────
+   SPOTLIGHT CARDS
+───────────────────────────────────────────── */
+.spotlight-card {
+  position: relative;
+  isolation: isolate;
+}
+
+.spotlight-card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border-radius: inherit;
+  opacity: 0;
+  background: radial-gradient(
+    400px circle at var(--spotlight-x, 50%) var(--spotlight-y, 50%),
+    rgba(82, 208, 220, 0.1),
+    rgba(200, 152, 90, 0.07) 44%,
+    transparent 72%
+  );
+  transition: opacity 220ms ease;
+}
+
+.spotlight-card:hover::before { opacity: 1; }
+
+/* ─────────────────────────────────────────────
+   PROJECT CARD 3-D SHELL
+   will-change is dynamic (hover-only) to avoid
+   creating compositor layers for every card.
+───────────────────────────────────────────── */
+.project-card-shell {
+  transform-style: preserve-3d;
+}
+
+.project-card-shell:hover {
+  will-change: transform;
+}
+
+/* ─────────────────────────────────────────────
+   FLIP CARD
+   will-change applied on hover only.
+   Touch devices get pointer cursor as discovery hint.
+───────────────────────────────────────────── */
+.flip-card:hover > * {
+  will-change: transform;
+}
+
+@media (pointer: coarse) {
+  .flip-card { cursor: pointer; }
+}
+
+/* ─────────────────────────────────────────────
+   CARD SURFACE UTILITY
+   Use on inner card wrappers that need elevation.
+───────────────────────────────────────────── */
+.card-surface {
+  background: linear-gradient(148deg, var(--surface-elevated), var(--surface));
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+}
+
+/* ─────────────────────────────────────────────
+   SCROLL-PROGRESS BAR GRADIENT
+───────────────────────────────────────────── */
+.progress-bar-gradient {
+  background: linear-gradient(90deg, var(--accent-cyan), var(--primary));
+}
+
+/* ─────────────────────────────────────────────
+   PROJECTS SECTION — additional accent orbs
+   Smaller, section-scoped to reinforce the
+   atmospheric treatment beyond the global layer.
+───────────────────────────────────────────── */
+.projects-aurora-gold {
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(195,147,86,0.13), transparent 65%);
+  filter: blur(48px);
+  animation: orb-a 20s ease-in-out infinite;
+}
+.projects-aurora-cyan {
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(82,208,220,0.1), transparent 65%);
+  filter: blur(48px);
+  animation: orb-b 26s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .projects-aurora-gold,
+  .projects-aurora-cyan { animation: none !important; }
+}
+
+/* ─────────────────────────────────────────────
+   SECTION EYEBROW LABEL
+───────────────────────────────────────────── */
+.section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-cyan);
+}
+
+.section-eyebrow::before {
+  content: "";
+  display: block;
+  width: 1.5rem;
+  height: 1px;
+  background: var(--accent-cyan);
+  flex-shrink: 0;
+}
+
+/* ─────────────────────────────────────────────
+   FORM FIELDS
+───────────────────────────────────────────── */
+.field-base {
+  display: block;
+  width: 100%;
+  height: 2.75rem;
+  border-radius: 0.375rem;
+  border: 1px solid var(--border);
+  background: var(--background);
+  padding-inline: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--foreground);
+  outline: none;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.field-base::placeholder { color: var(--muted); }
+
+.field-base:focus {
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 0 3px rgba(82, 208, 220, 0.1);
+}
+
+/* ─────────────────────────────────────────────
+   TEXT UTILITIES
+───────────────────────────────────────────── */
+.text-pretty  { text-wrap: pretty; }
+.text-balance { text-wrap: balance; }
+
+/* ─────────────────────────────────────────────
+   REDUCED MOTION
+───────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .project-card-shell { transform: none !important; }
 }
