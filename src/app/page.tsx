@@ -47,6 +47,7 @@ import { HeroSection } from "@/components/hero-section";
 import { RealArchSection } from "@/components/real-arch-section";
 import { MotionSection } from "@/components/motion-section";
 import { ProcessTimeline } from "@/components/process-timeline";
+import { ProjectScrollTarget } from "@/components/project-scroll-target";
 import { ProjectCard } from "@/components/project-card";
 import { ScrollProgress } from "@/components/scroll-progress";
 import { SiteHeader } from "@/components/site-header";
@@ -152,13 +153,13 @@ export default function Home() {
         <RealArchSection />
 
         {/* ── Proyectos ── */}
-        <section
+        <ProjectScrollTarget
           id="proyectos"
           className="relative overflow-hidden border-t border-[color:var(--border)] px-5 py-20 sm:px-6 lg:py-28"
         >
           {/* Atmospheric backdrop */}
           <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,14,22,0.97),rgba(5,8,13,0.99))]" />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,14,22,0.88),rgba(5,8,13,0.94))]" />
             <div
               className="projects-aurora-gold absolute rounded-full"
               style={{
@@ -226,7 +227,7 @@ export default function Home() {
               className="mt-12"
             />
           </div>
-        </section>
+        </ProjectScrollTarget>
 
         {/* ── Proceso ── */}
         <Section

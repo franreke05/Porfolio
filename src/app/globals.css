@@ -124,17 +124,17 @@ button, input, textarea, select { font: inherit; }
 
 /* ─────────────────────────────────────────────
    PAGE SHELL
-   Atmosphere is handled by <PageBackground />.
+   Atmosphere is handled by <TechBackground />.
    Shell is intentionally transparent so orbs
    show through. body background acts as fallback.
 ───────────────────────────────────────────── */
 .page-shell {
-  /* transparent — PageBackground is the visual layer */
+  /* transparent — TechBackground is the visual layer */
 }
 
 /* ─────────────────────────────────────────────
    SECTION BANDS
-   Semi-transparent so PageBackground orbs bleed
+   Semi-transparent so TechBackground orbs bleed
    through at section edges. Enough opacity to
    keep text fully readable.
 ───────────────────────────────────────────── */
@@ -157,26 +157,30 @@ button, input, textarea, select { font: inherit; }
 }
 
 /* ─────────────────────────────────────────────
-   PAGE BACKGROUND SYSTEM
-   All orb transforms are GPU-only (transform +
-   opacity). The motion.div wrappers handle
-   scroll-linked parallax via useTransform.
+   TECH BACKGROUND SYSTEM
+   Scroll-linked motion is limited to transform and opacity.
 ───────────────────────────────────────────── */
 
 /* Root container — fixed full-viewport layer */
-.page-bg-root {
+.tech-bg-root {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: -2;
   overflow: hidden;
+  pointer-events: none;
+  --tech-bg-base: #070a10;
+  --tech-bg-cyan: #52d0dc;
+  --tech-bg-gold: #c39356;
+  --tech-bg-opacity: 0.58;
+  --tech-bg-glow: 0.42;
   background:
     radial-gradient(ellipse 86% 64% at 50% -12%, rgba(82, 208, 220, 0.08), transparent 58%),
     radial-gradient(ellipse 78% 58% at 84% 24%, rgba(195, 147, 86, 0.075), transparent 62%),
-    var(--background);
+    var(--tech-bg-base);
   contain: paint; /* clip at viewport edges */
 }
 
-.page-bg-depth {
+.tech-bg-depth {
   position: absolute;
   inset: 0;
   background:
@@ -184,7 +188,7 @@ button, input, textarea, select { font: inherit; }
     radial-gradient(circle at 52% 48%, rgba(20, 35, 55, 0.22), transparent 46%);
 }
 
-.page-bg-circuit-grid {
+.tech-bg-circuit-grid {
   position: absolute;
   inset: -10%;
   opacity: 0.2;
@@ -196,16 +200,40 @@ button, input, textarea, select { font: inherit; }
   mask-image: radial-gradient(ellipse 80% 68% at 50% 42%, black 0%, transparent 78%);
 }
 
-.page-bg-circuits {
+.tech-bg-svg-shell {
+  position: absolute;
+  inset: 0;
+  will-change: transform, opacity;
+}
+
+.tech-bg-circuit-svg {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  opacity: 0.58;
+  opacity: var(--tech-bg-opacity);
   mix-blend-mode: screen;
 }
 
-.page-bg-diagonal-circuits {
+.tech-bg-trace-layer,
+.tech-bg-node-layer,
+.tech-bg-pulse-layer,
+.tech-bg-particle-layer {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.tech-bg-node-cyan {
+  fill: var(--tech-bg-cyan);
+  opacity: calc(var(--tech-bg-glow) + 0.18);
+}
+
+.tech-bg-node-gold {
+  fill: var(--tech-bg-gold);
+  opacity: calc(var(--tech-bg-glow) + 0.14);
+}
+
+.tech-bg-diagonal-circuits {
   position: absolute;
   inset: -20%;
   opacity: 0.12;
@@ -218,37 +246,20 @@ button, input, textarea, select { font: inherit; }
   mask-image: linear-gradient(90deg, transparent, black 18%, black 82%, transparent);
 }
 
-.page-bg-particle {
-  position: absolute;
-  display: block;
-  border-radius: 50%;
-  pointer-events: none;
-}
-
-.page-bg-particle-cyan {
-  background: rgba(82, 208, 220, 0.86);
-  box-shadow: 0 0 22px rgba(82, 208, 220, 0.46);
-}
-
-.page-bg-particle-gold {
-  background: rgba(195, 147, 86, 0.82);
-  box-shadow: 0 0 22px rgba(195, 147, 86, 0.42);
-}
-
 /* Orb anchors — positioned absolutely, carry parallax y */
-.page-bg-orb-anchor {
+.tech-bg-orb-anchor {
   position: absolute;
   pointer-events: none;
 }
 
 /* Orb base — shared blur */
-.page-bg-orb {
+.tech-bg-orb {
   border-radius: 50%;
   filter: blur(56px);
 }
 
 /* ── Individual orb colours ── */
-.orb-gold-hero {
+.tech-orb-gold-hero {
   background: radial-gradient(
     circle at 42% 38%,
     rgba(195, 147, 86, 0.30) 0%,
@@ -258,7 +269,7 @@ button, input, textarea, select { font: inherit; }
   animation: orb-a 24s ease-in-out infinite;
 }
 
-.orb-cyan-hero {
+.tech-orb-cyan-hero {
   background: radial-gradient(
     circle at 56% 40%,
     rgba(82, 208, 220, 0.24) 0%,
@@ -268,7 +279,7 @@ button, input, textarea, select { font: inherit; }
   animation: orb-b 30s ease-in-out infinite;
 }
 
-.orb-gold-mid {
+.tech-orb-gold-mid {
   background: radial-gradient(
     circle at 50% 50%,
     rgba(195, 147, 86, 0.18) 0%,
@@ -277,7 +288,7 @@ button, input, textarea, select { font: inherit; }
   animation: orb-c 38s ease-in-out infinite;
 }
 
-.orb-cyan-low {
+.tech-orb-cyan-low {
   background: radial-gradient(
     circle at 50% 50%,
     rgba(82, 208, 220, 0.16) 0%,
@@ -311,7 +322,7 @@ button, input, textarea, select { font: inherit; }
 }
 
 /* Dot grid — 40px period, very subtle (diffuse, not grid-like) */
-.page-bg-dots {
+.tech-bg-dots {
   position: absolute;
   inset: 0;
   background-image: radial-gradient(
@@ -324,7 +335,7 @@ button, input, textarea, select { font: inherit; }
 }
 
 /* Scanlines — 4px repeating bands, CRT texture at 1.5% */
-.page-bg-scanlines {
+.tech-bg-scanlines {
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -338,7 +349,7 @@ button, input, textarea, select { font: inherit; }
 }
 
 /* Radial vignette — draws eye to center, softens corners */
-.page-bg-vignette {
+.tech-bg-vignette {
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -356,13 +367,75 @@ button, input, textarea, select { font: inherit; }
 
 /* Disable all orb animations for reduced-motion users */
 @media (prefers-reduced-motion: reduce) {
-  .page-bg-orb,
-  .page-bg-circuit-grid,
-  .page-bg-diagonal-circuits {
+  .tech-bg-orb,
+  .tech-bg-circuit-grid,
+  .tech-bg-diagonal-circuits {
     animation: none !important;
   }
 
-  .page-bg-circuits { opacity: 0.36; }
+  .tech-bg-circuit-svg { opacity: 0.34; }
+}
+
+@media (max-width: 640px) {
+  .tech-bg-circuit-grid {
+    opacity: 0.14;
+    background-size: 120px 120px;
+  }
+
+  .tech-bg-circuit-svg {
+    inset: -2% -24% 0;
+    width: 148%;
+    height: 106%;
+    opacity: 0.46;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   PHONE BACKGROUND
+   Decorative fixed phone tied to document scroll
+   and the projects section progress.
+───────────────────────────────────────────── */
+.phone-bg-root {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  pointer-events: none;
+  contain: paint;
+  mix-blend-mode: screen;
+}
+
+.phone-bg-device {
+  width: min(44vw, 620px);
+  min-width: 340px;
+  transform-origin: center;
+  will-change: transform, opacity;
+  filter:
+    drop-shadow(0 44px 90px rgba(0, 0, 0, 0.48))
+    drop-shadow(0 0 46px rgba(82, 208, 220, 0.1));
+}
+
+.phone-bg-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 640px) {
+  .phone-bg-device {
+    width: min(88vw, 340px);
+    min-width: 220px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .phone-bg-device {
+    transform: none !important;
+    will-change: auto;
+  }
 }
 
 /* ─────────────────────────────────────────────

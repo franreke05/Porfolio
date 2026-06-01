@@ -4,7 +4,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { JsonLd } from "@/components/json-ld";
 import { LenisProvider } from "@/components/lenis-provider";
-import { PageBackground } from "@/components/page-background";
+import { PhoneBackground } from "@/components/phone-background";
+import { PhoneBackgroundProvider } from "@/components/phone-background-context";
+import { TechBackground } from "@/components/tech-background";
 import {
   SITE_NAME,
   SITE_URL,
@@ -94,9 +96,12 @@ export default function RootLayout({
       <body className="flex min-h-full flex-col">
         {/* Site-wide JSON-LD — Person + ProfessionalService + WebSite */}
         <JsonLd schemas={[personSchema, professionalServiceSchema, websiteSchema]} />
-        <LenisProvider />
-        <PageBackground />
-        {children}
+        <PhoneBackgroundProvider>
+          <LenisProvider />
+          <TechBackground />
+          <PhoneBackground />
+          {children}
+        </PhoneBackgroundProvider>
         <Analytics />
       </body>
     </html>

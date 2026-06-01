@@ -36,6 +36,26 @@ export const t = {
   spring: { type: "spring", stiffness: 200, damping: 26, mass: 1 } as const,
 } as const;
 
+// Tech background presets stay local to the background component so existing
+// page and card animations keep their current timing.
+export const backgroundMotion = {
+  trace: {
+    duration: 10,
+    repeat: Infinity,
+    ease: "easeInOut",
+  },
+  node: {
+    duration: 4.4,
+    repeat: Infinity,
+    ease: "easeInOut",
+  },
+  particle: {
+    duration: 8.6,
+    repeat: Infinity,
+    ease: "easeInOut",
+  },
+} as const;
+
 // ── Scroll-enter variants ─────────────────────────────────
 // Use with initial="hidden" whileInView="visible".
 // Children with the same variant key inherit parent stagger automatically.
