@@ -397,32 +397,78 @@ button, input, textarea, select { font: inherit; }
   mix-blend-mode: screen;
 }
 
-.phone-bg-device {
-  width: min(44vw, 620px);
-  min-width: 340px;
+/* Phone shell — holds SVG frame + absolutely positioned screen */
+.phone-bg-shell {
+  position: relative;
+  width: min(36vw, 520px);
+  min-width: 260px;
+  /* Height auto-computed from aspect-ratio so % offsets on children work */
+  aspect-ratio: 360 / 780;
   transform-origin: center;
   will-change: transform, opacity;
   filter:
-    drop-shadow(0 44px 90px rgba(0, 0, 0, 0.48))
-    drop-shadow(0 0 46px rgba(82, 208, 220, 0.1));
+    drop-shadow(0 40px 84px rgba(0, 0, 0, 0.44))
+    drop-shadow(0 0 38px rgba(82, 208, 220, 0.08));
 }
 
-.phone-bg-svg {
-  display: block;
+/* SVG phone frame fills the shell */
+.phone-bg-frame-svg {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  height: auto;
+  height: 100%;
+  display: block;
+}
+
+/*
+ * Screen area — mirrors SVG glass rect: x=20, y=54, w=320, h=690 in 360×780.
+ * As percentages of shell:
+ *   left  = 20/360  = 5.56 %
+ *   top   = 54/780  = 6.92 %
+ *   width = 320/360 = 88.89 %
+ *   height= 690/780 = 88.46 %
+ *
+ * container-type: size enables 100 cqh in child sections.
+ */
+.phone-bg-screen {
+  position: absolute;
+  left: 5.56%;
+  top: 6.92%;
+  width: 88.89%;
+  height: 88.46%;
+  /* Horizontal radius = 44/320 × 100% ≈ 13.75%; vertical = 44/690 × 100% ≈ 6.38% */
+  border-radius: 13.75% / 6.38%;
+  overflow: hidden;
+  background: rgba(4, 7, 12, 0.97);
+  container-type: size; /* gives children access to cqh */
+}
+
+/* Scrolling container — translated by Motion's y style prop */
+.phone-bg-inner {
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+}
+
+/* Each mini section fills exactly one phone-screen height */
+.phone-bg-section {
+  flex-shrink: 0;
+  height: 100cqh; /* 100 % of .phone-bg-screen's container height */
+  overflow: hidden;
+  padding: 14px 12px;
+  background: rgba(5, 8, 14, 0.96);
+  box-sizing: border-box;
 }
 
 @media (max-width: 640px) {
-  .phone-bg-device {
-    width: min(88vw, 340px);
-    min-width: 220px;
+  .phone-bg-shell {
+    width: min(72vw, 300px);
+    min-width: 180px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .phone-bg-device {
-    transform: none !important;
+  .phone-bg-shell {
     will-change: auto;
   }
 }
