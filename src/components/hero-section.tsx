@@ -2,7 +2,7 @@
 
 import { ArrowUpRight, Calendar, Sparkles } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
-import { ArchitectureMap } from "@/components/architecture-map";
+import { PhoneMockup } from "@/components/phone-mockup";
 import { MagneticButton } from "@/components/magnetic-button";
 import { dur, ease } from "@/lib/motion";
 import { siteProfile, trustSignals } from "@/lib/site-data";
@@ -139,14 +139,14 @@ export function HeroSection() {
           </motion.div>
         </div>
 
-        {/* ── Right: architecture map ── */}
+        {/* ── Right: phone mockup ── */}
         <motion.div
           className="min-w-0 max-w-full"
           initial={{ opacity: 0, scale: 0.97, y: 12 }}
           animate={{ opacity: 1, scale: 1,    y: 0  }}
           transition={{ duration: d(dur.slow), ease: ease.soft, delay: d(0.12) }}
         >
-          <ArchitectureMap />
+          <PhoneMockup />
         </motion.div>
       </div>
     </section>
