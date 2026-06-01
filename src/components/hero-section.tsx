@@ -7,7 +7,8 @@ import { MagneticButton } from "@/components/magnetic-button";
 import { dur, ease } from "@/lib/motion";
 import { siteProfile, trustSignals } from "@/lib/site-data";
 
-const TITLE_LINES = ["Apps mobile y sistemas digitales", "que ordenan tu negocio."];
+const TITLE_LINES_DESKTOP = ["Apps mobile y sistemas digitales", "que ordenan tu negocio."];
+const TITLE_LINES_MOBILE = ["Apps mobile", "y sistemas", "digitales", "que ordenan", "tu negocio."];
 
 const SUBTITLE =
   "Construyo el sistema completo: app mobile con KMP, CRM a medida, web rápida y automatizaciones que eliminan el trabajo repetitivo. Todo publicado, todo mantenido.";
@@ -55,11 +56,26 @@ export function HeroSection() {
           </motion.div>
 
           {/* Title — line-by-line reveal */}
-          <h1 className="text-4xl font-semibold leading-[1.06] text-[color:var(--foreground)] sm:text-5xl lg:text-[3.5rem]">
-            {TITLE_LINES.map((line, i) => (
+          <h1 className="max-w-full text-[2.35rem] font-semibold leading-[1.04] text-[color:var(--foreground)] sm:text-5xl sm:leading-[1.06] lg:text-[3.5rem]">
+            {TITLE_LINES_MOBILE.map((line, i) => (
               <motion.span
-                key={line}
-                className="block"
+                key={`mobile-${line}`}
+                className="block sm:hidden"
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: d(0.64),
+                  ease: ease.premium,
+                  delay: d(0.16 + i * 0.11),
+                }}
+              >
+                {line}
+              </motion.span>
+            ))}
+            {TITLE_LINES_DESKTOP.map((line, i) => (
+              <motion.span
+                key={`desktop-${line}`}
+                className="hidden sm:block"
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
@@ -102,7 +118,7 @@ export function HeroSection() {
 
           {/* Trust chips — stagger container */}
           <motion.div
-            className="mt-8 flex flex-wrap gap-2"
+            className="mt-8 grid max-w-full grid-cols-1 gap-2 min-[360px]:grid-cols-2 sm:flex sm:flex-wrap"
             aria-label="Especialidades"
             variants={chipContainer}
             initial="hidden"
@@ -112,12 +128,12 @@ export function HeroSection() {
             {trustSignals.map((signal) => (
               <motion.span
                 key={signal}
-                className="inline-flex items-center gap-1.5 rounded-md border border-[color:var(--border)] bg-[color:var(--surface)]/60 px-3 py-1.5 font-mono text-xs text-[color:var(--muted)]"
+                className="inline-flex min-w-0 max-w-full items-center gap-1.5 rounded-md border border-[color:var(--border)] bg-[color:var(--surface)]/60 px-3 py-1.5 font-mono text-[11px] leading-5 text-[color:var(--muted)] sm:w-auto sm:text-xs"
                 variants={chipItem}
                 transition={{ duration: d(dur.fast), ease: ease.soft }}
               >
                 <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[color:var(--accent-cyan)]" aria-hidden="true" />
-                {signal}
+                <span className="min-w-0 whitespace-normal break-words">{signal}</span>
               </motion.span>
             ))}
           </motion.div>
