@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/json-ld";
-import { SITE_NAME, SITE_URL, projectBreadcrumb, projectSchema, trimDesc } from "@/lib/seo";
+import { SITE_NAME, projectBreadcrumb, projectSchema, trimDesc } from "@/lib/seo";
 import {
   ArrowLeft,
   ArrowUpRight,
@@ -66,12 +66,9 @@ const projectAliases: Record<string, string> = {
 };
 
 export function generateStaticParams() {
-  return [
-    ...projects.map((project) => ({
-      id: project.id,
-    })),
-    ...Object.keys(projectAliases).map((id) => ({ id })),
-  ];
+  return projects.map((project) => ({
+    id: project.id,
+  }));
 }
 
 export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {

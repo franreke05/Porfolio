@@ -43,7 +43,6 @@ export const metadata: Metadata = {
 import { AnimatedCard } from "@/components/animated-card";
 import { ContactForm } from "@/components/contact-form";
 import { FlipCard } from "@/components/flip-card";
-import { PageBackground } from "@/components/page-background";
 import { HeroSection } from "@/components/hero-section";
 import { RealArchSection } from "@/components/real-arch-section";
 import { MotionSection } from "@/components/motion-section";
@@ -68,7 +67,6 @@ export default function Home() {
 
   return (
     <div className="page-shell min-h-screen overflow-hidden">
-      <PageBackground />
       <ScrollProgress />
       <SiteHeader />
       <main className="min-w-0">

@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { JsonLd } from "@/components/json-ld";
 import { LenisProvider } from "@/components/lenis-provider";
+import { PageBackground } from "@/components/page-background";
 import {
   SITE_NAME,
   SITE_URL,
@@ -94,6 +95,7 @@ export default function RootLayout({
         {/* Site-wide JSON-LD — Person + ProfessionalService + WebSite */}
         <JsonLd schemas={[personSchema, professionalServiceSchema, websiteSchema]} />
         <LenisProvider />
+        <PageBackground />
         {children}
         <Analytics />
       </body>
