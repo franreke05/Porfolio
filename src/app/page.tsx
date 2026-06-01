@@ -157,32 +157,23 @@ export default function Home() {
           id="proyectos"
           className="relative overflow-hidden border-t border-[color:var(--border)] px-5 py-20 sm:px-6 lg:py-28"
         >
-          {/* Atmospheric backdrop */}
+          {/* Accent highlight — no background overlay, just subtle blobs
+              so the global TechBackground stays as the unified layer */}
           <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,14,22,0.88),rgba(5,8,13,0.94))]" />
             <div
               className="projects-aurora-gold absolute rounded-full"
               style={{
                 left: "-8%", top: "4%",
-                width: 760, height: 760,
-                background: "radial-gradient(circle, rgba(195,147,86,0.13) 0%, transparent 62%)",
+                width: 640, height: 640,
+                background: "radial-gradient(circle, rgba(195,147,86,0.07) 0%, transparent 60%)",
               }}
             />
             <div
               className="projects-aurora-cyan absolute rounded-full"
               style={{
                 right: "-6%", bottom: "5%",
-                width: 660, height: 660,
-                background: "radial-gradient(circle, rgba(82,208,220,0.1) 0%, transparent 62%)",
-              }}
-            />
-            {/* Subtle engineer grid */}
-            <div
-              className="absolute inset-0"
-              style={{
-                backgroundImage:
-                  "linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)",
-                backgroundSize: "72px 72px",
+                width: 560, height: 560,
+                background: "radial-gradient(circle, rgba(82,208,220,0.05) 0%, transparent 60%)",
               }}
             />
           </div>

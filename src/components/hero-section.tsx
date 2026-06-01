@@ -29,15 +29,7 @@ export function HeroSection() {
 
   return (
     <section id="inicio" className="relative px-5 pb-20 pt-28 sm:px-6 lg:pt-32">
-      {/* Atmospheric hero beams — dual haze from top edge */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-        <div className="hero-beam-top absolute inset-x-0 -top-32 h-[620px]" />
-        {/* Bottom fade — smooth transition to next section */}
-        <div
-          className="absolute inset-x-0 bottom-0 h-40"
-          style={{ background: "linear-gradient(to top, rgba(7,10,16,0.7), transparent)" }}
-        />
-      </div>
+      {/* No section-specific overlay — TechBackground is the unified visual layer */}
 
       <div className="relative mx-auto grid w-full max-w-[calc(100vw-2.5rem)] gap-12 sm:max-w-6xl lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
 

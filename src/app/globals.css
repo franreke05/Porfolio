@@ -134,26 +134,20 @@ button, input, textarea, select { font: inherit; }
 
 /* ─────────────────────────────────────────────
    SECTION BANDS
-   Semi-transparent so TechBackground orbs bleed
-   through at section edges. Enough opacity to
-   keep text fully readable.
+   Fully transparent — TechBackground is the
+   single visual layer. Sections are separated
+   only by border-top + a hairline shadow so
+   the background reads as one continuous surface.
 ───────────────────────────────────────────── */
 .section-band {
   border-top: 1px solid var(--border);
-  background: linear-gradient(
-    180deg,
-    rgba(7, 10, 16, 0.84) 0%,
-    rgba(7, 10, 16, 0.93) 100%
-  );
 }
 
 .section-band-alt {
   border-top: 1px solid var(--border);
-  background: linear-gradient(
-    180deg,
-    rgba(11, 18, 28, 0.82) 0%,
-    rgba(8, 13, 22, 0.92) 100%
-  );
+  /* Barely-perceptible deepening — enough to signal
+     "different section" without breaking the unified bg */
+  background: rgba(0, 0, 0, 0.07);
 }
 
 /* ─────────────────────────────────────────────
@@ -165,7 +159,7 @@ button, input, textarea, select { font: inherit; }
 .tech-bg-root {
   position: fixed;
   inset: 0;
-  z-index: -2;
+  z-index: -1;
   overflow: hidden;
   pointer-events: none;
   --tech-bg-base: #070a10;
@@ -358,12 +352,7 @@ button, input, textarea, select { font: inherit; }
     linear-gradient(180deg, rgba(7, 10, 16, 0.26), transparent 22%, transparent 76%, rgba(7, 10, 16, 0.56));
 }
 
-/* ── Hero beam — atmospheric top haze ── */
-.hero-beam-top {
-  background:
-    radial-gradient(ellipse 88% 52% at 50% 0%, rgba(82, 208, 220, 0.1) 0%, transparent 70%),
-    radial-gradient(ellipse 56% 38% at 80% -5%, rgba(195, 147, 86, 0.1) 0%, transparent 65%);
-}
+/* .hero-beam-top removed — TechBackground handles the full-page atmosphere */
 
 /* Disable all orb animations for reduced-motion users */
 @media (prefers-reduced-motion: reduce) {
