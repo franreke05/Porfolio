@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { JsonLd } from "@/components/json-ld";
-import { SITE_NAME, SITE_URL, canonical } from "@/lib/seo";
+import { SITE_NAME, SITE_URL, canonical, faqPageSchema } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title:
@@ -147,7 +147,7 @@ const faqs = [
 export default function DisenoWebEmpresasPage() {
   return (
     <>
-      <JsonLd schemas={[breadcrumbSchema, serviceSchema]} />
+      <JsonLd schemas={[breadcrumbSchema, serviceSchema, faqPageSchema(faqs)]} />
 
       <div className="mx-auto max-w-4xl px-5 pb-24 pt-28 sm:px-6">
         {/* Breadcrumb */}
@@ -187,7 +187,7 @@ export default function DisenoWebEmpresasPage() {
         {/* Hero */}
         <header className="mb-14">
           <p className="section-eyebrow mb-4">Desarrollo web</p>
-          <h1 className="mb-5 text-4xl font-bold tracking-tight text-[color:var(--foreground)] sm:text-5xl">
+          <h1 className="mb-5 font-display text-4xl font-bold tracking-tight text-[color:var(--foreground)] sm:text-5xl">
             Diseño web profesional para empresas —{" "}
             <span className="text-[color:var(--primary)]">
               Granada, Almería y toda España
@@ -353,7 +353,7 @@ export default function DisenoWebEmpresasPage() {
           </h2>
           <div className="space-y-3">
             <Link
-              href="/proyectos/solsconfort-web-premium"
+              href="/proyectos/solsconfort"
               className="flex items-center gap-4 rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4 transition hover:border-[color:var(--border-hover)] hover:bg-[color:var(--surface-elevated)]"
             >
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[color:var(--border)] bg-[color:var(--surface-elevated)] text-sm font-bold text-[color:var(--primary)]">
@@ -370,7 +370,7 @@ export default function DisenoWebEmpresasPage() {
               <ArrowUpRight className="ml-auto h-4 w-4 shrink-0 text-[color:var(--muted)]" />
             </Link>
             <Link
-              href="/proyectos/vinotico-area-privada"
+              href="/proyectos/vinotico"
               className="flex items-center gap-4 rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4 transition hover:border-[color:var(--border-hover)] hover:bg-[color:var(--surface-elevated)]"
             >
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[color:var(--border)] bg-[color:var(--surface-elevated)] text-sm font-bold text-[color:var(--primary)]">

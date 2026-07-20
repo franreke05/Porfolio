@@ -20,7 +20,8 @@ import {
 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { projects, siteProfile, stackGroups } from "@/lib/site-data";
-import { dur, ease } from "@/lib/motion";
+import { ease } from "@/lib/motion";
+import { PhoneShell } from "@/components/phone-shell";
 
 /* ─────────────────────────────────────────────
    Screen registry
@@ -308,46 +309,8 @@ export function PhoneMockup() {
         {/* Aspect-ratio shell */}
         <div className="relative w-full" style={{ aspectRatio: "9 / 19.5" }}>
 
-          {/* SVG phone frame */}
-          <svg
-            viewBox="0 0 360 780"
-            className="absolute inset-0 h-full w-full"
-            aria-hidden="true"
-          >
-            <defs>
-              <linearGradient id="pm-border" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%"   stopColor="rgba(195,147,86,0.85)" />
-                <stop offset="48%"  stopColor="rgba(82,208,220,0.9)"  />
-                <stop offset="100%" stopColor="rgba(195,147,86,0.7)"  />
-              </linearGradient>
-              <linearGradient id="pm-body" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%"   stopColor="#0e1828" />
-                <stop offset="100%" stopColor="#06090e" />
-              </linearGradient>
-            </defs>
-
-            {/* Phone body */}
-            <rect x="6" y="4" width="348" height="772" rx="58" fill="url(#pm-body)" />
-            {/* Gradient border */}
-            <rect x="6" y="4" width="348" height="772" rx="58"
-              fill="none" stroke="url(#pm-border)" strokeWidth="2" />
-
-            {/* Screen glass */}
-            <rect x="20" y="54" width="320" height="690" rx="44"
-              fill="rgba(4,7,12,0.97)" />
-
-            {/* Dynamic island */}
-            <ellipse cx="180" cy="42" rx="42" ry="11" fill="rgba(4,7,12,1)" />
-
-            {/* Side buttons */}
-            <rect x="3"   y="176" width="3" height="70" rx="1.5" fill="rgba(195,147,86,0.28)" />
-            <rect x="3"   y="256" width="3" height="70" rx="1.5" fill="rgba(195,147,86,0.28)" />
-            <rect x="354" y="210" width="3" height="90" rx="1.5" fill="rgba(82,208,220,0.22)" />
-
-            {/* Home indicator */}
-            <rect x="140" y="748" width="80" height="4" rx="2"
-              fill="rgba(232,225,207,0.2)" />
-          </svg>
+          {/* SVG phone frame — shared with PhoneBackground */}
+          <PhoneShell className="absolute inset-0 h-full w-full" />
 
           {/* Screen HTML overlay */}
           {/* Matches SVG screen rect: x=20, y=54, w=320, h=690 of 360×780 */}

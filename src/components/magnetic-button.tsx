@@ -3,6 +3,8 @@
 import { motion, useMotionValue, useReducedMotion, useSpring } from "motion/react";
 import Link from "next/link";
 import type { MouseEvent, ReactNode } from "react";
+import { ClickSpark } from "@/components/click-spark";
+import { spring } from "@/lib/motion";
 
 type MagneticButtonProps = {
   href: string;
@@ -24,8 +26,8 @@ export function MagneticButton({
   const reduceMotion = useReducedMotion();
   const xValue = useMotionValue(0);
   const yValue = useMotionValue(0);
-  const x = useSpring(xValue, { stiffness: 200, damping: 20 });
-  const y = useSpring(yValue, { stiffness: 200, damping: 20 });
+  const x = useSpring(xValue, spring.magnetic);
+  const y = useSpring(yValue, spring.magnetic);
 
   const handleMove = (event: MouseEvent<HTMLAnchorElement>) => {
     if (reduceMotion || window.matchMedia("(max-width: 767px)").matches) return;
@@ -43,16 +45,21 @@ export function MagneticButton({
 
   return (
     <motion.span style={reduceMotion ? undefined : { x, y }} className="inline-flex">
-      <Link
-        href={href}
-        target={target}
-        rel={rel}
-        onMouseMove={handleMove}
-        onMouseLeave={reset}
-        className={`group/btn inline-flex min-h-12 items-center justify-center gap-2 rounded-lg px-5 text-sm font-semibold transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--background)] ${variantClass} ${className}`}
+      <ClickSpark
+        className="inline-flex rounded-lg"
+        sparkColor={variant === "primary" ? "var(--on-primary)" : "var(--primary)"}
       >
-        {children}
-      </Link>
+        <Link
+          href={href}
+          target={target}
+          rel={rel}
+          onMouseMove={handleMove}
+          onMouseLeave={reset}
+          className={`group/btn inline-flex min-h-12 items-center justify-center gap-2 rounded-lg px-5 text-sm font-semibold transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--background)] ${variantClass} ${className}`}
+        >
+          {children}
+        </Link>
+      </ClickSpark>
     </motion.span>
   );
 }

@@ -3,6 +3,7 @@
 import { motion, useReducedMotion } from "motion/react";
 import { useState, useCallback } from "react";
 import type { ReactNode } from "react";
+import { spring } from "@/lib/motion";
 
 type FlipCardProps = {
   front: ReactNode;
@@ -68,7 +69,7 @@ export function FlipCard({ front, back, className = "" }: FlipCardProps) {
         className="relative h-full w-full"
         style={{ transformStyle: "preserve-3d" }}
         animate={{ rotateY: flipped ? 180 : 0 }}
-        transition={{ type: "spring", stiffness: 260, damping: 30, mass: 1 }}
+        transition={spring.flip}
       >
         <div
           className="h-full w-full"

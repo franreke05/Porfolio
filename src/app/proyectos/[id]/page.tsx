@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { JsonLd } from "@/components/json-ld";
 import { SITE_NAME, projectBreadcrumb, projectSchema, trimDesc } from "@/lib/seo";
 import {
@@ -55,24 +55,39 @@ const projectStatusLabel: Record<Project["status"], string> = {
   "real-lab": "Laboratorio real",
 };
 
-const projectAliases: Record<string, string> = {
-  "personal-mobile-product": "edutrack-mobile-academica",
-  "edutrack-mobile-kmp": "edutrack-mobile-academica",
-  "personal-crm-lab": "requenadesk-crm-interno",
-  "requenadesk-crm": "requenadesk-crm-interno",
-  "personal-web-experiment": "solsconfort-web-premium",
-  "client-business-app": "vinotico-area-privada",
-  "client-internal-system": "oposicontrol-study-app",
+// Projects that already have a dedicated, richer static case-study page
+// (src/app/proyectos/{slug}/page.tsx, driven by lib/case-studies.ts) — every
+// canonical id and legacy alias for those projects redirects there instead of
+// rendering the generic template below, so there is exactly one indexable,
+// citable URL per project.
+const caseStudyRedirects: Record<string, string> = {
+  "edutrack-mobile-academica": "edutrack",
+  "edutrack-mobile-kmp": "edutrack",
+  "personal-mobile-product": "edutrack",
+  "requenadesk-crm-interno": "requenadesk",
+  "requenadesk-crm": "requenadesk",
+  "personal-crm-lab": "requenadesk",
+  "solsconfort-web-premium": "solsconfort",
+  "personal-web-experiment": "solsconfort",
+  "vinotico-area-privada": "vinotico",
+  "client-business-app": "vinotico",
+  "oposicontrol-study-app": "oposicontrol",
+  "client-internal-system": "oposicontrol",
 };
 
+// Only prerender projects that don't already have a dedicated static page —
+// this is a fallback template for future projects, not the 5 above.
 export function generateStaticParams() {
-  return projects.map((project) => ({
-    id: project.id,
-  }));
+  return projects
+    .filter((project) => !(project.id in caseStudyRedirects))
+    .map((project) => ({ id: project.id }));
 }
 
 export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
   const { id } = await params;
+  const redirectTarget = caseStudyRedirects[id];
+  if (redirectTarget) redirect(`/proyectos/${redirectTarget}`);
+
   const project = getProject(id);
 
   if (!project) return {};
@@ -100,6 +115,9 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
   const { id } = await params;
+  const redirectTarget = caseStudyRedirects[id];
+  if (redirectTarget) redirect(`/proyectos/${redirectTarget}`);
+
   const project = getProject(id);
 
   if (!project) {
@@ -158,7 +176,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 <p className="text-sm font-semibold uppercase text-[color:var(--primary)]">
                   {project.projectType}
                 </p>
-                <h1 className="mt-2 max-w-full text-balance text-4xl font-semibold leading-tight text-[color:var(--foreground)] sm:text-5xl">
+                <h1 className="mt-2 max-w-full text-balance font-display text-4xl font-semibold leading-tight text-[color:var(--foreground)] sm:text-5xl">
                   {project.title}
                 </h1>
               </div>
@@ -224,8 +242,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 }
 
 function getProject(id: string) {
-  const canonicalId = projectAliases[id] ?? id;
-  return projects.find((project) => project.id === canonicalId);
+  return projects.find((project) => project.id === id);
 }
 
 function getInitials(title: string) {

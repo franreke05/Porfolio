@@ -15,7 +15,7 @@ import {
   Zap,
   type LucideIcon,
 } from "lucide-react";
-import { SITE_NAME, SITE_URL, trimDesc } from "@/lib/seo";
+import { SITE_NAME, SITE_URL, faqPageSchema, trimDesc } from "@/lib/seo";
 
 // ── Home page metadata ────────────────────────────────────────────────────────
 // Explicit title so the template in layout.tsx doesn't wrap it twice.
@@ -42,11 +42,14 @@ export const metadata: Metadata = {
 };
 import { AnimatedCard } from "@/components/animated-card";
 import { ContactForm } from "@/components/contact-form";
+import { CountUp } from "@/components/count-up";
 import { FlipCard } from "@/components/flip-card";
 import { HeroSection } from "@/components/hero-section";
+import { JsonLd } from "@/components/json-ld";
 import { RealArchSection } from "@/components/real-arch-section";
 import { MotionSection } from "@/components/motion-section";
 import { ProcessTimeline } from "@/components/process-timeline";
+import { ProfileCard } from "@/components/profile-card";
 import { ProjectScrollTarget } from "@/components/project-scroll-target";
 import { ProjectCard } from "@/components/project-card";
 import { ScrollProgress } from "@/components/scroll-progress";
@@ -62,18 +65,55 @@ import {
   type Service,
 } from "@/lib/site-data";
 
+const homepageFaqs = [
+  {
+    q: "¿Cómo funciona el presupuesto de un proyecto?",
+    a: "No hay precios cerrados porque cada app, CRM o web depende del alcance real del proyecto. El primer paso siempre es una llamada para entender el problema y, a partir de ahí, proponer un camino y un presupuesto claros.",
+  },
+  {
+    q: "¿Cuánto tiempo tarda el desarrollo?",
+    a: "Depende del alcance de cada proyecto. Todos siguen el mismo proceso de cuatro fases — diagnóstico, prototipo claro, desarrollo iterativo y lanzamiento — y el plazo se confirma después del diagnóstico inicial, no antes.",
+  },
+  {
+    q: "¿Trabajas en remoto o solo en Almería?",
+    a: "Trabajo en remoto con empresas y autónomos de toda España, aunque estoy afincado en Almería. La coordinación se hace por llamada, email y WhatsApp durante todo el proyecto.",
+  },
+  {
+    q: "¿Qué tecnologías usas?",
+    a: "En mobile, Kotlin Multiplatform (KMP) y Jetpack Compose. En backend y datos, Ktor, PostgreSQL y SQL. En web, Next.js, TypeScript y Tailwind CSS. El stack completo está detallado en la sección Sobre mí.",
+  },
+  {
+    q: "¿Das soporte después del lanzamiento?",
+    a: "Sí. Todo lo que publico queda con mantenimiento: corrección de incidencias, mejoras y evolución de funcionalidades. Es uno de los servicios que ofrezco junto al desarrollo inicial.",
+  },
+  {
+    q: "¿Los proyectos que muestras son reales?",
+    a: "Sí, son proyectos reales o propios. Los de clientes con datos sensibles están anonimizados (nombre y marca cambiados) para proteger la confidencialidad, pero el problema, la solución técnica y el stack descritos son los reales.",
+  },
+];
+
 export default function Home() {
   const personalProjects = projects.filter((p) => p.type === "personal");
   const clientProjects   = projects.filter((p) => p.type === "client");
 
   return (
     <div className="page-shell min-h-screen overflow-hidden">
+      <JsonLd schemas={[faqPageSchema(homepageFaqs)]} />
       <ScrollProgress />
       <SiteHeader />
       <main className="min-w-0">
 
         {/* ── Hero ── */}
         <HeroSection />
+
+        {/* ── Definición clara — quién es y qué hace, en una frase autocontenida ── */}
+        <p className="mx-auto max-w-3xl px-5 pb-16 text-center text-base leading-7 text-[color:var(--muted)] sm:px-6">
+          <strong className="text-[color:var(--surface-foreground)]">Francisco Requena Sánchez</strong> es
+          desarrollador freelance en Almería, España, especializado en apps Android con Kotlin
+          Multiplatform, CRMs a medida con PostgreSQL y webs con Next.js. Diseña, desarrolla,
+          publica y mantiene sistemas digitales completos para pequeñas y medianas empresas, sin
+          depender de plantillas genéricas.
+        </p>
 
         {/* ── Sistema ── */}
         <section id="sistema" className="section-band px-5 py-20 sm:px-6 lg:py-28">
@@ -183,11 +223,11 @@ export default function Home() {
               <div className="mb-12 max-w-3xl">
                 <div className="mb-4 flex items-center gap-3">
                   <p className="section-eyebrow">Proyectos</p>
-                  <span className="ml-1 rounded-md border border-[color:var(--border)] bg-[color:var(--surface)] px-2 py-0.5 font-mono text-[10px] text-[color:var(--muted)]">
-                    {projects.length} casos
+                  <span className="ml-1 inline-flex items-center gap-1 rounded-md border border-[color:var(--border)] bg-[color:var(--surface)] px-2 py-0.5 font-mono text-[10px] text-[color:var(--muted)]">
+                    <CountUp to={projects.length} duration={1} /> casos
                   </span>
                 </div>
-                <h2 className="text-balance text-3xl font-semibold leading-[1.14] text-[color:var(--foreground)] sm:text-4xl">
+                <h2 className="text-balance font-display text-heading-lg font-semibold leading-[1.14] text-[color:var(--foreground)]">
                   Casos visuales con problema, solución, stack y resultado desde el primer vistazo.
                 </h2>
               </div>
@@ -236,7 +276,18 @@ export default function Home() {
           eyebrow="Sobre mí"
           title="Perfil técnico con base mobile y foco en herramientas útiles para negocio."
         >
-          <div className="grid gap-10 lg:grid-cols-[0.92fr_1.08fr]">
+          <div className="grid gap-10 lg:grid-cols-[0.78fr_1fr_1.1fr]">
+            <MotionSection as="div" className="mx-auto w-full max-w-xs lg:mx-0">
+              <ProfileCard
+                name={siteProfile.name}
+                title={siteProfile.role}
+                handle="franreke05"
+                status="Disponible"
+                contactHref="/#contacto"
+                contactText="Contactar"
+              />
+            </MotionSection>
+
             <MotionSection as="div">
               <p className="text-pretty text-lg leading-8 text-[color:var(--surface-foreground)]">
                 {siteProfile.shortBio}
@@ -268,25 +319,50 @@ export default function Home() {
               </div>
             </MotionSection>
 
+            {/* Bento-style skill grid — cursor-spotlight + glow-on-hover per tile,
+                inspired by reactbits.dev's MagicBento. Built on the existing
+                SpotlightCard primitive rather than porting MagicBento's GSAP
+                particle/magnetism engine: this project has no GSAP dependency,
+                and SpotlightCard already gives the same per-card glow-follows-
+                cursor effect used elsewhere on the site (LabBlock, ServiceCard). */}
             <MotionSection as="div" delay={0.08}>
               <div className="grid gap-4 sm:grid-cols-2">
                 {stackGroups.map((group) => (
-                  <div
-                    key={group.title}
-                    className="rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-5"
-                  >
-                    <h3 className="mb-4 text-xs font-bold uppercase tracking-widest text-[color:var(--muted)]">
-                      {group.title}
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      {group.items.map((item, index) => (
-                        <SkillChip key={item} label={item} index={index} />
-                      ))}
+                  <SpotlightCard key={group.title} className="rounded-xl">
+                    <div className="h-full rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-5 transition hover:border-[color:var(--primary)]/45">
+                      <h3 className="mb-4 text-xs font-bold uppercase tracking-widest text-[color:var(--muted)]">
+                        {group.title}
+                      </h3>
+                      <div className="flex flex-wrap gap-2">
+                        {group.items.map((item, index) => (
+                          <SkillChip key={item} label={item} index={index} />
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  </SpotlightCard>
                 ))}
               </div>
             </MotionSection>
+          </div>
+        </Section>
+
+        {/* ── FAQ ── */}
+        <Section
+          id="faq"
+          eyebrow="Preguntas frecuentes"
+          title="Lo que suelen preguntarme antes de empezar."
+          band="alt"
+        >
+          <div className="grid gap-3 sm:grid-cols-2">
+            {homepageFaqs.map((faq) => (
+              <div
+                key={faq.q}
+                className="rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-5"
+              >
+                <h3 className="font-semibold text-[color:var(--foreground)]">{faq.q}</h3>
+                <p className="mt-2 text-sm leading-6 text-[color:var(--muted)]">{faq.a}</p>
+              </div>
+            ))}
           </div>
         </Section>
 
@@ -296,7 +372,7 @@ export default function Home() {
             <MotionSection as="div">
               <div>
                 <p className="section-eyebrow mb-4">Contacto</p>
-                <h2 className="text-balance text-3xl font-semibold leading-[1.16] text-[color:var(--foreground)] sm:text-4xl">
+                <h2 className="text-balance font-display text-heading-lg font-semibold leading-[1.16] text-[color:var(--foreground)]">
                   Cuéntame qué quieres construir. Si tiene sentido, te propongo un camino claro.
                 </h2>
                 <p className="mt-5 text-pretty leading-7 text-[color:var(--muted)]">
@@ -339,7 +415,7 @@ function SectionHeader({
     <MotionSection as="div">
       <div className="mb-12 max-w-3xl">
         <p className="section-eyebrow mb-4">{eyebrow}</p>
-        <h2 className="text-balance text-3xl font-semibold leading-[1.14] text-[color:var(--foreground)] sm:text-4xl">
+        <h2 className="text-balance font-display text-heading-lg font-semibold leading-[1.14] text-[color:var(--foreground)]">
           {title}
         </h2>
         {text && (
@@ -410,7 +486,7 @@ function LabBlock({
                   {tag}
                 </span>
               </div>
-              <h3 className="text-base font-semibold text-[color:var(--foreground)]">{title}</h3>
+              <h3 className="font-display text-base font-semibold text-[color:var(--foreground)]">{title}</h3>
               <p className="mt-2 flex-1 text-sm leading-6 text-[color:var(--muted)]">{text}</p>
               <div className="mt-5 flex items-center gap-1.5">
                 <span className="font-mono text-[9px] uppercase tracking-widest text-[color:var(--muted)] opacity-50">stack</span>
@@ -468,7 +544,7 @@ function ServiceCard({ service, index }: { service: Service; index: number }) {
                   {service.highlight}
                 </span>
               </div>
-              <h3 className="text-lg font-semibold text-[color:var(--foreground)]">{service.title}</h3>
+              <h3 className="font-display text-lg font-semibold text-[color:var(--foreground)]">{service.title}</h3>
               <p className="mt-2 flex-1 text-sm leading-6 text-[color:var(--muted)]">{service.summary}</p>
               <div className="mt-5 flex items-center gap-1.5">
                 <span className="font-mono text-[9px] uppercase tracking-widest text-[color:var(--muted)] opacity-50">details</span>

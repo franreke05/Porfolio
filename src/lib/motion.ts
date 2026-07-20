@@ -107,27 +107,15 @@ export const cardHover = {
   hover: { y: -4 },
 } as const;
 
-// ── Legacy aliases (keep for existing call-sites) ─────────
-/** @deprecated Use `ease.premium` */
-export const premiumEase = ease.premium;
-
-/** @deprecated Use `dur.normal` */
-export const motionDuration = {
-  fast:   dur.fast,
-  medium: dur.normal,
-  slow:   dur.slow,
+// ── Spring presets ────────────────────────────────────────
+// Pointer-driven physics (magnetic follow, 3D tilt) — centralized so the
+// whole site's "snap back" feel is tuned in one place instead of scattered
+// ad hoc {stiffness, damping} literals per component.
+export const spring = {
+  /** MagneticButton x/y follow. */
+  magnetic: { type: "spring", stiffness: 200, damping: 20 } as const,
+  /** FlipCard 3D rotation. */
+  flip: { type: "spring", stiffness: 260, damping: 30, mass: 1 } as const,
+  /** ProjectCard pointer-tilt (rotateX/rotateY). */
+  tilt: { type: "spring", stiffness: 170, damping: 24 } as const,
 } as const;
-
-/** @deprecated Use `viewport` */
-export const viewportOnce = viewport;
-
-export const staggerChildren = {
-  animate: {
-    transition: { staggerChildren: 0.08, delayChildren: 0.08 },
-  },
-};
-
-export const cardReveal = {
-  initial: { opacity: 0, y: 20, scale: 0.98 },
-  animate: { opacity: 1, y: 0,  scale: 1    },
-};

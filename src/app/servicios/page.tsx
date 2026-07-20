@@ -110,7 +110,7 @@ export default function ServiciosPage() {
         {/* Header */}
         <header className="mb-14">
           <p className="section-eyebrow mb-4">Lo que construyo</p>
-          <h1 className="mb-4 text-4xl font-bold tracking-tight text-[color:var(--foreground)] sm:text-5xl">
+          <h1 className="mb-4 font-display text-4xl font-bold tracking-tight text-[color:var(--foreground)] sm:text-5xl">
             Servicios de desarrollo digital
           </h1>
           <p className="max-w-2xl text-lg leading-relaxed text-[color:var(--muted)]">

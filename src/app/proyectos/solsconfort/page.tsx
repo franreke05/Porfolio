@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { JsonLd } from "@/components/json-ld";
 import { CaseStudyTemplate } from "@/components/case-study-template";
 import { solsconfort } from "@/lib/case-studies";
-import { SITE_NAME, SITE_URL, trimDesc } from "@/lib/seo";
+import { SITE_NAME, SITE_URL, projectBreadcrumb, projectSchema, trimDesc } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title:       solsconfort.seoTitle,
@@ -21,24 +21,16 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const breadcrumb = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Inicio",      item: SITE_URL },
-    { "@type": "ListItem", position: 2, name: "Proyectos",   item: `${SITE_URL}/#proyectos` },
-    { "@type": "ListItem", position: 3, name: "Solsconfort", item: `${SITE_URL}/proyectos/solsconfort` },
-  ],
-};
+const breadcrumb = projectBreadcrumb("Solsconfort", "solsconfort");
 
-const schema = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  name: "Solsconfort (caso documentado)",
+// Was previously mistyped as WebSite (that type describes a domain/site, not a
+// product) — WebApplication correctly describes a delivered web product.
+const schema = projectSchema({
+  id:          "solsconfort",
+  title:       "Solsconfort (caso documentado)",
   description: solsconfort.seoDescription,
-  creator: { "@id": `${SITE_URL}/#person` },
-  url: `${SITE_URL}/proyectos/solsconfort`,
-};
+  type:        "browser",
+});
 
 export default function SolsconfortPage() {
   return (

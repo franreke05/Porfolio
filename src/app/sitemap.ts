@@ -1,8 +1,7 @@
 import type { MetadataRoute } from "next";
-import { projects } from "@/lib/site-data";
 import { SITE_URL } from "@/lib/seo";
 
-const LAST_MODIFIED = new Date("2026-05-30");
+const LAST_MODIFIED = new Date("2026-07-20");
 
 const SERVICE_SLUGS = [
   "desarrollo-apps-android",
@@ -36,14 +35,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority:        0.8,
   }));
 
-  // Long-slug aliases kept for backward compatibility — lower priority, no duplicate canonicals
-  const projectUrls: MetadataRoute.Sitemap = projects.map((project) => ({
-    url:             `${SITE_URL}/proyectos/${project.id}`,
-    lastModified:    LAST_MODIFIED,
-    changeFrequency: "monthly" as const,
-    priority:        0.5,
-  }));
-
+  // Legacy long-slug ids and aliases now 301-redirect to the short slugs above
+  // (see src/app/proyectos/[id]/page.tsx) — intentionally not listed here, a
+  // sitemap should never contain a redirecting URL.
   return [
     {
       url:             SITE_URL,
@@ -53,6 +47,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     ...serviceUrls,
     ...caseStudyUrls,
-    ...projectUrls,
   ];
 }

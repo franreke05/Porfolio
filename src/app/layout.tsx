@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { JsonLd } from "@/components/json-ld";
 import { LenisProvider } from "@/components/lenis-provider";
@@ -23,6 +23,14 @@ const geistSans = Geist({
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
+  subsets:  ["latin"],
+  display:  "swap",
+});
+
+// Display face for headlines — geometric/technical character, distinct from
+// the default Geist look, consistent with the site's "technical, not artisan" identity.
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
   subsets:  ["latin"],
   display:  "swap",
 });
@@ -91,7 +99,7 @@ export default function RootLayout({
     <html
       lang="es"
       data-scroll-behavior="smooth"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
         {/* Site-wide JSON-LD — Person + ProfessionalService + WebSite */}

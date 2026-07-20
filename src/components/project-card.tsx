@@ -13,6 +13,7 @@ import type { MouseEvent } from "react";
 import { ProjectVisual } from "@/components/project-visual";
 import { SpotlightCard } from "@/components/spotlight-card";
 import type { Project } from "@/lib/site-data";
+import { spring } from "@/lib/motion";
 
 type ProjectCardProps = {
   project: Project;
@@ -31,8 +32,8 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
   const shouldReduceMotion = useReducedMotion();
   const pointerX = useMotionValue(0);
   const pointerY = useMotionValue(0);
-  const springX = useSpring(pointerX, { stiffness: 170, damping: 24 });
-  const springY = useSpring(pointerY, { stiffness: 170, damping: 24 });
+  const springX = useSpring(pointerX, spring.tilt);
+  const springY = useSpring(pointerY, spring.tilt);
   const rotateX = useTransform(springY, [-0.5, 0.5], [3, -3]);
   const rotateY = useTransform(springX, [-0.5, 0.5], [-4, 4]);
 
@@ -80,7 +81,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
         />
 
         <Link
-          href={`/proyectos/${project.id}`}
+          href={`/proyectos/${project.caseStudySlug ?? project.id}`}
           className="flex h-full flex-col p-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--background)]"
           aria-label={`Abrir caso de proyecto: ${project.title}`}
         >
@@ -106,7 +107,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
             <p className="mb-2 text-xs font-semibold uppercase text-[color:var(--primary)]">
               {project.projectType}
             </p>
-            <h4 className="text-2xl font-semibold leading-tight text-[color:var(--foreground)]">
+            <h4 className="font-display text-2xl font-semibold leading-tight text-[color:var(--foreground)]">
               {project.title}
             </h4>
 

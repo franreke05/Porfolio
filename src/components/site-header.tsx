@@ -14,6 +14,7 @@ const navItems = [
   ["Proyectos",    "proyectos"],
   ["Proceso",      "proceso"],
   ["Sobre mí",     "sobre-mi"],
+  ["FAQ",          "faq"],
 ] as const;
 
 export function SiteHeader() {

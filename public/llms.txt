@@ -1,0 +1,29 @@
+# Francisco Requena Sánchez — Desarrollador de apps mobile, CRMs y webs
+
+> Francisco Requena Sánchez es un desarrollador freelance afincado en Almería, España (disponible en remoto), especializado en apps Android con Kotlin Multiplatform (KMP) y Jetpack Compose, CRMs a medida con PostgreSQL, webs rápidas con Next.js y automatizaciones de negocio para pymes. Construye el sistema completo — app o CRM, web y despliegue — sin plantillas genéricas, y se encarga también del mantenimiento posterior.
+
+Contacto: franciscorequenasanchez0@gmail.com · +34 642 95 75 72 · Almería, España · Remoto.
+
+## Servicios
+
+- [Desarrollo de apps Android con Kotlin Multiplatform](https://francisco-requena.vercel.app/servicios/desarrollo-apps-android): apps nativas con Jetpack Compose, MVVM y arquitectura preparada para escalar.
+- [CRM a medida](https://francisco-requena.vercel.app/servicios/crm-a-medida): sistemas internos con PostgreSQL, paneles, roles, flujos de trabajo y reportes — sin licencias genéricas ni funcionalidades sin usar.
+- [Diseño y desarrollo web para empresas](https://francisco-requena.vercel.app/servicios/diseno-web-empresas): webs rápidas con Next.js, SEO técnico y enfoque en conversión.
+- [Automatizaciones para pymes](https://francisco-requena.vercel.app/servicios/automatizaciones-pymes): integraciones entre herramientas y procesos que eliminan trabajo manual repetitivo.
+
+También ofrece mantenimiento y mejora continua tras el lanzamiento, y configuración de SEO técnico, hosting y analytics — ver la sección de servicios en la página principal.
+
+## Casos de proyecto
+
+- [EduTrack](https://francisco-requena.vercel.app/proyectos/edutrack): app Android (Kotlin, Jetpack Compose, Firebase) para calcular notas, medias ponderadas y nota necesaria para aprobar.
+- [RequenaDesk](https://francisco-requena.vercel.app/proyectos/requenadesk): CRM a medida (Kotlin, Ktor, PostgreSQL, Compose Desktop) para gestión interna de clientes, tareas y estados comerciales.
+- [Vinótico](https://francisco-requena.vercel.app/proyectos/vinotico): área privada y sistema de suscripciones con WordPress/WooCommerce para un club de socios (caso anonimizado).
+- [Solsconfort](https://francisco-requena.vercel.app/proyectos/solsconfort): web corporativa profesional para una empresa de servicios técnicos.
+- [OposiControl](https://francisco-requena.vercel.app/proyectos/oposicontrol): app Android de productividad (Kotlin Multiplatform) para opositores — temarios, simulacros y planificación.
+
+## Más información
+
+- [Página principal](https://francisco-requena.vercel.app/): perfil completo, stack técnico, proceso de trabajo y formulario de contacto.
+- [Currículum (PDF)](https://francisco-requena.vercel.app/francisco-requena-cv.pdf)
+- [GitHub](https://github.com/franreke05)
+- [LinkedIn](https://www.linkedin.com/in/franciscorequenasanchez)

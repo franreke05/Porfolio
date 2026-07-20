@@ -4,6 +4,7 @@ import { ArrowUpRight, Calendar, Sparkles } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import { PhoneMockup } from "@/components/phone-mockup";
 import { MagneticButton } from "@/components/magnetic-button";
+import { GradientText } from "@/components/gradient-text";
 import { dur, ease } from "@/lib/motion";
 import { siteProfile, trustSignals } from "@/lib/site-data";
 
@@ -48,7 +49,7 @@ export function HeroSection() {
           </motion.div>
 
           {/* Title — line-by-line reveal */}
-          <h1 className="max-w-full text-[2.35rem] font-semibold leading-[1.04] text-[color:var(--foreground)] sm:text-5xl sm:leading-[1.06] lg:text-[3.5rem]">
+          <h1 className="max-w-full font-display text-display-sm font-semibold leading-[1.04] text-[color:var(--foreground)] sm:text-5xl sm:leading-[1.06] lg:text-display-lg">
             {TITLE_LINES_MOBILE.map((line, i) => (
               <motion.span
                 key={`mobile-${line}`}
@@ -61,7 +62,11 @@ export function HeroSection() {
                   delay: d(0.16 + i * 0.11),
                 }}
               >
-                {line}
+                {i === TITLE_LINES_MOBILE.length - 1 ? (
+                  <GradientText animationSpeed={5}>{line}</GradientText>
+                ) : (
+                  line
+                )}
               </motion.span>
             ))}
             {TITLE_LINES_DESKTOP.map((line, i) => (
@@ -76,7 +81,11 @@ export function HeroSection() {
                   delay: d(0.16 + i * 0.11),
                 }}
               >
-                {line}
+                {i === TITLE_LINES_DESKTOP.length - 1 ? (
+                  <GradientText animationSpeed={5}>{line}</GradientText>
+                ) : (
+                  line
+                )}
               </motion.span>
             ))}
           </h1>

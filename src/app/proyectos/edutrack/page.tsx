@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { JsonLd } from "@/components/json-ld";
 import { CaseStudyTemplate } from "@/components/case-study-template";
 import { edutrack } from "@/lib/case-studies";
-import { SITE_NAME, SITE_URL, trimDesc } from "@/lib/seo";
+import { SITE_NAME, SITE_URL, projectBreadcrumb, projectSchema, trimDesc } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title:       edutrack.seoTitle,
@@ -21,26 +21,15 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const breadcrumb = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Inicio",    item: SITE_URL },
-    { "@type": "ListItem", position: 2, name: "Proyectos", item: `${SITE_URL}/#proyectos` },
-    { "@type": "ListItem", position: 3, name: "EduTrack",  item: `${SITE_URL}/proyectos/edutrack` },
-  ],
-};
+const breadcrumb = projectBreadcrumb("EduTrack", "edutrack");
 
-const schema = {
-  "@context": "https://schema.org",
-  "@type": "MobileApplication",
-  name: "EduTrack",
+const schema = projectSchema({
+  id:          "edutrack",
+  title:       "EduTrack",
   description: edutrack.seoDescription,
-  creator: { "@id": `${SITE_URL}/#person` },
+  type:        "mobile",
   applicationCategory: "EducationApplication",
-  operatingSystem: "Android",
-  url: `${SITE_URL}/proyectos/edutrack`,
-};
+});
 
 export default function EduTrackPage() {
   return (

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { JsonLd } from "@/components/json-ld";
 import { CaseStudyTemplate } from "@/components/case-study-template";
 import { requenadesk } from "@/lib/case-studies";
-import { SITE_NAME, SITE_URL, trimDesc } from "@/lib/seo";
+import { SITE_NAME, SITE_URL, projectBreadcrumb, projectSchema, trimDesc } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title:       requenadesk.seoTitle,
@@ -21,25 +21,14 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const breadcrumb = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Inicio",       item: SITE_URL },
-    { "@type": "ListItem", position: 2, name: "Proyectos",    item: `${SITE_URL}/#proyectos` },
-    { "@type": "ListItem", position: 3, name: "RequenaDesk",  item: `${SITE_URL}/proyectos/requenadesk` },
-  ],
-};
+const breadcrumb = projectBreadcrumb("RequenaDesk", "requenadesk");
 
-const schema = {
-  "@context": "https://schema.org",
-  "@type": "WebApplication",
-  name: "RequenaDesk",
+const schema = projectSchema({
+  id:          "requenadesk",
+  title:       "RequenaDesk",
   description: requenadesk.seoDescription,
-  creator: { "@id": `${SITE_URL}/#person` },
-  applicationCategory: "BusinessApplication",
-  url: `${SITE_URL}/proyectos/requenadesk`,
-};
+  type:        "dashboard",
+});
 
 export default function RequenaDesksPage() {
   return (

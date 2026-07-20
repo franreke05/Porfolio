@@ -9,6 +9,7 @@ import {
   useTransform,
 } from "motion/react";
 import { projects, stackGroups } from "@/lib/site-data";
+import { PhoneShell } from "@/components/phone-shell";
 
 /**
  * Fixed decorative phone that sits between TechBackground (z=-1) and page
@@ -79,48 +80,8 @@ export function PhoneBackground() {
         className="phone-bg-shell"
         style={{ scale, rotate, opacity: phoneOpacity }}
       >
-        {/* ── SVG phone frame ─────────────────────────────────────── */}
-        <svg
-          viewBox="0 0 360 780"
-          className="phone-bg-frame-svg"
-          role="presentation"
-          focusable="false"
-        >
-          <defs>
-            <linearGradient id="pbg-frame-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%"   stopColor="rgba(195,147,86,0.90)" />
-              <stop offset="50%"  stopColor="rgba(82,208,220,0.95)"  />
-              <stop offset="100%" stopColor="rgba(195,147,86,0.76)"  />
-            </linearGradient>
-            <linearGradient id="pbg-body-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%"   stopColor="#0d1724" />
-              <stop offset="100%" stopColor="#060810" />
-            </linearGradient>
-          </defs>
-
-          {/* Phone body */}
-          <rect x="6"  y="4"  width="348" height="772" rx="58"
-            fill="url(#pbg-body-grad)" />
-          {/* Gradient border */}
-          <rect x="6"  y="4"  width="348" height="772" rx="58"
-            fill="none" stroke="url(#pbg-frame-grad)" strokeWidth="2" />
-          {/* Screen glass */}
-          <rect x="20" y="54" width="320" height="690" rx="44"
-            fill="rgba(4,7,12,0.97)" />
-          {/* Dynamic island */}
-          <ellipse cx="180" cy="42" rx="42" ry="11" fill="rgba(4,7,12,1)" />
-          {/* Volume buttons */}
-          <rect x="3"   y="176" width="3" height="70" rx="1.5"
-            fill="rgba(195,147,86,0.30)" />
-          <rect x="3"   y="256" width="3" height="70" rx="1.5"
-            fill="rgba(195,147,86,0.30)" />
-          {/* Power button */}
-          <rect x="354" y="210" width="3" height="90" rx="1.5"
-            fill="rgba(82,208,220,0.25)" />
-          {/* Home indicator */}
-          <rect x="140" y="748" width="80" height="4" rx="2"
-            fill="rgba(232,225,207,0.22)" />
-        </svg>
+        {/* ── SVG phone frame — shared with PhoneMockup ───────────── */}
+        <PhoneShell className="phone-bg-frame-svg" />
 
         {/* ── Screen — clips inner content as it scrolls ─────────── */}
         <motion.div className="phone-bg-screen" style={{ filter: screenFilter }}>

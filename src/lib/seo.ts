@@ -3,6 +3,8 @@
  * Import from here in layout.tsx, page.tsx and generateMetadata functions.
  */
 
+import { stackGroups } from "@/lib/site-data";
+
 export const SITE_URL  = "https://francisco-requena.vercel.app" as const;
 export const SITE_NAME = "Francisco Requena Sánchez" as const;
 
@@ -28,6 +30,13 @@ export function canonical(path: string): string {
 
 // ── JSON-LD schemas ────────────────────────────────────────
 
+/** Flattened, deduplicated entity list — built from the real stack groups shown on-site. */
+export const KNOWS_ABOUT = [
+  ...new Set(stackGroups.flatMap((group) => group.items)),
+  "Desarrollo de CRM a medida",
+  "Automatización de procesos de negocio",
+] as const;
+
 export const personSchema = {
   "@context": "https://schema.org",
   "@type": "Person",
@@ -47,6 +56,7 @@ export const personSchema = {
     addressRegion: "Andalucía",
     addressCountry: "ES",
   },
+  knowsAbout: KNOWS_ABOUT,
   sameAs: [AUTHOR.github, AUTHOR.linkedin],
 } as const;
 
@@ -61,6 +71,7 @@ export const professionalServiceSchema = {
   provider: { "@id": `${SITE_URL}/#person` },
   areaServed: { "@type": "Country", name: "España" },
   availableLanguage: [{ "@type": "Language", name: "Spanish" }],
+  knowsAbout: KNOWS_ABOUT,
   hasOfferCatalog: {
     "@type": "OfferCatalog",
     name: "Servicios de desarrollo",
@@ -139,6 +150,7 @@ export function projectSchema(opts: {
   title: string;
   description: string;
   type: "mobile" | "dashboard" | "browser" | "subscription";
+  applicationCategory?: string;
 }) {
   const schemaType =
     opts.type === "mobile" ? "MobileApplication" : "WebApplication";
@@ -149,8 +161,24 @@ export function projectSchema(opts: {
     name: opts.title,
     description: opts.description,
     creator: { "@id": `${SITE_URL}/#person` },
-    applicationCategory: "BusinessApplication",
+    applicationCategory: opts.applicationCategory ?? "BusinessApplication",
     url: `${SITE_URL}/proyectos/${opts.id}`,
     ...(opts.type === "mobile" && { operatingSystem: "Android" }),
+  };
+}
+
+/** FAQPage schema from a page's own visible {q, a} list — reused across service pages and the homepage FAQ. */
+export function faqPageSchema(faqs: { q: string; a: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.a,
+      },
+    })),
   };
 }

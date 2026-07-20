@@ -49,8 +49,18 @@
   --color-secondary:        var(--secondary);
   --color-accent-cyan:      var(--accent-cyan);
   --color-muted:            var(--muted);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans:    var(--font-geist-sans);
+  --font-mono:    var(--font-geist-mono);
+  --font-display: var(--font-space-grotesk);
+
+  /* Deliberate type scale — headings use this instead of ad hoc Tailwind
+     sizes, so the whole site follows one rhythm (~1.25 ratio). */
+  --text-display-sm: 2.35rem;
+  --text-display-md: 3rem;
+  --text-display-lg: 3.75rem;
+  --text-heading-lg: 2.25rem;
+  --text-heading-md: 1.5rem;
+  --text-heading-sm: 1.125rem;
 }
 
 /* ─────────────────────────────────────────────
@@ -563,6 +573,325 @@ button, input, textarea, select { font: inherit; }
 @media (prefers-reduced-motion: reduce) {
   .projects-aurora-gold,
   .projects-aurora-cyan { animation: none !important; }
+}
+
+/* ─────────────────────────────────────────────
+   PROFILE CARD
+   Adapted from reactbits.dev — see components/profile-card.tsx.
+   Sunpillar rainbow foil recolored to the site's gold/cyan tokens;
+   photo-based avatar replaced with the "FR" monogram (no headshot asset).
+───────────────────────────────────────────── */
+.pc-card-wrapper {
+  --pointer-x: 50%;
+  --pointer-y: 50%;
+  --pointer-from-center: 0;
+  --pointer-from-top: 0.5;
+  --pointer-from-left: 0.5;
+  --card-opacity: 0;
+  --rotate-x: 0deg;
+  --rotate-y: 0deg;
+  --background-x: 50%;
+  --background-y: 50%;
+  --behind-glow-color: rgba(82, 208, 220, 0.4);
+  --behind-glow-size: 45%;
+  --inner-gradient: linear-gradient(148deg, rgba(200, 152, 90, 0.16) 0%, rgba(82, 208, 220, 0.16) 100%);
+  --sunpillar-1: var(--primary);
+  --sunpillar-2: var(--accent-cyan);
+  --sunpillar-3: var(--primary);
+  --sunpillar-4: var(--accent-cyan);
+  --sunpillar-5: var(--primary);
+  --sunpillar-6: var(--accent-cyan);
+  --card-radius: 1.25rem;
+
+  perspective: 900px;
+  transform: translate3d(0, 0, 0.1px);
+  position: relative;
+  touch-action: none;
+}
+
+.pc-behind {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at var(--pointer-x) var(--pointer-y), var(--behind-glow-color) 0%, transparent var(--behind-glow-size));
+  filter: blur(50px) saturate(1.1);
+  opacity: calc(0.7 * var(--card-opacity));
+  transition: opacity 200ms ease;
+}
+
+.pc-card-wrapper:hover,
+.pc-card-wrapper.active {
+  --card-opacity: 1;
+}
+
+.pc-card {
+  height: min(60svh, 460px);
+  display: grid;
+  aspect-ratio: 0.74;
+  border-radius: var(--card-radius);
+  position: relative;
+  background-blend-mode: color-dodge, normal, normal, normal;
+  box-shadow: rgba(0, 0, 0, 0.55) calc((var(--pointer-from-left) * 10px) - 3px) calc((var(--pointer-from-top) * 20px) - 6px) 24px -6px;
+  transition: transform 1s ease;
+  transform: translateZ(0) rotateX(0deg) rotateY(0deg);
+  background: var(--background);
+  border: 1px solid var(--border);
+  backface-visibility: hidden;
+  overflow: hidden;
+}
+
+.pc-card:hover,
+.pc-card.active {
+  transition: none;
+  transform: translateZ(0) rotateX(var(--rotate-y)) rotateY(var(--rotate-x));
+}
+
+.pc-card-shell.entering .pc-card { transition: transform 180ms ease-out; }
+.pc-card-shell { position: relative; z-index: 1; }
+.pc-card * { display: grid; grid-area: 1/-1; border-radius: var(--card-radius); pointer-events: none; }
+
+.pc-inside {
+  inset: 0;
+  position: absolute;
+  background-image: var(--inner-gradient);
+  background-color: var(--background);
+  transform: none;
+}
+
+.pc-shine,
+.pc-shine::after {
+  --space: 5%;
+  --angle: -45deg;
+  transform: translate3d(0, 0, 1px);
+  overflow: hidden;
+  z-index: 3;
+  background: transparent;
+  background-size: cover;
+  background-position: center;
+  background-image:
+    repeating-linear-gradient(0deg, var(--sunpillar-1) calc(var(--space) * 1), var(--sunpillar-2) calc(var(--space) * 2), var(--sunpillar-3) calc(var(--space) * 3), var(--sunpillar-4) calc(var(--space) * 4), var(--sunpillar-5) calc(var(--space) * 5), var(--sunpillar-6) calc(var(--space) * 6), var(--sunpillar-1) calc(var(--space) * 7)),
+    radial-gradient(farthest-corner circle at var(--pointer-x) var(--pointer-y), hsla(0, 0%, 0%, 0.1) 12%, hsla(0, 0%, 0%, 0.15) 20%, hsla(0, 0%, 0%, 0.25) 120%);
+  background-position: 0 var(--background-y), center;
+  background-blend-mode: color, hard-light;
+  background-size: 500% 500%, 200% 200%;
+  background-repeat: repeat;
+  opacity: 0.4;
+  filter: brightness(0.7) contrast(1.2) saturate(0.4);
+  transition: filter 0.8s ease, opacity 0.8s ease;
+}
+
+.pc-shine::before,
+.pc-shine::after {
+  content: "";
+  background-position: center;
+  background-size: cover;
+  grid-area: 1/1;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.pc-card:hover .pc-shine,
+.pc-card.active .pc-shine {
+  filter: brightness(0.9) contrast(1.4) saturate(0.6);
+  opacity: 0.6;
+}
+
+.pc-card:hover .pc-shine::before,
+.pc-card.active .pc-shine::before {
+  opacity: 0.5;
+}
+
+.pc-shine::before {
+  background-image: linear-gradient(45deg, var(--sunpillar-4), var(--sunpillar-5), var(--sunpillar-6), var(--sunpillar-1), var(--sunpillar-2), var(--sunpillar-3));
+  background-size: 250% 250%;
+  background-position: var(--pointer-x) var(--pointer-y);
+  mix-blend-mode: color-dodge;
+  filter: brightness(calc(2 - var(--pointer-from-center))) contrast(calc(var(--pointer-from-center) + 2)) saturate(calc(0.5 + var(--pointer-from-center)));
+}
+
+.pc-glare {
+  transform: translate3d(0, 0, 1.1px);
+  overflow: hidden;
+  background-image: radial-gradient(farthest-corner circle at var(--pointer-x) var(--pointer-y), rgba(232, 225, 207, 0.35) 12%, rgba(18, 29, 46, 0.55) 90%);
+  mix-blend-mode: overlay;
+  filter: brightness(0.85) contrast(1.15);
+  z-index: 4;
+}
+
+/* Single flex column for all real content — monogram, name/title, footer —
+   instead of the library's two grid-stacked layers with absolute top:%
+   placement. That worked for the library's short placeholder name; it
+   overlapped once real (longer, wrapping) name/role text pushed the
+   footer bar into the details block. flex:1 on the monogram wrapper
+   absorbs any extra/less space instead of relying on fixed percentages. */
+.pc-body {
+  position: relative;
+  z-index: 5;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 28px 18px 18px;
+  text-align: center;
+}
+
+.pc-monogram-wrap {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pc-monogram {
+  width: 5rem;
+  height: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid rgba(200, 152, 90, 0.55);
+  background: var(--surface-elevated);
+  color: var(--primary);
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.pc-user-info {
+  --ui-inset: 18px;
+  margin-top: 16px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: calc(max(0px, var(--card-radius) - var(--ui-inset) + 6px));
+  padding: 12px 14px;
+  pointer-events: auto;
+}
+
+.pc-user-details { display: flex; align-items: center; gap: 10px; }
+
+.pc-mini-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(200, 152, 90, 0.5);
+  background: var(--surface-elevated);
+  color: var(--primary);
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.pc-user-text { display: flex; align-items: flex-start; flex-direction: column; gap: 4px; }
+.pc-handle { font-size: 13px; font-weight: 600; color: rgba(255, 255, 255, 0.92); line-height: 1; }
+.pc-status { font-size: 12px; color: var(--accent-cyan); line-height: 1; }
+
+.pc-contact-btn {
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+  pointer-events: auto;
+}
+
+.pc-contact-btn:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-1px); }
+
+.pc-details {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pc-details h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  margin: 0;
+  text-wrap: balance;
+  font-size: clamp(1.05rem, 4.2svh, 1.5rem);
+  line-height: 1.2;
+  background-image: linear-gradient(to bottom, var(--foreground), var(--primary));
+  background-size: 1em 1.5em;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+.pc-details p {
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 1.4;
+  margin: 0;
+  background-image: linear-gradient(to bottom, var(--surface-foreground), var(--accent-cyan));
+  background-size: 1em 1.5em;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pc-card,
+  .pc-behind,
+  .pc-shine,
+  .pc-shine::before {
+    transition: none !important;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   GRADIENT TEXT
+   Adapted from reactbits.dev — see components/gradient-text.tsx
+───────────────────────────────────────────── */
+.gradient-text {
+  position: relative;
+  display: inline-flex;
+  max-width: fit-content;
+  border-radius: 0.75rem;
+}
+
+.gradient-text-border {
+  padding: 0.2rem 0.5rem;
+}
+
+.gradient-text-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.gradient-text-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  z-index: -1;
+  border-radius: inherit;
+  background-color: var(--background);
+}
+
+.gradient-text-content {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
 }
 
 /* ─────────────────────────────────────────────

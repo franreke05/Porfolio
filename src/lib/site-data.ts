@@ -9,6 +9,8 @@ export type Service = {
 
 export type Project = {
   id: string;
+  /** Short slug of this project's dedicated case-study page (src/app/proyectos/{slug}), if it has one — the canonical URL to link to. Falls back to `id` for projects without a dedicated page. */
+  caseStudySlug?: string;
   type: "personal" | "client";
   visibility: "public" | "anonymous";
   status: "technical-demo" | "documented-case" | "own-system" | "anonymous-project" | "real-lab";
@@ -149,6 +151,7 @@ export const services: Service[] = [
 export const projects: Project[] = [
   {
     id: "edutrack-mobile-academica",
+    caseStudySlug: "edutrack",
     type: "personal",
     visibility: "public",
     status: "real-lab",
@@ -168,6 +171,7 @@ export const projects: Project[] = [
   },
   {
     id: "requenadesk-crm-interno",
+    caseStudySlug: "requenadesk",
     type: "personal",
     visibility: "public",
     status: "own-system",
@@ -187,6 +191,7 @@ export const projects: Project[] = [
   },
   {
     id: "solsconfort-web-premium",
+    caseStudySlug: "solsconfort",
     type: "client",
     visibility: "public",
     status: "documented-case",
@@ -206,6 +211,7 @@ export const projects: Project[] = [
   },
   {
     id: "vinotico-area-privada",
+    caseStudySlug: "vinotico",
     type: "client",
     visibility: "anonymous",
     status: "anonymous-project",
@@ -225,6 +231,7 @@ export const projects: Project[] = [
   },
   {
     id: "oposicontrol-study-app",
+    caseStudySlug: "oposicontrol",
     type: "personal",
     visibility: "public",
     status: "technical-demo",
