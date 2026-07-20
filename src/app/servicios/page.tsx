@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { JsonLd } from "@/components/json-ld";
-import { SITE_NAME, SITE_URL, canonical } from "@/lib/seo";
+import { SITE_NAME, SITE_URL, canonical, faqPageSchema } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Servicios de desarrollo digital",
@@ -78,12 +78,39 @@ const services = [
   },
 ] as const;
 
+const serviciosFaqs = [
+  {
+    q: "¿Cómo funciona el presupuesto de un proyecto?",
+    a: "No hay precios cerrados porque cada app, CRM o web depende del alcance real del proyecto. El primer paso siempre es una llamada para entender el problema y, a partir de ahí, proponer un camino y un presupuesto claros.",
+  },
+  {
+    q: "¿Cuánto tiempo tarda el desarrollo?",
+    a: "Depende del alcance de cada proyecto. Todos siguen el mismo proceso de cuatro fases — diagnóstico, prototipo claro, desarrollo iterativo y lanzamiento — y el plazo se confirma después del diagnóstico inicial, no antes.",
+  },
+  {
+    q: "¿Trabajas en remoto o solo en Almería?",
+    a: "Trabajo en remoto con empresas y autónomos de toda España, aunque estoy afincado en Almería. La coordinación se hace por llamada, email y WhatsApp durante todo el proyecto.",
+  },
+  {
+    q: "¿Qué tecnologías usas?",
+    a: "En mobile, Kotlin Multiplatform (KMP) y Jetpack Compose. En backend y datos, Ktor, PostgreSQL y SQL. En web, Next.js, TypeScript y Tailwind CSS. El stack completo está detallado en la sección Sobre mí.",
+  },
+  {
+    q: "¿Das soporte después del lanzamiento?",
+    a: "Sí. Todo lo que publico queda con mantenimiento: corrección de incidencias, mejoras y evolución de funcionalidades. Es uno de los servicios que ofrezco junto al desarrollo inicial.",
+  },
+  {
+    q: "¿Los proyectos que muestras son reales?",
+    a: "Sí, con nombre propio y código real — nada anonimizado. EduTrack y FlashFix son MVPs funcionales en producción; OposiControl y OryKai están en desarrollo activo, y lo digo así de claro en cada caso en lugar de aparentar que están más terminados de lo que están.",
+  },
+];
+
 export default function ServiciosPage() {
   return (
     <>
-      <JsonLd schemas={[serviciosIndexSchema]} />
+      <JsonLd schemas={[serviciosIndexSchema, faqPageSchema(serviciosFaqs)]} />
 
-      <div className="mx-auto max-w-4xl px-5 pb-24 pt-28 sm:px-6">
+      <div className="w-full px-5 pb-24 pt-28 sm:px-8 lg:px-12 xl:px-16 2xl:px-24">
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb" className="mb-10">
           <ol className="flex items-center gap-2 text-sm text-[color:var(--muted)]">
@@ -123,24 +150,24 @@ export default function ServiciosPage() {
 
         {/* Service grid */}
         <section aria-label="Listado de servicios">
-          <ul className="grid gap-4 sm:grid-cols-2">
+          <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {services.map((service) => (
               <li key={service.href}>
                 <Link
                   href={service.href}
-                  className="group flex h-full flex-col gap-4 rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-6 transition hover:border-[color:var(--border-hover)] hover:bg-[color:var(--surface-elevated)]"
+                  className="group flex h-full flex-col gap-4 border-2 border-[color:var(--foreground)] bg-[color:var(--surface)] p-6 transition-colors hover:bg-[color:var(--surface-elevated)]"
                 >
                   <div className="flex items-start justify-between gap-3">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[color:var(--border)] bg-[color:var(--surface-elevated)] font-mono text-sm font-bold text-[color:var(--primary)]">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center border-2 border-[color:var(--foreground)] bg-[color:var(--surface-elevated)] font-mono text-sm font-bold text-[color:var(--primary)]">
                       {service.code}
                     </div>
-                    <ArrowUpRight className="h-4 w-4 shrink-0 text-[color:var(--muted)] transition group-hover:text-[color:var(--accent-cyan)]" />
+                    <ArrowUpRight className="h-4 w-4 shrink-0 text-[color:var(--muted)] transition group-hover:text-[color:var(--primary)]" />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <p className="font-semibold text-[color:var(--foreground)]">
+                    <p className="font-display text-lg font-semibold text-[color:var(--foreground)]">
                       {service.title}
                     </p>
-                    <p className="font-mono text-xs text-[color:var(--accent-cyan)]">
+                    <p className="font-mono text-xs text-[color:var(--muted)]">
                       {service.tagline}
                     </p>
                   </div>
@@ -153,19 +180,36 @@ export default function ServiciosPage() {
           </ul>
         </section>
 
+        {/* FAQ — folded in from the old homepage: pricing/timeline questions
+            belong next to the service descriptions that raise them. */}
+        <section className="mt-20">
+          <p className="section-eyebrow mb-4">Preguntas frecuentes</p>
+          <h2 className="mb-8 max-w-2xl text-balance font-display text-2xl font-bold leading-tight text-[color:var(--foreground)] sm:text-3xl">
+            Lo que suelen preguntarme antes de empezar.
+          </h2>
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+            {serviciosFaqs.map((faq) => (
+              <div key={faq.q} className="border-2 border-[color:var(--foreground)] bg-[color:var(--surface)] p-5">
+                <h3 className="font-semibold text-[color:var(--foreground)]">{faq.q}</h3>
+                <p className="mt-2 text-sm leading-6 text-[color:var(--muted)]">{faq.a}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* CTA */}
-        <div className="mt-16 rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] px-6 py-10 text-center">
+        <div className="mt-16 border-2 border-[color:var(--foreground)] bg-[color:var(--surface)] px-6 py-10 text-center">
           <p className="section-eyebrow mb-3 justify-center">¿Hablamos?</p>
-          <h2 className="text-2xl font-semibold text-[color:var(--foreground)]">
+          <h2 className="font-display text-2xl font-bold text-[color:var(--foreground)]">
             ¿No sabes por dónde empezar?
           </h2>
-          <p className="mt-3 text-[color:var(--muted)]">
+          <p className="mx-auto mt-3 max-w-md text-[color:var(--muted)]">
             Cuéntame tu proyecto en una llamada de 30 minutos. Sin compromiso,
             sin presión de venta. Solo escucho y te digo si puedo ayudarte.
           </p>
           <Link
             href="/#contacto"
-            className="mt-6 inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-[color:var(--primary)] px-6 text-sm font-semibold text-[color:var(--on-primary)] transition hover:bg-[color:var(--primary-hover)]"
+            className="mt-6 inline-flex min-h-12 items-center justify-center gap-2 border-2 border-[color:var(--foreground)] bg-[color:var(--primary)] px-6 text-sm font-semibold text-[color:var(--on-primary)] transition-colors hover:bg-[color:var(--primary-hover)]"
           >
             Agendar llamada
           </Link>

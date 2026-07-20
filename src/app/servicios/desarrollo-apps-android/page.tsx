@@ -148,7 +148,7 @@ export default function DesarrolloAppsAndroidPage() {
     <>
       <JsonLd schemas={[breadcrumbSchema, serviceSchema, faqPageSchema(faqs)]} />
 
-      <div className="mx-auto max-w-4xl px-5 pb-24 pt-28 sm:px-6">
+      <div className="mx-auto max-w-6xl px-5 pb-24 pt-28 sm:px-8 lg:px-12 xl:px-16 2xl:px-24">
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb" className="mb-8">
           <ol className="flex items-center gap-2 text-sm text-[color:var(--muted)]">
@@ -359,27 +359,27 @@ export default function DesarrolloAppsAndroidPage() {
               </div>
               <div>
                 <p className="font-semibold text-[color:var(--foreground)]">
-                  EduTrack Mobile Académica
+                  EduTrack
                 </p>
                 <p className="text-sm text-[color:var(--muted)]">
-                  App Android de gestión académica con Kotlin/KMP y Compose
+                  App Android en beta pública para seguimiento académico con Firebase
                 </p>
               </div>
               <ArrowUpRight className="ml-auto h-4 w-4 shrink-0 text-[color:var(--muted)]" />
             </Link>
             <Link
-              href="/proyectos/oposicontrol"
+              href="/proyectos/flashfix"
               className="flex items-center gap-4 rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4 transition hover:border-[color:var(--border-hover)] hover:bg-[color:var(--surface-elevated)]"
             >
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[color:var(--border)] bg-[color:var(--surface-elevated)] text-sm font-bold text-[color:var(--primary)]">
-                OC
+                FF
               </div>
               <div>
                 <p className="font-semibold text-[color:var(--foreground)]">
-                  OposiControl Study App
+                  FlashFix
                 </p>
                 <p className="text-sm text-[color:var(--muted)]">
-                  Aplicación de estudio para oposiciones con seguimiento y estadísticas
+                  Marketplace Android con geolocalización, chat y valoraciones
                 </p>
               </div>
               <ArrowUpRight className="ml-auto h-4 w-4 shrink-0 text-[color:var(--muted)]" />

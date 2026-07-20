@@ -43,3 +43,6 @@ next-env.d.ts
 
 .vercel
 .env*
+
+# local Claude Code session state / cross-project skill config (not project content)
+.claude/

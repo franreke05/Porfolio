@@ -27,8 +27,7 @@ const schema = projectSchema({
   id:          "oposicontrol",
   title:       "OposiControl",
   description: oposicontrol.seoDescription,
-  type:        "mobile",
-  applicationCategory: "EducationApplication",
+  type:        "dashboard",
 });
 
 export default function OposiControlPage() {

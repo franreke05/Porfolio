@@ -147,7 +147,7 @@ export default function CrmAMedidaPage() {
     <>
       <JsonLd schemas={[breadcrumbSchema, serviceSchema, faqPageSchema(faqs)]} />
 
-      <div className="mx-auto max-w-4xl px-5 pb-24 pt-28 sm:px-6">
+      <div className="mx-auto max-w-6xl px-5 pb-24 pt-28 sm:px-8 lg:px-12 xl:px-16 2xl:px-24">
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb" className="mb-8">
           <ol className="flex items-center gap-2 text-sm text-[color:var(--muted)]">
@@ -351,18 +351,18 @@ export default function CrmAMedidaPage() {
           </h2>
           <div className="space-y-3">
             <Link
-              href="/proyectos/requenadesk"
+              href="/proyectos/orykai"
               className="flex items-center gap-4 rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4 transition hover:border-[color:var(--border-hover)] hover:bg-[color:var(--surface-elevated)]"
             >
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[color:var(--border)] bg-[color:var(--surface-elevated)] text-sm font-bold text-[color:var(--primary)]">
-                RD
+                OK
               </div>
               <div>
                 <p className="font-semibold text-[color:var(--foreground)]">
-                  RequenaDesk CRM Interno
+                  OryKai
                 </p>
                 <p className="text-sm text-[color:var(--muted)]">
-                  Sistema CRM a medida con PostgreSQL, roles y panel de gestión
+                  CRM multiplataforma propio con Ktor, PostgreSQL y facturación en PDF
                 </p>
               </div>
               <ArrowUpRight className="ml-auto h-4 w-4 shrink-0 text-[color:var(--muted)]" />

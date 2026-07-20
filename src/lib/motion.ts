@@ -114,8 +114,10 @@ export const cardHover = {
 export const spring = {
   /** MagneticButton x/y follow. */
   magnetic: { type: "spring", stiffness: 200, damping: 20 } as const,
-  /** FlipCard 3D rotation. */
-  flip: { type: "spring", stiffness: 260, damping: 30, mass: 1 } as const,
-  /** ProjectCard pointer-tilt (rotateX/rotateY). */
+  /** Comic-cover / card pointer-tilt (rotateX/rotateY). */
   tilt: { type: "spring", stiffness: 170, damping: 24 } as const,
+  /** Homepage phone rotation, smoothed against raw scroll progress — heavier
+      than a pointer tilt so it reads as physical weight settling, not a
+      1:1 scrub. */
+  scroll: { type: "spring", stiffness: 90, damping: 20, mass: 1.1 } as const,
 } as const;

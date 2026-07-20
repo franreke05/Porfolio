@@ -1,69 +1,49 @@
 "use client";
 
-// Adapted from reactbits.dev (MIT + Commons Clause) — rewritten to TypeScript,
-// locale switched to es-ES to match the site's language.
-import { useInView, useMotionValue, useSpring } from "motion/react";
-import { useCallback, useEffect, useRef } from "react";
+import { motion, useReducedMotion } from "motion/react";
 
 type CountUpProps = {
   to: number;
-  from?: number;
-  direction?: "up" | "down";
-  delay?: number;
   duration?: number;
   className?: string;
-  startWhen?: boolean;
   separator?: string;
 };
 
-export function CountUp({
-  to,
-  from = 0,
-  direction = "up",
-  delay = 0,
-  duration = 1.4,
-  className = "",
-  startWhen = true,
-  separator = "",
-}: CountUpProps) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const motionValue = useMotionValue(direction === "down" ? to : from);
+/**
+ * A mechanical-odometer numeral reveal — each digit flips into place
+ * (translateY + rotateX) on scroll-into-view, staggered left to right, like
+ * the wheels of a physical counter settling. Replaces the old spring-tween
+ * CountUp (a reactbits.dev adaptation) with a genuinely bespoke effect.
+ */
+export function CountUp({ to, duration = 1, className = "", separator = "" }: CountUpProps) {
+  const reduceMotion = useReducedMotion();
+  const formatted = separator
+    ? Intl.NumberFormat("es-ES", { useGrouping: true }).format(to).replace(/\./g, separator)
+    : String(to);
+  const chars = formatted.split("");
+  const stagger = Math.max(duration / Math.max(chars.length, 1), 0.05);
 
-  const damping = 20 + 40 * (1 / duration);
-  const stiffness = 100 * (1 / duration);
-  const springValue = useSpring(motionValue, { damping, stiffness });
-  const isInView = useInView(ref, { once: true, margin: "0px" });
-
-  const formatValue = useCallback(
-    (latest: number) => {
-      const formatted = Intl.NumberFormat("es-ES", { useGrouping: !!separator }).format(
-        Math.round(latest),
-      );
-      return separator ? formatted.replace(/\./g, separator) : formatted;
-    },
-    [separator],
+  return (
+    <span className={`inline-flex overflow-hidden ${className}`} aria-label={formatted}>
+      {chars.map((char, i) => (
+        <motion.span
+          key={`${char}-${i}`}
+          className="inline-block"
+          aria-hidden="true"
+          initial={reduceMotion ? undefined : { y: "60%", opacity: 0, rotateX: -60 }}
+          whileInView={{ y: "0%", opacity: 1, rotateX: 0 }}
+          viewport={{ once: true, amount: 0.8 }}
+          transition={{
+            type: "spring",
+            stiffness: 260,
+            damping: 22,
+            delay: reduceMotion ? 0 : i * stagger,
+          }}
+          style={{ transformOrigin: "50% 100%" }}
+        >
+          {char}
+        </motion.span>
+      ))}
+    </span>
   );
-
-  useEffect(() => {
-    if (ref.current) ref.current.textContent = formatValue(direction === "down" ? to : from);
-  }, [from, to, direction, formatValue]);
-
-  useEffect(() => {
-    if (!isInView || !startWhen) return;
-
-    const timeoutId = setTimeout(() => {
-      motionValue.set(direction === "down" ? from : to);
-    }, delay * 1000);
-
-    return () => clearTimeout(timeoutId);
-  }, [isInView, startWhen, motionValue, direction, from, to, delay]);
-
-  useEffect(() => {
-    const unsubscribe = springValue.on("change", (latest) => {
-      if (ref.current) ref.current.textContent = formatValue(latest);
-    });
-    return () => unsubscribe();
-  }, [springValue, formatValue]);
-
-  return <span className={className} ref={ref} />;
 }

@@ -3,7 +3,7 @@
 import { motion, useMotionValue, useReducedMotion, useSpring } from "motion/react";
 import Link from "next/link";
 import type { MouseEvent, ReactNode } from "react";
-import { ClickSpark } from "@/components/click-spark";
+import { LetterpressStamp } from "@/components/letterpress-stamp";
 import { spring } from "@/lib/motion";
 
 type MagneticButtonProps = {
@@ -40,26 +40,23 @@ export function MagneticButton({
 
   const variantClass =
     variant === "primary"
-      ? "bg-[color:var(--primary)] text-[color:var(--on-primary)] hover:bg-[color:var(--primary-hover)]"
-      : "border border-[color:var(--border-hover)] bg-[color:var(--surface-elevated)] text-[color:var(--foreground)] hover:border-[color:var(--primary)]/70 hover:text-[color:var(--primary)]";
+      ? "border-2 border-[color:var(--foreground)] bg-[color:var(--primary)] text-[color:var(--on-primary)] hover:bg-[color:var(--primary-hover)]"
+      : "border-2 border-[color:var(--foreground)] bg-[color:var(--background)] text-[color:var(--foreground)] hover:bg-[color:var(--foreground)] hover:text-[color:var(--background)]";
 
   return (
     <motion.span style={reduceMotion ? undefined : { x, y }} className="inline-flex">
-      <ClickSpark
-        className="inline-flex rounded-lg"
-        sparkColor={variant === "primary" ? "var(--on-primary)" : "var(--primary)"}
-      >
+      <LetterpressStamp className="rounded-lg">
         <Link
           href={href}
           target={target}
           rel={rel}
           onMouseMove={handleMove}
           onMouseLeave={reset}
-          className={`group/btn inline-flex min-h-12 items-center justify-center gap-2 rounded-lg px-5 text-sm font-semibold transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--background)] ${variantClass} ${className}`}
+          className={`group/btn inline-flex min-h-12 items-center justify-center gap-2 rounded-lg px-5 text-sm font-semibold transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--background)] ${variantClass} ${className}`}
         >
           {children}
         </Link>
-      </ClickSpark>
+      </LetterpressStamp>
     </motion.span>
   );
 }

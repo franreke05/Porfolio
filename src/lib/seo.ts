@@ -138,7 +138,7 @@ export function projectBreadcrumb(projectTitle: string, projectId: string) {
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Inicio",    item: SITE_URL },
-      { "@type": "ListItem", position: 2, name: "Proyectos", item: `${SITE_URL}/#proyectos` },
+      { "@type": "ListItem", position: 2, name: "Proyectos", item: `${SITE_URL}/proyectos` },
       { "@type": "ListItem", position: 3, name: projectTitle, item: `${SITE_URL}/proyectos/${projectId}` },
     ],
   };

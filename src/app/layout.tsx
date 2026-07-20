@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
-import { Geist, Geist_Mono, Space_Grotesk } from "next/font/google";
+import { Fraunces, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Footer } from "@/components/footer";
 import { JsonLd } from "@/components/json-ld";
 import { LenisProvider } from "@/components/lenis-provider";
-import { PhoneBackground } from "@/components/phone-background";
-import { PhoneBackgroundProvider } from "@/components/phone-background-context";
-import { TechBackground } from "@/components/tech-background";
+import { SiteHeader } from "@/components/site-header";
 import {
   SITE_NAME,
   SITE_URL,
@@ -27,12 +26,14 @@ const geistMono = Geist_Mono({
   display:  "swap",
 });
 
-// Display face for headlines — geometric/technical character, distinct from
-// the default Geist look, consistent with the site's "technical, not artisan" identity.
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
-  subsets:  ["latin"],
-  display:  "swap",
+// Display face for headlines and comic-cover mastheads — a real editorial
+// serif with optical sizing and italics, replacing the dark-tech geometric
+// sans this site used before.
+const fraunces = Fraunces({
+  variable:      "--font-fraunces",
+  subsets:       ["latin"],
+  display:       "swap",
+  axes:          ["opsz", "SOFT", "WONK"],
 });
 
 // ── Global metadata (inherited by all pages unless overridden) ──
@@ -85,7 +86,7 @@ export const metadata: Metadata = {
 
   // Mobile status bar + PWA chrome colour
   other: {
-    "theme-color": "#070a10",
+    "theme-color": "#f3efe4",
   },
 
   // Verification placeholders — fill in once verified.
@@ -99,17 +100,15 @@ export default function RootLayout({
     <html
       lang="es"
       data-scroll-behavior="smooth"
-      className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
         {/* Site-wide JSON-LD — Person + ProfessionalService + WebSite */}
         <JsonLd schemas={[personSchema, professionalServiceSchema, websiteSchema]} />
-        <PhoneBackgroundProvider>
-          <LenisProvider />
-          <TechBackground />
-          <PhoneBackground />
-          {children}
-        </PhoneBackgroundProvider>
+        <LenisProvider />
+        <SiteHeader />
+        {children}
+        <Footer />
         <Analytics />
       </body>
     </html>

@@ -26,7 +26,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
   ];
 
-  const CASE_STUDY_SLUGS = ["edutrack", "requenadesk", "vinotico", "solsconfort", "oposicontrol"] as const;
+  const CASE_STUDY_SLUGS = ["edutrack", "flashfix", "oposicontrol", "orykai"] as const;
 
   const caseStudyUrls: MetadataRoute.Sitemap = CASE_STUDY_SLUGS.map((slug) => ({
     url:             `${SITE_URL}/proyectos/${slug}`,
@@ -44,6 +44,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified:    LAST_MODIFIED,
       changeFrequency: "weekly",
       priority:        1,
+    },
+    {
+      url:             `${SITE_URL}/proyectos`,
+      lastModified:    LAST_MODIFIED,
+      changeFrequency: "monthly",
+      priority:        0.9,
+    },
+    {
+      url:             `${SITE_URL}/sobre-mi`,
+      lastModified:    LAST_MODIFIED,
+      changeFrequency: "monthly",
+      priority:        0.7,
     },
     ...serviceUrls,
     ...caseStudyUrls,

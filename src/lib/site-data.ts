@@ -148,108 +148,111 @@ export const services: Service[] = [
   },
 ];
 
+// All 4 projects below are real, named, currently-active Android/Kotlin
+// projects of Francisco's — reviewed directly from source (build files, git
+// log, README, screen inventory), not fictionalized. EduTrack and FlashFix
+// are working MVPs; OposiControl and OryKai are honestly framed as active
+// work-in-progress, matching their own internal roadmap docs.
 export const projects: Project[] = [
   {
-    id: "edutrack-mobile-academica",
+    id: "edutrack",
     caseStudySlug: "edutrack",
     type: "personal",
     visibility: "public",
-    status: "real-lab",
-    title: "EduTrack-style",
-    projectType: "Producto mobile propio",
+    status: "documented-case",
+    title: "EduTrack",
+    projectType: "App mobile de productividad académica",
     problem:
-      "Los estudiantes calculan mal medias, porcentajes y notas necesarias para aprobar cuando todo vive en hojas, calculadoras y capturas dispersas.",
+      "Los estudiantes calculan mal medias, porcentajes y la nota que necesitan para aprobar cuando todo vive en hojas sueltas, calculadoras y capturas de pantalla dispersas.",
     solution:
-      "App mobile con cursos, asignaturas, notas ponderadas, simulador de nota necesaria, recordatorios y exportación para revisar el progreso sin fricción.",
+      "App Android con cursos, asignaturas, notas ponderadas, simulador de nota necesaria y recordatorios de exámenes, con inicio de sesión Firebase y un plan Premium ya definido.",
     result:
-      "Producto preparado para beta, modelo freemium y arquitectura escalable para evolucionar hacia sincronización, pagos y analítica educativa.",
-    stack: ["Kotlin", "Jetpack Compose", "Firebase", "Material 3", "WorkManager"],
-    metrics: ["8+ pantallas", "Beta", "MVP", "Recordatorios"],
+      "12 pantallas en producción y beta pública activa desde hace más de un año (80 commits), con copy de Play Store, checklist de lanzamiento y precios de suscripción ya preparados.",
+    stack: ["Kotlin", "Jetpack Compose", "Firebase Auth", "Firebase Realtime DB", "Play Billing", "DataStore"],
+    metrics: ["12 pantallas", "Beta 0.3", "Firebase", "Play Store listo"],
     image: "mobile",
     cta: "Ver caso",
     links: {},
   },
   {
-    id: "requenadesk-crm-interno",
-    caseStudySlug: "requenadesk",
+    id: "flashfix",
+    caseStudySlug: "flashfix",
     type: "personal",
     visibility: "public",
     status: "own-system",
-    title: "RequenaDesk-style",
-    projectType: "Sistema interno / CRM",
+    title: "FlashFix",
+    projectType: "Marketplace mobile con backend real",
     problem:
-      "Pequeños negocios gestionan clientes, tareas e incidencias con WhatsApp, Excel y notas sueltas, perdiendo trazabilidad y prioridad operativa.",
+      "Encontrar un taller mecánico cercano de confianza implica llamar a varios talleres a ciegas, sin saber disponibilidad, valoraciones ni poder hablar directamente con ellos.",
     solution:
-      "CRM personalizado con clientes, tickets, estados, roles, dashboard operativo y base de datos SQL para centralizar el trabajo diario.",
+      "Marketplace Android que localiza talleres por geolocalización, permite chatear con ellos, valorarlos y gestionar todo desde paneles de usuario, taller y administrador.",
     result:
-      "Sistema centralizado, mantenible y preparado para operación diaria con despliegue en VPS y capa de backend separada.",
-    stack: ["Kotlin", "Compose Desktop", "Ktor", "PostgreSQL", "Caddy", "VPS"],
-    metrics: ["SQL", "Roles", "Dashboard", "VPS"],
+      "MVP funcional de 17 pantallas con Firebase, Appwrite y Google Maps integrados. Hice mi propia auditoría de código, documenté los problemas reales (estado global, mezcla de Material 2/3, un bug crítico) y empecé a corregirlos: la última entrega migra a Material 3 y cifra las preferencias sensibles.",
+    stack: ["Jetpack Compose", "Firebase", "Room", "Appwrite", "Google Maps", "EncryptedSharedPreferences"],
+    metrics: ["17 pantallas", "MVP", "Auditoría propia", "Multi-rol"],
+    image: "mobile",
+    cta: "Ver caso",
+    links: {},
+  },
+  {
+    id: "oposicontrol",
+    caseStudySlug: "oposicontrol",
+    type: "personal",
+    visibility: "public",
+    status: "technical-demo",
+    title: "OposiControl",
+    projectType: "Backoffice multiplataforma (KMP)",
+    problem:
+      "Gestionar el contenido de una plataforma de oposiciones — noticias, recursos, tienda, tickets de soporte — sin un panel centralizado obliga a tocar la base de datos a mano y sin control de roles.",
+    solution:
+      "Backoffice multiplataforma (Android, iOS, escritorio) con Kotlin Multiplatform y Clean Architecture estricta — Domain → Repository → UseCases → ViewModel — sobre Supabase, con más de 300 archivos Kotlin repartidos en 18+ módulos Gradle.",
+    result:
+      "Arquitectura ya operativa y probada — es la base técnica, no el proyecto entero: el panel de moderación y la tienda siguen en desarrollo activo.",
+    stack: ["Kotlin Multiplatform", "Compose Multiplatform", "Koin", "Ktor", "SQLDelight", "Supabase"],
+    metrics: ["KMP", "Clean Architecture", "18+ módulos", "En desarrollo"],
     image: "dashboard",
     cta: "Ver arquitectura",
     links: {},
   },
   {
-    id: "solsconfort-web-premium",
-    caseStudySlug: "solsconfort",
-    type: "client",
-    visibility: "public",
-    status: "documented-case",
-    title: "Solsconfort-style",
-    projectType: "Web corporativa",
-    problem:
-      "Una empresa necesita explicar servicios técnicos con claridad visual y generar confianza desde la primera visita.",
-    solution:
-      "Web responsive con secciones comerciales, estructura SEO, bloques visuales, formularios, rendimiento y jerarquía clara de servicios.",
-    result:
-      "Mejor claridad de servicios, experiencia visual más profesional y base preparada para captación mediante contacto directo.",
-    stack: ["WordPress", "Elementor", "HTML", "CSS", "JavaScript", "SEO técnico"],
-    metrics: ["Responsive", "SEO", "Formulario", "Performance"],
-    image: "browser",
-    cta: "Ver caso",
-    links: {},
-  },
-  {
-    id: "vinotico-area-privada",
-    caseStudySlug: "vinotico",
-    type: "client",
-    visibility: "anonymous",
-    status: "anonymous-project",
-    title: "Vinótico-style",
-    projectType: "Web + sistema de negocio",
-    problem:
-      "Un club de suscripción necesita gestionar socios, preferencias, área privada y beneficios sin depender de procesos manuales.",
-    solution:
-      "Sistema WordPress/WooCommerce con suscripciones, control de acceso, área de socio, ventajas y lógica de negocio personalizada.",
-    result:
-      "Sistema comercial más escalable, con lógica personalizada para socios y recorrido preparado para venta recurrente.",
-    stack: ["WordPress", "WooCommerce", "Woo Subscriptions", "PHP", "Snippets", "UX"],
-    metrics: ["Auth", "Suscripciones", "Área privada", "Roles"],
-    image: "subscription",
-    cta: "Solicitar demo",
-    links: {},
-  },
-  {
-    id: "oposicontrol-study-app",
-    caseStudySlug: "oposicontrol",
+    id: "orykai",
+    caseStudySlug: "orykai",
     type: "personal",
     visibility: "public",
-    status: "technical-demo",
-    title: "OposiControl-style",
-    projectType: "App mobile de productividad",
+    status: "own-system",
+    title: "OryKai",
+    projectType: "CRM multiplataforma (KMP)",
     problem:
-      "Los opositores necesitan ordenar temarios, simulacros, progreso y planificación sin saltar entre calendarios, PDFs y notas sueltas.",
+      "Llevar clientes, tickets, tareas y facturas de mi propia operación freelance en herramientas sueltas no escala ni deja rastro de qué se ha facturado ni a quién.",
     solution:
-      "App mobile con módulos, progreso, estadísticas, simulacros y organización de estudio para convertir sesiones dispersas en un sistema medible.",
+      "CRM multiplataforma propio (Kotlin Multiplatform: Android, iOS, escritorio y servidor) con backend Ktor + PostgreSQL, autenticación JWT y generación de facturas en PDF.",
     result:
-      "Base técnica preparada para producto educativo escalable, con lógica multiplataforma y backend listo para datos de usuario.",
-    stack: ["Kotlin Multiplatform", "Compose", "Supabase", "Ktor"],
-    metrics: ["MVP", "Auth", "Stats", "Simulacros"],
-    image: "mobile",
+      "27 pantallas ya construidas entre panel de admin y panel de cliente. El MVP se centra en escritorio y servidor, con Android como panel ligero de revisión — auth, persistencia y adjuntos siguen siendo hitos activos en mi propio roadmap.",
+    stack: ["Kotlin Multiplatform", "Ktor", "PostgreSQL", "Flyway", "JWT", "PDFBox"],
+    metrics: ["KMP", "Ktor + PostgreSQL", "27 pantallas", "En desarrollo"],
+    image: "dashboard",
     cta: "Ver arquitectura",
     links: {},
   },
 ];
+
+// Honest, in-character status word for the comic-cover indicia — never
+// implies a project is finished when it's documented as in-progress.
+export const projectStatusWord: Record<Project["status"], string> = {
+  "technical-demo": "EN DESARROLLO",
+  "documented-case": "BETA PÚBLICA",
+  "own-system": "MVP",
+  "anonymous-project": "ANONIMIZADO",
+  "real-lab": "LABORATORIO",
+};
+
+export const projectStatusAccent: Record<Project["status"], "live" | "progress"> = {
+  "technical-demo": "progress",
+  "documented-case": "live",
+  "own-system": "live",
+  "anonymous-project": "progress",
+  "real-lab": "progress",
+};
 
 export const stackGroups = [
   {

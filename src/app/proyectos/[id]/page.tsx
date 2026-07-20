@@ -55,38 +55,47 @@ const projectStatusLabel: Record<Project["status"], string> = {
   "real-lab": "Laboratorio real",
 };
 
-// Projects that already have a dedicated, richer static case-study page
-// (src/app/proyectos/{slug}/page.tsx, driven by lib/case-studies.ts) — every
-// canonical id and legacy alias for those projects redirects there instead of
-// rendering the generic template below, so there is exactly one indexable,
-// citable URL per project.
+// Slugs that have a dedicated static page (src/app/proyectos/{slug}/page.tsx,
+// driven by lib/case-studies.ts) — excluded from this route's
+// generateStaticParams so there's exactly one static page per project, never
+// a competing dynamic-route prerender at the same path.
+const STATIC_CASE_STUDY_SLUGS = new Set(["edutrack", "flashfix", "oposicontrol", "orykai"]);
+
+// Legacy long-form ids, old aliases, and renamed/removed projects — redirect
+// to their current location instead of rendering the generic template below.
+// Vinótico and Solsconfort (anonymized client work) are no longer showcased;
+// send any indexed/bookmarked links back to the live projects section rather
+// than a dead end. RequenaDesk was renamed to OryKai.
 const caseStudyRedirects: Record<string, string> = {
-  "edutrack-mobile-academica": "edutrack",
-  "edutrack-mobile-kmp": "edutrack",
-  "personal-mobile-product": "edutrack",
-  "requenadesk-crm-interno": "requenadesk",
-  "requenadesk-crm": "requenadesk",
-  "personal-crm-lab": "requenadesk",
-  "solsconfort-web-premium": "solsconfort",
-  "personal-web-experiment": "solsconfort",
-  "vinotico-area-privada": "vinotico",
-  "client-business-app": "vinotico",
-  "oposicontrol-study-app": "oposicontrol",
-  "client-internal-system": "oposicontrol",
+  "edutrack-mobile-academica": "/proyectos/edutrack",
+  "edutrack-mobile-kmp": "/proyectos/edutrack",
+  "personal-mobile-product": "/proyectos/edutrack",
+  "oposicontrol-study-app": "/proyectos/oposicontrol",
+  "client-internal-system": "/proyectos/oposicontrol",
+  "requenadesk": "/proyectos/orykai",
+  "requenadesk-crm-interno": "/proyectos/orykai",
+  "requenadesk-crm": "/proyectos/orykai",
+  "personal-crm-lab": "/proyectos/orykai",
+  "vinotico": "/proyectos",
+  "vinotico-area-privada": "/proyectos",
+  "client-business-app": "/proyectos",
+  "solsconfort": "/proyectos",
+  "solsconfort-web-premium": "/proyectos",
+  "personal-web-experiment": "/proyectos",
 };
 
 // Only prerender projects that don't already have a dedicated static page —
-// this is a fallback template for future projects, not the 5 above.
+// this is a fallback template for future projects, not the 4 above.
 export function generateStaticParams() {
   return projects
-    .filter((project) => !(project.id in caseStudyRedirects))
+    .filter((project) => !STATIC_CASE_STUDY_SLUGS.has(project.id))
     .map((project) => ({ id: project.id }));
 }
 
 export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
   const { id } = await params;
   const redirectTarget = caseStudyRedirects[id];
-  if (redirectTarget) redirect(`/proyectos/${redirectTarget}`);
+  if (redirectTarget) redirect(redirectTarget);
 
   const project = getProject(id);
 
@@ -116,7 +125,7 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
 export default async function ProjectPage({ params }: ProjectPageProps) {
   const { id } = await params;
   const redirectTarget = caseStudyRedirects[id];
-  if (redirectTarget) redirect(`/proyectos/${redirectTarget}`);
+  if (redirectTarget) redirect(redirectTarget);
 
   const project = getProject(id);
 
@@ -138,12 +147,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   ];
 
   return (
-    <main className="page-shell min-h-screen w-full min-w-0 overflow-hidden px-5 py-8 sm:px-6 lg:py-10">
+    <main className="page-shell min-h-screen w-full min-w-0 px-5 py-8 sm:px-8 lg:px-12 lg:py-10 xl:px-16 2xl:px-24">
       <JsonLd schemas={ldSchemas} />
-      <div className="mx-auto w-full min-w-0 max-w-[calc(100vw-2.5rem)] sm:max-w-6xl">
+      <div className="w-full min-w-0">
         <nav className="mb-8 grid gap-3 sm:flex sm:items-center sm:justify-between">
           <Link
-            href="/#proyectos"
+            href="/proyectos"
             className="inline-flex min-h-10 w-fit items-center gap-2 rounded-lg border border-[color:var(--outline)] bg-[color:var(--surface)] px-3 text-sm font-semibold text-[color:var(--foreground)] transition hover:border-[color:var(--primary)]"
           >
             <ArrowLeft className="h-4 w-4 text-[color:var(--primary)]" aria-hidden="true" />
@@ -151,7 +160,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           </Link>
           <Link
             href="/#contacto"
-            className="inline-flex min-h-10 w-fit max-w-full items-center gap-2 rounded-lg border border-[color:var(--primary)]/55 px-3 text-sm font-semibold text-[color:var(--primary)] transition hover:bg-[rgba(195,147,86,0.09)]"
+            className="inline-flex min-h-10 w-fit max-w-full items-center gap-2 rounded-lg border border-[color:var(--primary)]/55 px-3 text-sm font-semibold text-[color:var(--primary)] transition hover:bg-[color:var(--accent-soft)]"
           >
             <span className="truncate">Comentar proyecto</span>
             <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
@@ -169,7 +178,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             </div>
 
             <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-start">
-              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg border border-[color:var(--primary)]/45 bg-[rgba(195,147,86,0.12)] text-xl font-semibold text-[color:var(--primary)]">
+              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg border border-[color:var(--primary)]/45 bg-[color:var(--accent-soft)] text-xl font-semibold text-[color:var(--primary)]">
                 {getInitials(project.title)}
               </div>
               <div className="min-w-0">

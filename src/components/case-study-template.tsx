@@ -2,9 +2,11 @@
 
 import { motion } from "motion/react";
 import Link from "next/link";
-import { ArrowLeft, ArrowUpRight, BadgeCheck, LockKeyhole } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, BadgeCheck, ChevronDown, LockKeyhole } from "lucide-react";
+import { ComicCover } from "@/components/comic-cover";
 import { dur, ease, viewport } from "@/lib/motion";
 import type { CaseStudyData } from "@/lib/case-studies";
+import { projectStatusAccent, projectStatusWord, projects } from "@/lib/site-data";
 
 // ─────────────────────────────────────────────
 // Motion helpers
@@ -40,7 +42,7 @@ function Reveal({
 // ─────────────────────────────────────────────
 // CSS Mockups
 // ─────────────────────────────────────────────
-function MobileMockup({ title }: { title: string }) {
+export function MobileMockup() {
   return (
     <div className="relative mx-auto w-[200px]" aria-hidden="true">
       {/* Phone frame */}
@@ -88,7 +90,7 @@ function MobileMockup({ title }: { title: string }) {
   );
 }
 
-function DashboardMockup() {
+export function DashboardMockup() {
   return (
     <div
       className="overflow-hidden rounded-xl border border-[color:var(--border)] bg-[color:var(--background)] shadow-[0_24px_60px_rgba(0,0,0,0.4)]"
@@ -140,123 +142,63 @@ function DashboardMockup() {
   );
 }
 
-function BrowserMockup() {
-  return (
-    <div
-      className="overflow-hidden rounded-xl border border-[color:var(--border)] bg-[color:var(--background)] shadow-[0_24px_60px_rgba(0,0,0,0.4)]"
-      aria-hidden="true"
-    >
-      {/* Browser chrome */}
-      <div className="flex items-center gap-3 border-b border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-3">
-        <div className="flex gap-1.5">
-          <div className="h-2.5 w-2.5 rounded-full bg-[color:var(--error)]/60" />
-          <div className="h-2.5 w-2.5 rounded-full bg-[color:var(--primary)]/60" />
-          <div className="h-2.5 w-2.5 rounded-full bg-[color:var(--success)]/60" />
-        </div>
-        <div className="flex flex-1 items-center gap-2 rounded-md border border-[color:var(--border)] bg-[color:var(--background)] px-3 py-1">
-          <div className="h-1.5 w-1.5 rounded-full bg-[color:var(--accent-cyan)]/60" />
-          <div className="h-1.5 w-32 rounded-full bg-[color:var(--muted)]/40" />
-        </div>
-      </div>
-      {/* Page content */}
-      <div className="space-y-0">
-        {/* Hero block */}
-        <div className="bg-[color:var(--surface)] px-6 py-5">
-          <div className="mb-2 h-4 w-48 rounded-full bg-[color:var(--foreground)]/60" />
-          <div className="h-2.5 w-full max-w-xs rounded-full bg-[color:var(--muted)]/40" />
-          <div className="mt-1 h-2.5 w-48 rounded-full bg-[color:var(--muted)]/30" />
-          <div className="mt-4 h-8 w-28 rounded-lg bg-[color:var(--primary)]/50" />
-        </div>
-        {/* Service grid */}
-        <div className="grid grid-cols-3 gap-2 px-4 py-3">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="rounded-lg border border-[color:var(--border)] bg-[color:var(--surface)] p-2">
-              <div className="mb-1.5 h-6 w-6 rounded-md bg-[color:var(--accent-cyan)]/20" />
-              <div className="h-2 w-full rounded-full bg-[color:var(--foreground)]/40" />
-              <div className="mt-1 h-1.5 w-3/4 rounded-full bg-[color:var(--muted)]/30" />
-            </div>
-          ))}
-        </div>
-        {/* Contact strip */}
-        <div className="flex items-center justify-between bg-[color:var(--surface-elevated)] px-4 py-3">
-          <div className="h-2 w-32 rounded-full bg-[color:var(--foreground)]/30" />
-          <div className="h-6 w-20 rounded-md bg-[color:var(--primary)]/40" />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function SubscriptionMockup() {
-  return (
-    <div
-      className="overflow-hidden rounded-xl border border-[color:var(--border)] bg-[color:var(--background)] shadow-[0_24px_60px_rgba(0,0,0,0.4)]"
-      aria-hidden="true"
-    >
-      {/* Browser chrome */}
-      <div className="flex items-center gap-3 border-b border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-3">
-        <div className="flex gap-1.5">
-          <div className="h-2.5 w-2.5 rounded-full bg-[color:var(--error)]/60" />
-          <div className="h-2.5 w-2.5 rounded-full bg-[color:var(--primary)]/60" />
-          <div className="h-2.5 w-2.5 rounded-full bg-[color:var(--success)]/60" />
-        </div>
-        <div className="flex flex-1 items-center gap-2 rounded-md border border-[color:var(--border)] bg-[color:var(--background)] px-3 py-1">
-          <div className="h-1.5 w-1.5 rounded-full bg-[color:var(--success)]/60" />
-          <div className="h-1.5 w-28 rounded-full bg-[color:var(--muted)]/40" />
-        </div>
-        <div className="flex items-center gap-1.5 rounded-md bg-[color:var(--accent-soft)] px-2 py-1">
-          <div className="h-1.5 w-1.5 rounded-full bg-[color:var(--primary)]" />
-          <div className="h-1.5 w-8 rounded-full bg-[color:var(--primary)]/60" />
-        </div>
-      </div>
-      {/* Member area */}
-      <div className="space-y-2 p-4">
-        {/* Welcome banner */}
-        <div className="rounded-lg bg-[color:var(--accent-soft)] px-4 py-3">
-          <div className="h-2 w-28 rounded-full bg-[color:var(--primary)]" />
-          <div className="mt-1 h-1.5 w-40 rounded-full bg-[color:var(--primary)]/50" />
-        </div>
-        {/* Benefits grid */}
-        <div className="grid grid-cols-2 gap-2">
-          {["Selección del mes", "Descuento socio", "Contenido exclusivo", "Próxima entrega"].map((label, i) => (
-            <div key={label} className="rounded-lg border border-[color:var(--border)] bg-[color:var(--surface)] p-2.5">
-              <div className="mb-1 flex h-5 w-5 items-center justify-center rounded-md bg-[color:var(--accent-cyan)]/20">
-                <div className="h-2 w-2 rounded-sm bg-[color:var(--accent-cyan)]/60" />
-              </div>
-              <div className="h-1.5 rounded-full bg-[color:var(--foreground)]/50" style={{ width: `${60 + i * 8}%` }} />
-              <div className="mt-0.5 h-1 w-3/4 rounded-full bg-[color:var(--muted)]/30" />
-            </div>
-          ))}
-        </div>
-        {/* Plan badge */}
-        <div className="flex items-center justify-between rounded-lg border border-[color:var(--primary)]/30 bg-[color:var(--accent-soft)] px-3 py-2">
-          <div className="h-1.5 w-20 rounded-full bg-[color:var(--primary)]/60" />
-          <div className="h-5 w-14 rounded-md bg-[color:var(--primary)]/40" />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function ProjectMockup({ type, title }: { type: CaseStudyData["mockupType"]; title: string }) {
-  if (type === "mobile")       return <MobileMockup title={title} />;
-  if (type === "dashboard")    return <DashboardMockup />;
-  if (type === "subscription") return <SubscriptionMockup />;
-  return <BrowserMockup />;
-}
-
 // ─────────────────────────────────────────────
-// Section wrapper
+// Section wrapper (used inside the collapsible technical detail)
 // ─────────────────────────────────────────────
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
+    <section className="mb-10 last:mb-0">
+      <h3 className="mb-5 flex items-center gap-3 text-lg font-semibold text-[color:var(--foreground)]">
+        <span className="h-px w-6 shrink-0 bg-[color:var(--accent-cyan)]" aria-hidden="true" />
+        {title}
+      </h3>
+      {children}
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────
+// Comic panel — the narrative beat (Problema/Solución/Resultado).
+// Diagonal clip-path is confined to a fixed-height header band so real
+// paragraph text below is never at risk of being clipped.
+// ─────────────────────────────────────────────
+function ComicPanel({
+  number,
+  eyebrow,
+  title,
+  accent,
+  children,
+}: {
+  number: string;
+  eyebrow: string;
+  title: string;
+  accent: "cyan" | "gold";
+  children: React.ReactNode;
+}) {
+  const isLive = accent === "cyan";
+  return (
     <Reveal>
-      <section className="mb-10">
-        <h2 className="mb-5 flex items-center gap-3 text-xl font-semibold text-[color:var(--foreground)]">
-          <span className="h-px w-6 shrink-0 bg-[color:var(--accent-cyan)]" aria-hidden="true" />
-          {title}
-        </h2>
-        {children}
+      <section
+        className={`relative mb-8 overflow-hidden rounded-xl ${
+          isLive ? "comic-ink-outline-cyan" : "comic-ink-outline"
+        } bg-[color:var(--surface)]`}
+      >
+        <div
+          className={`comic-diagonal relative flex items-center gap-4 px-6 py-6 sm:px-8 ${
+            isLive ? "comic-halftone" : "comic-halftone-gold"
+          }`}
+        >
+          <span className="comic-numeral shrink-0" aria-hidden="true">{number}</span>
+          <div className="min-w-0">
+            <p className={`comic-action-word text-xs ${isLive ? "comic-status-live" : "comic-status-progress"}`}>
+              {eyebrow}
+            </p>
+            <h2 className="mt-1 font-display text-2xl font-bold text-[color:var(--foreground)] sm:text-3xl">
+              {title}
+            </h2>
+          </div>
+        </div>
+        <div className="p-6 sm:p-8">{children}</div>
       </section>
     </Reveal>
   );
@@ -268,14 +210,19 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 export function CaseStudyTemplate({ data }: { data: CaseStudyData }) {
   const VisibilityIcon = data.visibility === "anonymous" ? LockKeyhole : BadgeCheck;
 
+  const projectIndex = projects.findIndex((p) => (p.caseStudySlug ?? p.id) === data.slug);
+  const project = projects[projectIndex];
+  const issueNumber = projectIndex >= 0 ? projectIndex + 1 : 1;
+  const techStack = data.stack.slice(0, 2).map((s) => s.name).join(" · ").toUpperCase();
+
   return (
     <main className="page-shell min-h-screen w-full min-w-0 overflow-hidden">
       {/* ── Top nav ── */}
-      <div className="sticky top-16 z-30 border-b border-[color:var(--border)] bg-[color:var(--background)]/90 backdrop-blur-md">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3 sm:px-6">
+      <div className="sticky top-16 z-30 border-b-2 border-[color:var(--foreground)] bg-[color:var(--background)]">
+        <div className="flex w-full items-center justify-between gap-4 px-5 py-3 sm:px-8 lg:px-12 xl:px-16 2xl:px-24">
           <Link
-            href="/#proyectos"
-            className="inline-flex items-center gap-2 rounded-lg border border-[color:var(--border)] bg-[color:var(--surface)] px-3 py-2 text-sm font-semibold text-[color:var(--foreground)] transition hover:border-[color:var(--primary)] hover:-translate-y-px"
+            href="/proyectos"
+            className="inline-flex items-center gap-2 border-2 border-[color:var(--foreground)] bg-[color:var(--surface)] px-3 py-2 text-sm font-semibold text-[color:var(--foreground)] transition-colors hover:bg-[color:var(--foreground)] hover:text-[color:var(--background)]"
           >
             <ArrowLeft className="h-4 w-4 text-[color:var(--primary)]" aria-hidden="true" />
             Proyectos
@@ -286,7 +233,7 @@ export function CaseStudyTemplate({ data }: { data: CaseStudyData }) {
             <ol className="flex items-center gap-1.5 text-xs text-[color:var(--muted)]">
               <li><Link href="/" className="hover:text-[color:var(--foreground)] transition">Inicio</Link></li>
               <li aria-hidden="true">/</li>
-              <li><Link href="/#proyectos" className="hover:text-[color:var(--foreground)] transition">Proyectos</Link></li>
+              <li><Link href="/proyectos" className="hover:text-[color:var(--foreground)] transition">Proyectos</Link></li>
               <li aria-hidden="true">/</li>
               <li className="text-[color:var(--foreground)]" aria-current="page">{data.h1.split("—")[0].trim()}</li>
             </ol>
@@ -294,7 +241,7 @@ export function CaseStudyTemplate({ data }: { data: CaseStudyData }) {
 
           <Link
             href="/#contacto"
-            className="inline-flex items-center gap-2 rounded-lg border border-[color:var(--primary)]/50 px-3 py-2 text-sm font-semibold text-[color:var(--primary)] transition hover:border-[color:var(--primary)] hover:bg-[color:var(--accent-soft)]"
+            className="inline-flex items-center gap-2 border-2 border-[color:var(--foreground)] bg-[color:var(--primary)] px-3 py-2 text-sm font-semibold text-[color:var(--on-primary)] transition-colors hover:bg-[color:var(--primary-hover)]"
           >
             <span className="hidden sm:inline">Hablar del proyecto</span>
             <span className="sm:hidden">Contacto</span>
@@ -303,7 +250,7 @@ export function CaseStudyTemplate({ data }: { data: CaseStudyData }) {
         </div>
       </div>
 
-      <div className="mx-auto w-full min-w-0 max-w-[calc(100vw-2.5rem)] py-10 sm:max-w-6xl sm:px-6">
+      <div className="w-full min-w-0 px-5 py-10 sm:px-8 lg:px-12 xl:px-16 2xl:px-24">
 
         {/* ── Hero ── */}
         <div className="mb-12 grid gap-10 lg:grid-cols-[1fr_0.85fr] lg:items-center">
@@ -354,14 +301,24 @@ export function CaseStudyTemplate({ data }: { data: CaseStudyData }) {
             </motion.div>
           </div>
 
-          {/* Right: mockup */}
+          {/* Right: comic cover — literal Marvel-style cover, the one loud
+              visual moment on this page */}
           <motion.div
             className="flex items-center justify-center"
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
           >
-            <ProjectMockup type={data.mockupType} title={data.h1} />
+            <ComicCover
+              mode="header"
+              issueNumber={issueNumber}
+              title={data.h1.split("—")[0].trim()}
+              tagline={data.tagline}
+              techStack={techStack}
+              statusWord={project ? projectStatusWord[project.status] : data.statusLabel.toUpperCase()}
+              statusAccent={project ? projectStatusAccent[project.status] : "progress"}
+              mockupType={data.mockupType}
+            />
           </motion.div>
         </div>
 
@@ -369,7 +326,7 @@ export function CaseStudyTemplate({ data }: { data: CaseStudyData }) {
         <div className="grid gap-8 lg:grid-cols-[0.65fr_1.35fr]">
 
           {/* ── Sidebar ── */}
-          <aside className="space-y-6">
+          <aside className="space-y-6 lg:sticky lg:top-24 lg:self-start">
             {/* Stack */}
             <Reveal>
               <div className="rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-5">
@@ -433,20 +390,15 @@ export function CaseStudyTemplate({ data }: { data: CaseStudyData }) {
             )}
           </aside>
 
-          {/* ── Main content ── */}
-          <div className="min-w-0 space-y-2">
+          {/* ── Main content — comic-panel narrative ── */}
+          <div className="min-w-0">
 
-            {/* Context */}
-            <Section title="Contexto">
-              <p className="leading-7 text-[color:var(--surface-foreground)]">{data.context}</p>
-            </Section>
-
-            {/* Problem */}
-            <Section title="El problema">
+            {/* Panel 1 — El problema */}
+            <ComicPanel number="01" eyebrow="El conflicto" title="El problema" accent="gold">
               <p className="mb-4 leading-7 text-[color:var(--surface-foreground)]">{data.problem.intro}</p>
               <ul className="space-y-2">
                 {data.problem.bullets.map((b, i) => (
-                  <li key={i} className="flex gap-3 rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4">
+                  <li key={i} className="flex gap-3 rounded-xl border border-[color:var(--border)] bg-[color:var(--background)] p-4">
                     <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-[color:var(--error)]/15 font-mono text-xs font-bold text-[color:var(--error)]">
                       {i + 1}
                     </span>
@@ -454,131 +406,150 @@ export function CaseStudyTemplate({ data }: { data: CaseStudyData }) {
                   </li>
                 ))}
               </ul>
-            </Section>
+            </ComicPanel>
 
-            {/* Objectives */}
-            <Section title="Objetivos">
-              <ul className="grid gap-2 sm:grid-cols-2">
-                {data.objectives.map((obj, i) => (
-                  <li key={i} className="flex gap-3 rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4">
-                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-[color:var(--accent-cyan-soft)] font-mono text-xs font-bold text-[color:var(--accent-cyan)]">
-                      {i + 1}
-                    </span>
-                    <p className="text-sm leading-6 text-[color:var(--surface-foreground)]">{obj}</p>
-                  </li>
-                ))}
-              </ul>
-            </Section>
-
-            {/* Solution */}
-            <Section title="Solución">
+            {/* Panel 2 — La solución */}
+            <ComicPanel number="02" eyebrow="La jugada" title="La solución" accent="cyan">
               <div className="space-y-4">
                 {data.solution.map((para, i) => (
                   <p key={i} className="leading-7 text-[color:var(--surface-foreground)]">{para}</p>
                 ))}
               </div>
-            </Section>
+            </ComicPanel>
 
-            {/* Architecture */}
-            <Section title="Arquitectura">
-              <div className="overflow-hidden rounded-xl border border-[color:var(--border)]">
-                {data.architecture.map((row, i) => (
-                  <div
-                    key={row.layer}
-                    className={`flex flex-col gap-1 p-4 sm:flex-row sm:items-start sm:gap-4 ${
-                      i < data.architecture.length - 1 ? "border-b border-[color:var(--border)]" : ""
-                    } ${i % 2 === 0 ? "bg-[color:var(--surface)]" : "bg-[color:var(--background)]"}`}
-                  >
-                    <div className="w-28 shrink-0">
-                      <span className="font-mono text-xs font-bold text-[color:var(--accent-cyan)]">{row.layer}</span>
-                    </div>
-                    <div className="w-44 shrink-0">
-                      <span className="rounded-md border border-[color:var(--border)] bg-[color:var(--surface-elevated)] px-2 py-0.5 font-mono text-[10px] text-[color:var(--surface-foreground)]">
-                        {row.tech}
-                      </span>
-                    </div>
-                    <p className="text-sm leading-6 text-[color:var(--muted)]">{row.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </Section>
-
-            {/* Features */}
-            <Section title="Funcionalidades">
-              <div className="grid gap-3 sm:grid-cols-2">
-                {data.features.map((f) => (
-                  <div key={f.title} className="rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4">
-                    <h3 className="mb-1 text-sm font-semibold text-[color:var(--foreground)]">{f.title}</h3>
-                    <p className="text-sm leading-6 text-[color:var(--muted)]">{f.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </Section>
-
-            {/* Stack detail */}
-            <Section title="Stack y decisiones tecnológicas">
-              <div className="overflow-hidden rounded-xl border border-[color:var(--border)]">
-                <div className="grid grid-cols-3 gap-4 bg-[color:var(--surface-elevated)] px-4 py-2 text-[10px] font-bold uppercase tracking-wider text-[color:var(--muted)]">
-                  <span>Tecnología</span><span>Categoría</span><span>Para qué</span>
-                </div>
-                {data.stack.map((s, i) => (
-                  <div
-                    key={s.name}
-                    className={`grid grid-cols-3 gap-4 px-4 py-3 text-sm ${
-                      i < data.stack.length - 1 ? "border-b border-[color:var(--border)]" : ""
-                    } ${i % 2 === 0 ? "bg-[color:var(--surface)]" : "bg-[color:var(--background)]"}`}
-                  >
-                    <span className="font-semibold text-[color:var(--foreground)]">{s.name}</span>
-                    <span className="font-mono text-xs text-[color:var(--accent-cyan)]">{s.category}</span>
-                    <span className="text-[color:var(--muted)]">{s.purpose}</span>
-                  </div>
-                ))}
-              </div>
-            </Section>
-
-            {/* Decisions */}
-            <Section title="Decisiones importantes">
-              <div className="grid gap-4 sm:grid-cols-2">
-                {data.decisions.map((d) => (
-                  <div key={d.title} className="rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-5">
-                    <p className="mb-2 text-sm font-bold text-[color:var(--primary)]">{d.title}</p>
-                    <p className="text-sm leading-6 text-[color:var(--muted)]">{d.why}</p>
-                  </div>
-                ))}
-              </div>
-            </Section>
-
-            {/* Result */}
-            <Section title="Resultado">
+            {/* Panel 3 — El resultado / estado actual */}
+            <ComicPanel number="03" eyebrow="El desenlace" title={data.statusLabel === "Demo técnica" ? "Estado actual" : "El resultado"} accent="gold">
               <p className="mb-4 leading-7 text-[color:var(--surface-foreground)]">{data.result.summary}</p>
               <ul className="space-y-2">
                 {data.result.points.map((pt, i) => (
-                  <li key={i} className="flex gap-3 rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4">
+                  <li key={i} className="flex gap-3 rounded-xl border border-[color:var(--border)] bg-[color:var(--background)] p-4">
                     <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[color:var(--success)]" aria-hidden="true" />
                     <p className="text-sm leading-6 text-[color:var(--surface-foreground)]">{pt}</p>
                   </li>
                 ))}
               </ul>
-            </Section>
+            </ComicPanel>
 
-            {/* Demonstrates */}
-            <Section title="Qué demuestra este proyecto">
-              <ul className="space-y-2">
-                {data.demonstrates.map((d, i) => (
-                  <li key={i} className="flex gap-3 rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4">
-                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-[color:var(--accent-soft)] font-mono text-xs font-bold text-[color:var(--primary)]">→</span>
-                    <p className="text-sm leading-6 text-[color:var(--surface-foreground)]">{d}</p>
-                  </li>
-                ))}
-              </ul>
-            </Section>
+            {/* Collapsible technical detail — real SSR'd HTML via <details>,
+                crawlable without JS, expandable for technical readers without
+                slowing down the business-facing comic narrative above. */}
+            <Reveal>
+              <details className="group mb-8 overflow-hidden rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)]">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-6 py-5 text-left transition hover:bg-[color:var(--surface-elevated)] sm:px-8">
+                  <div>
+                    <p className="section-eyebrow">Para perfiles técnicos</p>
+                    <h2 className="mt-1 font-display text-xl font-bold text-[color:var(--foreground)] sm:text-2xl">
+                      Detalle técnico
+                    </h2>
+                  </div>
+                  <ChevronDown
+                    className="h-5 w-5 shrink-0 text-[color:var(--muted)] transition-transform duration-300 group-open:rotate-180"
+                    aria-hidden="true"
+                  />
+                </summary>
+
+                <div className="border-t border-[color:var(--border)] px-6 py-6 sm:px-8">
+                  <Section title="Contexto">
+                    <p className="leading-7 text-[color:var(--surface-foreground)]">{data.context}</p>
+                  </Section>
+
+                  <Section title="Objetivos">
+                    <ul className="grid gap-2 sm:grid-cols-2">
+                      {data.objectives.map((obj, i) => (
+                        <li key={i} className="flex gap-3 rounded-xl border border-[color:var(--border)] bg-[color:var(--background)] p-4">
+                          <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-[color:var(--accent-cyan-soft)] font-mono text-xs font-bold text-[color:var(--accent-cyan)]">
+                            {i + 1}
+                          </span>
+                          <p className="text-sm leading-6 text-[color:var(--surface-foreground)]">{obj}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  </Section>
+
+                  <Section title="Arquitectura">
+                    <div className="overflow-hidden rounded-xl border border-[color:var(--border)]">
+                      {data.architecture.map((row, i) => (
+                        <div
+                          key={row.layer}
+                          className={`flex flex-col gap-1 p-4 sm:flex-row sm:items-start sm:gap-4 ${
+                            i < data.architecture.length - 1 ? "border-b border-[color:var(--border)]" : ""
+                          } ${i % 2 === 0 ? "bg-[color:var(--background)]" : "bg-[color:var(--surface-elevated)]"}`}
+                        >
+                          <div className="w-28 shrink-0">
+                            <span className="font-mono text-xs font-bold text-[color:var(--accent-cyan)]">{row.layer}</span>
+                          </div>
+                          <div className="w-44 shrink-0">
+                            <span className="rounded-md border border-[color:var(--border)] bg-[color:var(--surface-elevated)] px-2 py-0.5 font-mono text-[10px] text-[color:var(--surface-foreground)]">
+                              {row.tech}
+                            </span>
+                          </div>
+                          <p className="text-sm leading-6 text-[color:var(--muted)]">{row.desc}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </Section>
+
+                  <Section title="Funcionalidades">
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      {data.features.map((f) => (
+                        <div key={f.title} className="rounded-xl border border-[color:var(--border)] bg-[color:var(--background)] p-4">
+                          <h4 className="mb-1 text-sm font-semibold text-[color:var(--foreground)]">{f.title}</h4>
+                          <p className="text-sm leading-6 text-[color:var(--muted)]">{f.desc}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </Section>
+
+                  <Section title="Stack y para qué se usa">
+                    <div className="overflow-hidden rounded-xl border border-[color:var(--border)]">
+                      <div className="grid grid-cols-3 gap-4 bg-[color:var(--surface-elevated)] px-4 py-2 text-[10px] font-bold uppercase tracking-wider text-[color:var(--muted)]">
+                        <span>Tecnología</span><span>Categoría</span><span>Para qué</span>
+                      </div>
+                      {data.stack.map((s, i) => (
+                        <div
+                          key={s.name}
+                          className={`grid grid-cols-3 gap-4 px-4 py-3 text-sm ${
+                            i < data.stack.length - 1 ? "border-b border-[color:var(--border)]" : ""
+                          } ${i % 2 === 0 ? "bg-[color:var(--background)]" : "bg-[color:var(--surface-elevated)]"}`}
+                        >
+                          <span className="font-semibold text-[color:var(--foreground)]">{s.name}</span>
+                          <span className="font-mono text-xs text-[color:var(--accent-cyan)]">{s.category}</span>
+                          <span className="text-[color:var(--muted)]">{s.purpose}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </Section>
+
+                  <Section title="Decisiones importantes">
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      {data.decisions.map((d) => (
+                        <div key={d.title} className="rounded-xl border border-[color:var(--border)] bg-[color:var(--background)] p-5">
+                          <p className="mb-2 text-sm font-bold text-[color:var(--primary)]">{d.title}</p>
+                          <p className="text-sm leading-6 text-[color:var(--muted)]">{d.why}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </Section>
+
+                  <Section title="Qué demuestra este proyecto">
+                    <ul className="space-y-2">
+                      {data.demonstrates.map((d, i) => (
+                        <li key={i} className="flex gap-3 rounded-xl border border-[color:var(--border)] bg-[color:var(--background)] p-4">
+                          <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-[color:var(--accent-soft)] font-mono text-xs font-bold text-[color:var(--primary)]">→</span>
+                          <p className="text-sm leading-6 text-[color:var(--surface-foreground)]">{d}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  </Section>
+                </div>
+              </details>
+            </Reveal>
 
             {/* CTA */}
             <Reveal>
-              <div className="relative mt-4 overflow-hidden rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] px-6 py-10 text-center">
-                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_100%,rgba(82,208,220,0.07),transparent)]" aria-hidden="true" />
+              <div className="border-2 border-[color:var(--foreground)] bg-[color:var(--surface)] px-6 py-10 text-center">
                 <p className="section-eyebrow mb-3 justify-center">¿Necesitas algo similar?</p>
-                <h2 className="text-2xl font-semibold text-[color:var(--foreground)]">
+                <h2 className="font-display text-2xl font-bold text-[color:var(--foreground)]">
                   Cuéntame tu proyecto
                 </h2>
                 <p className="mx-auto mt-3 max-w-md text-pretty text-[color:var(--muted)]">
@@ -586,7 +557,7 @@ export function CaseStudyTemplate({ data }: { data: CaseStudyData }) {
                 </p>
                 <Link
                   href="/#contacto"
-                  className="mt-6 inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-[color:var(--primary)] px-6 text-sm font-semibold text-[color:var(--on-primary)] transition hover:bg-[color:var(--primary-hover)] hover:-translate-y-px"
+                  className="mt-6 inline-flex min-h-12 items-center justify-center gap-2 border-2 border-[color:var(--foreground)] bg-[color:var(--primary)] px-6 text-sm font-semibold text-[color:var(--on-primary)] transition-colors hover:bg-[color:var(--primary-hover)]"
                 >
                   Agendar llamada
                   <ArrowUpRight className="h-4 w-4" aria-hidden="true" />

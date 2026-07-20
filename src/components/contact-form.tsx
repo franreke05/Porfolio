@@ -5,7 +5,7 @@ import { useFormStatus } from "react-dom";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { submitContactMessage } from "@/app/actions";
 import { initialContactState } from "@/lib/contact";
-import { ClickSpark } from "@/components/click-spark";
+import { LetterpressStamp } from "@/components/letterpress-stamp";
 
 const projectTypes = [
   "App mobile",
@@ -23,10 +23,10 @@ function SubmitButton() {
   const { pending } = useFormStatus();
 
   return (
-    <ClickSpark className="inline-flex rounded-lg" sparkColor="var(--on-primary)">
+    <LetterpressStamp className="rounded-lg">
       <button
         type="submit"
-        className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-[color:var(--primary)] px-5 text-sm font-semibold text-[color:var(--on-primary)] transition hover:-translate-y-0.5 hover:bg-[color:var(--primary-hover)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--surface)] disabled:cursor-not-allowed disabled:opacity-60"
+        className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border-2 border-[color:var(--foreground)] bg-[color:var(--primary)] px-5 text-sm font-semibold text-[color:var(--on-primary)] transition-colors hover:bg-[color:var(--primary-hover)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--surface)] disabled:cursor-not-allowed disabled:opacity-60"
         disabled={pending}
       >
         {pending ? (
@@ -41,7 +41,7 @@ function SubmitButton() {
           </>
         )}
       </button>
-    </ClickSpark>
+    </LetterpressStamp>
   );
 }
 
@@ -71,9 +71,9 @@ export function ContactForm() {
   return (
     <form
       action={formAction}
-      className="rounded-xl border border-[color:var(--border)] bg-[linear-gradient(148deg,var(--surface-elevated),var(--surface))] p-5 shadow-[0_16px_48px_rgba(0,0,0,0.28)] sm:p-6"
+      className="rounded-xl border-2 border-[color:var(--foreground)] bg-[color:var(--surface)] p-5 sm:p-6"
     >
-      <div className="mb-5 rounded-md border border-[color:var(--border)] bg-[color:var(--accent-cyan-soft)] p-3 text-sm leading-6 text-[color:var(--surface-foreground)]">
+      <div className="mb-5 rounded-md border border-[color:var(--border)] bg-[color:var(--accent-soft)] p-3 text-sm leading-6 text-[color:var(--surface-foreground)]">
         Describe el problema, el objetivo y el contexto. Con eso puedo proponerte una ruta clara.
       </div>
 
@@ -218,8 +218,8 @@ export function ContactForm() {
         <p
           className={`mt-4 rounded-md border px-3 py-2 text-sm ${
             state.status === "success"
-              ? "border-[rgba(101,214,218,0.45)] bg-[rgba(101,214,218,0.1)] text-[color:var(--foreground)]"
-              : "border-[rgba(207,102,92,0.45)] bg-[rgba(207,102,92,0.1)] text-[color:var(--foreground)]"
+              ? "border-[color:var(--success)]/45 bg-[color:var(--success)]/10 text-[color:var(--foreground)]"
+              : "border-[color:var(--error)]/45 bg-[color:var(--error)]/10 text-[color:var(--foreground)]"
           }`}
           aria-live="polite"
         >
