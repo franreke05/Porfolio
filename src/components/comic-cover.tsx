@@ -7,7 +7,7 @@ import { DashboardMockup, MobileMockup } from "@/components/case-study-template"
 type ComicCoverMockupType = "mobile" | "dashboard" | "browser" | "subscription";
 
 type ComicCoverProps = {
-  mode: "gallery" | "header";
+  mode: "gallery" | "header" | "mini";
   issueNumber: number;
   title: string;
   tagline: string;
@@ -112,6 +112,46 @@ export function ComicCover({
 }: ComicCoverProps) {
   const reduceMotion = useReducedMotion();
   const issue = String(issueNumber).padStart(2, "0");
+
+  // Compact variant for dense previews (e.g. 3 covers fanned in a homepage
+  // teaser) — the full gallery/header layout below assumes ≥250px of width
+  // for its text-2xl+ masthead and tagline; forced into a much smaller box
+  // it clips mid-word instead of scaling down. This drops the tagline and
+  // price-tag/stack chip (the two worst offenders) and shrinks everything
+  // else, so it stays legible at ~100–150px instead of just cropping.
+  if (mode === "mini") {
+    return (
+      <div className={`mx-auto w-full ${className}`}>
+        <div className="flex aspect-[2/3] w-full flex-col overflow-hidden border-2 border-[color:var(--foreground)] bg-[color:var(--surface)]">
+          <div className="flex shrink-0 items-center justify-between gap-1 border-b-2 border-[color:var(--foreground)] bg-[color:var(--background)] px-1.5 py-1">
+            <span className="font-mono text-[7px] font-bold text-[color:var(--foreground)]">Nº{issue}</span>
+            <span
+              className={`comic-action-word text-[6px] ${statusAccent === "live" ? "comic-status-live" : "comic-status-progress"}`}
+            >
+              {statusWord}
+            </span>
+          </div>
+          <p className="line-clamp-2 shrink-0 px-1.5 py-1.5 font-display text-[11px] font-bold italic uppercase leading-[1.1] text-[color:var(--foreground)]">
+            {title}
+          </p>
+          <HeroArt mockupType={mockupType} />
+          <div className="relative shrink-0 border-t-2 border-[color:var(--foreground)] bg-[color:var(--background)] px-1.5 py-1.5">
+            <motion.div
+              className="pointer-events-none absolute -top-5 right-1 h-7 w-7"
+              initial={reduceMotion ? undefined : { scale: 0, rotate: -25, opacity: 0 }}
+              whileInView={{ scale: 1, rotate: -12, opacity: 1 }}
+              viewport={{ once: true, amount: 0.6 }}
+              transition={{ type: "spring", stiffness: 260, damping: 18 }}
+            >
+              <Starburst className="h-full w-full" />
+            </motion.div>
+            <Barcode seed={title} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const s = sizing[mode];
 
   return (

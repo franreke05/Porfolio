@@ -169,12 +169,12 @@ function ActTrabajo() {
             <Link
               key={project.id}
               href={`/proyectos/${project.caseStudySlug ?? project.id}`}
-              className="w-28 shrink-0 transition-transform duration-300 hover:-translate-y-1 sm:w-32"
+              className="w-24 shrink-0 transition-transform duration-300 hover:-translate-y-1 sm:w-28 md:w-32"
               style={{ transform: `rotate(${(i - 1) * 4}deg)` }}
               aria-label={`Ver caso completo: ${project.title}`}
             >
               <ComicCover
-                mode="gallery"
+                mode="mini"
                 issueNumber={i + 1}
                 title={project.title}
                 tagline={study?.tagline ?? project.projectType}
