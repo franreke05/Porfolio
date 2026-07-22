@@ -91,6 +91,7 @@ export default function ProyectosPage() {
                   statusWord={projectStatusWord[project.status]}
                   statusAccent={projectStatusAccent[project.status]}
                   mockupType={project.image}
+                  brandMark={project.id === "flashfix" ? "flashfix" : undefined}
                   className="transition-shadow duration-300 group-hover:shadow-[6px_6px_0_0_var(--foreground)]"
                 />
               </Link>

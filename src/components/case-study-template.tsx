@@ -4,6 +4,7 @@ import { motion } from "motion/react";
 import Link from "next/link";
 import { ArrowLeft, ArrowUpRight, BadgeCheck, ChevronDown, LockKeyhole } from "lucide-react";
 import { ComicCover } from "@/components/comic-cover";
+import { FlashFixInterfaceGallery } from "@/components/flashfix-interface-gallery";
 import { dur, ease, viewport } from "@/lib/motion";
 import type { CaseStudyData } from "@/lib/case-studies";
 import { projectStatusAccent, projectStatusWord, projects } from "@/lib/site-data";
@@ -304,7 +305,7 @@ export function CaseStudyTemplate({ data }: { data: CaseStudyData }) {
           {/* Right: comic cover — literal Marvel-style cover, the one loud
               visual moment on this page */}
           <motion.div
-            className="flex items-center justify-center"
+            className={`flex items-center justify-center ${data.slug === "flashfix" ? "lg:mt-8" : ""}`}
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
@@ -318,11 +319,18 @@ export function CaseStudyTemplate({ data }: { data: CaseStudyData }) {
               statusWord={project ? projectStatusWord[project.status] : data.statusLabel.toUpperCase()}
               statusAccent={project ? projectStatusAccent[project.status] : "progress"}
               mockupType={data.mockupType}
+              brandMark={data.slug === "flashfix" ? "flashfix" : undefined}
             />
           </motion.div>
         </div>
 
         {/* ── Two-column content ── */}
+        {data.slug === "flashfix" && (
+          <Reveal>
+            <FlashFixInterfaceGallery />
+          </Reveal>
+        )}
+
         <div className="grid gap-8 lg:grid-cols-[0.65fr_1.35fr]">
 
           {/* ── Sidebar ── */}

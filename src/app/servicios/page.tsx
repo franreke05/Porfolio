@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
 import { JsonLd } from "@/components/json-ld";
+import { ServicesTabletExperience, type ServiceTabletOffering } from "@/components/services-tablet-experience";
 import { SITE_NAME, SITE_URL, canonical, faqPageSchema } from "@/lib/seo";
 
 export const metadata: Metadata = {
@@ -76,7 +76,7 @@ const services = [
     description:
       "Integraciones entre herramientas, formularios automáticos, notificaciones y reportes que se generan solos. Tu equipo enfocado en lo que importa.",
   },
-] as const;
+] as const satisfies readonly ServiceTabletOffering[];
 
 const serviciosFaqs = [
   {
@@ -110,9 +110,9 @@ export default function ServiciosPage() {
     <>
       <JsonLd schemas={[serviciosIndexSchema, faqPageSchema(serviciosFaqs)]} />
 
-      <div className="w-full px-5 pb-24 pt-28 sm:px-8 lg:px-12 xl:px-16 2xl:px-24">
+      <div className="mx-auto w-full max-w-[1600px] px-5 pb-20 pt-28 sm:px-8 lg:px-12 xl:px-16 2xl:px-20">
         {/* Breadcrumb */}
-        <nav aria-label="Breadcrumb" className="mb-10">
+        <nav aria-label="Breadcrumb" className="mb-8">
           <ol className="flex items-center gap-2 text-sm text-[color:var(--muted)]">
             <li>
               <Link
@@ -135,12 +135,14 @@ export default function ServiciosPage() {
         </nav>
 
         {/* Header */}
-        <header className="mb-14">
-          <p className="section-eyebrow mb-4">Lo que construyo</p>
-          <h1 className="mb-4 font-display text-4xl font-bold tracking-tight text-[color:var(--foreground)] sm:text-5xl">
-            Servicios de desarrollo digital
-          </h1>
-          <p className="max-w-2xl text-lg leading-relaxed text-[color:var(--muted)]">
+        <header className="mb-10 grid gap-6 lg:grid-cols-[1.05fr_0.75fr] lg:items-end lg:gap-14">
+          <div>
+            <p className="section-eyebrow mb-4">Lo que construyo</p>
+            <h1 className="max-w-[15ch] font-display text-4xl font-bold leading-[0.98] tracking-tight text-[color:var(--foreground)] sm:text-5xl xl:text-6xl">
+              Servicios de desarrollo digital
+            </h1>
+          </div>
+          <p className="max-w-2xl text-lg leading-relaxed text-[color:var(--muted)] lg:pb-1">
             Trabajo con empresas y autónomos que necesitan sistemas digitales
             reales: apps que funcionan, paneles que se usan y webs que generan
             contactos. Sin intermediarios, sin equipos inflados, sin promesas
@@ -148,72 +150,37 @@ export default function ServiciosPage() {
           </p>
         </header>
 
-        {/* Service grid */}
+        {/* Interactive service explorer */}
         <section aria-label="Listado de servicios">
-          <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            {services.map((service) => (
-              <li key={service.href}>
-                <Link
-                  href={service.href}
-                  className="group flex h-full flex-col gap-4 border-2 border-[color:var(--foreground)] bg-[color:var(--surface)] p-6 transition-colors hover:bg-[color:var(--surface-elevated)]"
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center border-2 border-[color:var(--foreground)] bg-[color:var(--surface-elevated)] font-mono text-sm font-bold text-[color:var(--primary)]">
-                      {service.code}
-                    </div>
-                    <ArrowUpRight className="h-4 w-4 shrink-0 text-[color:var(--muted)] transition group-hover:text-[color:var(--primary)]" />
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <p className="font-display text-lg font-semibold text-[color:var(--foreground)]">
-                      {service.title}
-                    </p>
-                    <p className="font-mono text-xs text-[color:var(--muted)]">
-                      {service.tagline}
-                    </p>
-                  </div>
-                  <p className="mt-auto text-sm leading-6 text-[color:var(--muted)]">
-                    {service.description}
-                  </p>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <ServicesTabletExperience services={services} />
         </section>
 
-        {/* FAQ — folded in from the old homepage: pricing/timeline questions
-            belong next to the service descriptions that raise them. */}
-        <section className="mt-20">
-          <p className="section-eyebrow mb-4">Preguntas frecuentes</p>
-          <h2 className="mb-8 max-w-2xl text-balance font-display text-2xl font-bold leading-tight text-[color:var(--foreground)] sm:text-3xl">
-            Lo que suelen preguntarme antes de empezar.
-          </h2>
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-            {serviciosFaqs.map((faq) => (
-              <div key={faq.q} className="border-2 border-[color:var(--foreground)] bg-[color:var(--surface)] p-5">
-                <h3 className="font-semibold text-[color:var(--foreground)]">{faq.q}</h3>
-                <p className="mt-2 text-sm leading-6 text-[color:var(--muted)]">{faq.a}</p>
-              </div>
+        <section className="mt-24 grid gap-10 lg:grid-cols-[0.62fr_1.38fr] lg:gap-16" aria-labelledby="servicios-faq-title">
+          <div className="self-start lg:sticky lg:top-28">
+            <p className="section-eyebrow mb-4">Preguntas frecuentes</p>
+            <h2 id="servicios-faq-title" className="max-w-xl text-balance font-display text-3xl font-bold leading-tight text-[color:var(--foreground)] sm:text-4xl">
+              Lo importante, antes de empezar.
+            </h2>
+            <p className="mt-4 max-w-md leading-7 text-[color:var(--muted)]">
+              Alcance, tiempos, propiedad del código y soporte explicados con claridad desde el principio.
+            </p>
+          </div>
+
+          <div>
+            {serviciosFaqs.map((faq, index) => (
+              <details key={faq.q} className="group border-t border-[color:var(--foreground)] last:border-b">
+                <summary className="grid cursor-pointer list-none grid-cols-[2rem_1fr_auto] items-start gap-3 py-5 marker:content-none sm:gap-5 sm:py-6">
+                  <span className="pt-1 font-mono text-[10px] font-bold text-[color:var(--primary)]">{String(index + 1).padStart(2, "0")}</span>
+                  <h3 className="font-display text-lg font-bold leading-snug text-[color:var(--foreground)] sm:text-xl">{faq.q}</h3>
+                  <span className="flex h-7 w-7 items-center justify-center border border-[color:var(--foreground)] font-mono text-lg leading-none text-[color:var(--primary)] transition-transform duration-300 group-open:rotate-45" aria-hidden="true">+</span>
+                </summary>
+                <div className="pb-6 pl-11 pr-10 sm:pl-[3.25rem] sm:pr-14">
+                  <p className="max-w-3xl leading-7 text-[color:var(--muted)]">{faq.a}</p>
+                </div>
+              </details>
             ))}
           </div>
         </section>
-
-        {/* CTA */}
-        <div className="mt-16 border-2 border-[color:var(--foreground)] bg-[color:var(--surface)] px-6 py-10 text-center">
-          <p className="section-eyebrow mb-3 justify-center">¿Hablamos?</p>
-          <h2 className="font-display text-2xl font-bold text-[color:var(--foreground)]">
-            ¿No sabes por dónde empezar?
-          </h2>
-          <p className="mx-auto mt-3 max-w-md text-[color:var(--muted)]">
-            Cuéntame tu proyecto en una llamada de 30 minutos. Sin compromiso,
-            sin presión de venta. Solo escucho y te digo si puedo ayudarte.
-          </p>
-          <Link
-            href="/#contacto"
-            className="mt-6 inline-flex min-h-12 items-center justify-center gap-2 border-2 border-[color:var(--foreground)] bg-[color:var(--primary)] px-6 text-sm font-semibold text-[color:var(--on-primary)] transition-colors hover:bg-[color:var(--primary-hover)]"
-          >
-            Agendar llamada
-          </Link>
-        </div>
       </div>
     </>
   );

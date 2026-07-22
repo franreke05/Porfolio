@@ -2,6 +2,7 @@ import { useId } from "react";
 
 type PhoneShellProps = {
   className?: string;
+  layer?: "complete" | "depth";
 };
 
 /**
@@ -13,7 +14,7 @@ type PhoneShellProps = {
  * Gradient ids are namespaced with useId() in case more than one instance
  * ever mounts at once — plain string ids would otherwise collide.
  */
-export function PhoneShell({ className }: PhoneShellProps) {
+export function PhoneShell({ className, layer = "complete" }: PhoneShellProps) {
   const uid = useId();
   const frameGradId = `phone-frame-${uid}`;
   const bodyGradId  = `phone-body-${uid}`;
@@ -38,23 +39,45 @@ export function PhoneShell({ className }: PhoneShellProps) {
         </linearGradient>
       </defs>
 
-      {/* Phone body — dark hardware chassis, deliberately kept dark
-          regardless of site theme (a real phone's bezel is dark either
-          way); the screen glass below carries the site's paper palette. */}
-      <rect x="6" y="4" width="348" height="772" rx="58" fill={`url(#${bodyGradId})`} />
-      {/* Gradient border */}
-      <rect x="6" y="4" width="348" height="772" rx="58" fill="none" stroke={`url(#${frameGradId})`} strokeWidth="2" />
-      {/* Screen glass */}
-      <rect x="20" y="54" width="320" height="690" rx="44" fill="var(--background)" />
-      {/* Dynamic island */}
-      <ellipse cx="180" cy="42" rx="42" ry="11" fill="#0c0a08" />
-      {/* Volume buttons */}
-      <rect x="3"   y="176" width="3" height="70" rx="1.5" style={{ fill: "var(--primary)", fillOpacity: 0.3 }} />
-      <rect x="3"   y="256" width="3" height="70" rx="1.5" style={{ fill: "var(--primary)", fillOpacity: 0.3 }} />
-      {/* Power button */}
-      <rect x="354" y="210" width="3" height="90" rx="1.5" style={{ fill: "var(--foreground)", fillOpacity: 0.3 }} />
-      {/* Home indicator */}
-      <rect x="140" y="748" width="80" height="4" rx="2" fill="var(--foreground)" opacity="0.28" />
+      {layer === "depth" ? (
+        <>
+          <rect x="5" y="3" width="350" height="774" rx="59" fill={`url(#${bodyGradId})`} />
+          <rect
+            x="5"
+            y="3"
+            width="350"
+            height="774"
+            rx="59"
+            fill="none"
+            stroke="var(--primary)"
+            strokeWidth="3"
+            opacity="0.68"
+          />
+          <rect x="1" y="176" width="6" height="70" rx="3" fill="var(--primary)" opacity="0.78" />
+          <rect x="1" y="256" width="6" height="70" rx="3" fill="var(--primary)" opacity="0.62" />
+          <rect x="353" y="210" width="6" height="90" rx="3" fill="var(--primary)" opacity="0.52" />
+        </>
+      ) : (
+        <>
+          {/* Phone body — dark hardware chassis, deliberately kept dark
+              regardless of site theme (a real phone's bezel is dark either
+              way); the screen glass below carries the site's paper palette. */}
+          <rect x="6" y="4" width="348" height="772" rx="58" fill={`url(#${bodyGradId})`} />
+          {/* Gradient border */}
+          <rect x="6" y="4" width="348" height="772" rx="58" fill="none" stroke={`url(#${frameGradId})`} strokeWidth="2" />
+          {/* Screen glass */}
+          <rect x="20" y="54" width="320" height="690" rx="44" fill="var(--background)" />
+          {/* Dynamic island */}
+          <ellipse cx="180" cy="42" rx="42" ry="11" fill="#0c0a08" />
+          {/* Volume buttons */}
+          <rect x="3"   y="176" width="3" height="70" rx="1.5" style={{ fill: "var(--primary)", fillOpacity: 0.3 }} />
+          <rect x="3"   y="256" width="3" height="70" rx="1.5" style={{ fill: "var(--primary)", fillOpacity: 0.3 }} />
+          {/* Power button */}
+          <rect x="354" y="210" width="3" height="90" rx="1.5" style={{ fill: "var(--foreground)", fillOpacity: 0.3 }} />
+          {/* Home indicator */}
+          <rect x="140" y="748" width="80" height="4" rx="2" fill="var(--foreground)" opacity="0.28" />
+        </>
+      )}
     </svg>
   );
 }
