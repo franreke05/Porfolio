@@ -125,6 +125,14 @@ export function PhoneDepthStage({
   const shadowScale = useTransform(smoothY, [-1, 1], [1.025, 0.98]);
   const bezelLightY = useTransform(smoothY, [-1, 1], [-5, 5]);
 
+  // Glass glare — a soft diagonal sheen that slides across the screen glass
+  // as the chassis tilts, tracking rotation faster than the object itself
+  // (a fixed light source, not a decal glued to the glass). This is the
+  // single biggest lever for reading as real glass instead of a flat-color
+  // rectangle — without it no amount of frame shading sells the material.
+  const glareX = useTransform(combinedRotateY, [-16, 16], [-38, 38]);
+  const glareY = useTransform(combinedRotateX, [-6, 6], [-26, 26]);
+
   useEffect(() => {
     if (interactive && !reducedMotion) return;
 
@@ -270,6 +278,41 @@ export function PhoneDepthStage({
 
         {/* Live screen — not pointer-events-none: ContactoScreen renders real links. */}
         {children}
+
+        {/* Glass glare — sits above the live screen content at a higher Z,
+            clipped to the same rounded rect the screen uses. Low-opacity
+            "screen" blend so it reads as a light reflection sliding over
+            glass rather than a white smear obscuring the UI underneath. */}
+        <div
+          className="pointer-events-none absolute overflow-hidden"
+          style={{
+            left: "5.56%", top: "6.92%", width: "88.9%", height: "88.46%",
+            borderRadius: "9.4%",
+            transform: "translateZ(6px)",
+          }}
+          aria-hidden="true"
+        >
+          <motion.div
+            className="absolute -inset-[60%] rotate-[22deg] mix-blend-overlay opacity-70"
+            style={{
+              x: glareX,
+              y: glareY,
+              background:
+                "linear-gradient(105deg, transparent 44%, rgba(0,0,0,0.06) 48%, rgba(255,255,255,0.5) 49.5%, rgba(255,255,255,0.5) 50.5%, rgba(0,0,0,0.06) 52%, transparent 56%)",
+            }}
+          />
+          {/* Ambient corner sheen — a fixed, gentle top-left highlight so the
+              glass reads as reflective even when the sliding streak above is
+              parked out of frame at rest. Overlay blend keeps it subtle
+              against both light and dark screens. */}
+          <div
+            className="pointer-events-none absolute -inset-[10%] mix-blend-overlay opacity-80"
+            style={{
+              background:
+                "radial-gradient(circle at 22% 14%, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.1) 20%, transparent 42%)",
+            }}
+          />
+        </div>
       </motion.div>
 
       {/* Back plate — the flip's destination. Carries the rotator's rotation

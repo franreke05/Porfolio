@@ -41,7 +41,10 @@ export type CaseStudyData = {
   projectType: string;
   statusLabel: string;
   visibility: "public" | "anonymous";
-  mockupType: "mobile" | "dashboard" | "browser" | "subscription";
+  /** Commissioned comic-cover poster art — fallback for the rare case `project` isn't found in site-data. */
+  coverSrc: string;
+  coverAlt: string;
+  coverFit?: "cover" | "contain";
 
   // Sidebar metrics
   metrics: Array<{ label: string; value: string }>;
@@ -79,7 +82,8 @@ export const edutrack: CaseStudyData = {
   projectType:   "App mobile de productividad académica",
   statusLabel:   "Caso documentado",
   visibility:    "public",
-  mockupType:    "mobile",
+  coverSrc:      "/images/projects/edutrack-cover.webp",
+  coverAlt:      "Portada cómic de EduTrack: un lápiz atraviesa un examen suspenso hacia un aprobado",
 
   metrics: [
     { label: "Plataforma",  value: "Android" },
@@ -193,7 +197,8 @@ export const flashfix: CaseStudyData = {
   projectType:   "Marketplace mobile con backend real",
   statusLabel:   "Sistema propio",
   visibility:    "public",
-  mockupType:    "mobile",
+  coverSrc:      "/images/flashfix-comic-cover-v2.png",
+  coverAlt:      "Portada de cómic de FlashFix con un coche deportivo, mapas y herramientas mecánicas",
 
   metrics: [
     { label: "Pantallas",  value: "17" },
@@ -305,7 +310,8 @@ export const oposicontrol: CaseStudyData = {
   projectType:   "Backoffice multiplataforma (KMP)",
   statusLabel:   "Demo técnica",
   visibility:    "public",
-  mockupType:    "dashboard",
+  coverSrc:      "/images/projects/oposicontrol-cover.webp",
+  coverAlt:      "Portada cómic de OposiControl: una torre de control blindada con un escudo de seguridad ordenando documentos",
 
   metrics: [
     { label: "Arquitectura", value: "KMP · Clean Architecture" },
@@ -418,7 +424,9 @@ export const orykai: CaseStudyData = {
   projectType:   "CRM multiplataforma (KMP)",
   statusLabel:   "Sistema propio",
   visibility:    "public",
-  mockupType:    "dashboard",
+  coverSrc:      "/images/projects/orykai-cover.webp",
+  coverAlt:      "Portada cómic de OryKai: un dragón dorado envuelve facturas, monedas y un terminal de CRM",
+  coverFit:      "contain",
 
   metrics: [
     { label: "Pantallas",  value: "27 (8 admin + 19 cliente)" },

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { JsonLd } from "@/components/json-ld";
 import { ComicCover } from "@/components/comic-cover";
+import { MagneticButton } from "@/components/magnetic-button";
 import { caseStudies } from "@/lib/case-studies";
 import { projectStatusAccent, projectStatusWord, projects } from "@/lib/site-data";
 import { SITE_NAME, SITE_URL, canonical } from "@/lib/seo";
@@ -56,12 +57,12 @@ export default function ProyectosPage() {
         <header className="mb-16 max-w-2xl">
           <p className="section-eyebrow mb-4">El archivo</p>
           <h1 className="mb-4 font-display text-4xl font-bold tracking-tight text-[color:var(--foreground)] sm:text-5xl">
-            Cuatro proyectos, cuatro portadas.
+            Cuatro proyectos reales. Cuatro sistemas en marcha.
           </h1>
           <p className="text-pretty text-lg leading-relaxed text-[color:var(--muted)]">
-            Nada de capturas de marketing ni métricas infladas: cada número
-            de esta colección es un proyecto Android o Kotlin Multiplatform
-            real, con su estado tal cual está hoy — beta pública, MVP o en
+            Nada de maquetas ni capturas retocadas: cada número de este
+            archivo es una app Android o un sistema Kotlin Multiplatform
+            real, con su estado exacto de hoy — beta pública, MVP o en
             desarrollo activo.
           </p>
         </header>
@@ -90,8 +91,10 @@ export default function ProyectosPage() {
                   techStack={techStack}
                   statusWord={projectStatusWord[project.status]}
                   statusAccent={projectStatusAccent[project.status]}
-                  mockupType={project.image}
-                  brandMark={project.id === "flashfix" ? "flashfix" : undefined}
+                  coverSrc={project.coverSrc}
+                  coverAlt={project.coverAlt}
+                  coverPosition={project.coverPosition}
+                  coverFit={project.coverFit}
                   className="transition-shadow duration-300 group-hover:shadow-[6px_6px_0_0_var(--foreground)]"
                 />
               </Link>
@@ -109,12 +112,11 @@ export default function ProyectosPage() {
             Si tienes una idea, un problema de gestión o una app en mente, puedo
             proponerte un camino claro desde el primer mensaje.
           </p>
-          <Link
-            href="/#contacto"
-            className="mt-6 inline-flex min-h-12 items-center justify-center gap-2 border-2 border-[color:var(--foreground)] bg-[color:var(--primary)] px-6 text-sm font-semibold text-[color:var(--on-primary)] transition-colors hover:bg-[color:var(--primary-hover)]"
-          >
-            Agendar llamada
-          </Link>
+          <div className="mt-6">
+            <MagneticButton href="/#contacto" rounded="none">
+              Agendar llamada
+            </MagneticButton>
+          </div>
         </div>
       </div>
     </>

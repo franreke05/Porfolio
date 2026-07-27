@@ -22,6 +22,13 @@ export type Project = {
   stack: string[];
   metrics: string[];
   image: "mobile" | "dashboard" | "browser" | "subscription";
+  /** Commissioned comic-cover poster art for this project — a full-bleed illustrated "story" referencing the real product logo, never a raw asset or generated mockup. */
+  coverSrc: string;
+  coverAlt: string;
+  /** Only set when the commissioned art's aspect ratio needs a non-center crop. */
+  coverPosition?: string;
+  /** "contain" when the art's aspect ratio is too far from 2:3 to crop without losing something worth keeping. */
+  coverFit?: "cover" | "contain";
   cta: "Ver caso" | "Solicitar demo" | "Ver arquitectura";
   links: {
     demo?: string;
@@ -171,6 +178,8 @@ export const projects: Project[] = [
     stack: ["Kotlin", "Jetpack Compose", "Firebase Auth", "Firebase Realtime DB", "Play Billing", "DataStore"],
     metrics: ["12 pantallas", "Beta 0.3", "Firebase", "Play Store listo"],
     image: "mobile",
+    coverSrc: "/images/projects/edutrack-cover.webp",
+    coverAlt: "Portada cómic de EduTrack: un lápiz atraviesa un examen suspenso hacia un aprobado",
     cta: "Ver caso",
     links: {},
   },
@@ -191,6 +200,8 @@ export const projects: Project[] = [
     stack: ["Jetpack Compose", "Firebase", "Room", "Appwrite", "Google Maps", "EncryptedSharedPreferences"],
     metrics: ["17 pantallas", "MVP", "Auditoría propia", "Multi-rol"],
     image: "mobile",
+    coverSrc: "/images/flashfix-comic-cover-v2.png",
+    coverAlt: "Portada de cómic de FlashFix con un coche deportivo, mapas y herramientas mecánicas",
     cta: "Ver caso",
     links: {},
   },
@@ -211,6 +222,8 @@ export const projects: Project[] = [
     stack: ["Kotlin Multiplatform", "Compose Multiplatform", "Koin", "Ktor", "SQLDelight", "Supabase"],
     metrics: ["KMP", "Clean Architecture", "18+ módulos", "En desarrollo"],
     image: "dashboard",
+    coverSrc: "/images/projects/oposicontrol-cover.webp",
+    coverAlt: "Portada cómic de OposiControl: una torre de control blindada con un escudo de seguridad ordenando documentos",
     cta: "Ver arquitectura",
     links: {},
   },
@@ -231,6 +244,9 @@ export const projects: Project[] = [
     stack: ["Kotlin Multiplatform", "Ktor", "PostgreSQL", "Flyway", "JWT", "PDFBox"],
     metrics: ["KMP", "Ktor + PostgreSQL", "27 pantallas", "En desarrollo"],
     image: "dashboard",
+    coverSrc: "/images/projects/orykai-cover.webp",
+    coverAlt: "Portada cómic de OryKai: un dragón dorado envuelve facturas, monedas y un terminal de CRM",
+    coverFit: "contain",
     cta: "Ver arquitectura",
     links: {},
   },

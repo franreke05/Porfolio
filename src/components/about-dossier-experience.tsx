@@ -454,10 +454,13 @@ export function AboutDossierExperience({ profile, experience, stack, process, po
               fill
               priority
               sizes="(max-width: 1023px) 100vw, 38vw"
-              className="scale-100 object-cover object-[48%_44%] saturate-[0.72] contrast-[1.08] sepia-[0.08] sm:scale-[1.02] sm:object-[48%_50%] lg:scale-[1.24] lg:object-[48%_39%]"
+              className="scale-[1.16] object-cover object-[44%_38%] saturate-[0.55] contrast-[1.1] sepia-[0.16] sm:scale-[1.2] sm:object-[45%_42%] lg:scale-[1.48] lg:object-[45%_34%]"
             />
+            {/* Edge vignette — fades the visible door/wall clutter at the
+                frame's sides into the ink tone, leaving the face untouched. */}
+            <div className="absolute inset-0 bg-[radial-gradient(85%_75%_at_46%_40%,transparent_45%,rgba(20,16,12,0.5)_100%)]" aria-hidden="true" />
             <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(20,16,12,0.06)_35%,rgba(20,16,12,0.72)_100%)]" aria-hidden="true" />
-            <div className="comic-halftone absolute inset-0 opacity-[0.1] mix-blend-multiply" aria-hidden="true" />
+            <div className="comic-halftone absolute inset-0 opacity-[0.14] mix-blend-multiply" aria-hidden="true" />
 
             <div className="absolute left-4 top-4 max-w-[52%] truncate border border-[color:var(--foreground)] bg-[color:var(--background)] px-3 py-2 font-mono text-[8px] font-bold uppercase tracking-[0.1em] text-[color:var(--foreground)] sm:left-6 sm:top-6">
               FR / {profile.name}

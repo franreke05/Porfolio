@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { FaqDisclosure } from "@/components/faq-disclosure";
 import { JsonLd } from "@/components/json-ld";
+import { MotionSection } from "@/components/motion-section";
 import { ServicesTabletExperience, type ServiceTabletOffering } from "@/components/services-tablet-experience";
 import { SITE_NAME, SITE_URL, canonical, faqPageSchema } from "@/lib/seo";
 
@@ -136,18 +138,18 @@ export default function ServiciosPage() {
 
         {/* Header */}
         <header className="mb-10 grid gap-6 lg:grid-cols-[1.05fr_0.75fr] lg:items-end lg:gap-14">
-          <div>
+          <MotionSection as="div">
             <p className="section-eyebrow mb-4">Lo que construyo</p>
             <h1 className="max-w-[15ch] font-display text-4xl font-bold leading-[0.98] tracking-tight text-[color:var(--foreground)] sm:text-5xl xl:text-6xl">
               Servicios de desarrollo digital
             </h1>
-          </div>
-          <p className="max-w-2xl text-lg leading-relaxed text-[color:var(--muted)] lg:pb-1">
+          </MotionSection>
+          <MotionSection as="div" delay={0.1} className="max-w-2xl text-lg leading-relaxed text-[color:var(--muted)] lg:pb-1">
             Trabajo con empresas y autónomos que necesitan sistemas digitales
             reales: apps que funcionan, paneles que se usan y webs que generan
             contactos. Sin intermediarios, sin equipos inflados, sin promesas
             genéricas.
-          </p>
+          </MotionSection>
         </header>
 
         {/* Interactive service explorer */}
@@ -156,7 +158,7 @@ export default function ServiciosPage() {
         </section>
 
         <section className="mt-24 grid gap-10 lg:grid-cols-[0.62fr_1.38fr] lg:gap-16" aria-labelledby="servicios-faq-title">
-          <div className="self-start lg:sticky lg:top-28">
+          <MotionSection as="div" className="self-start lg:sticky lg:top-28">
             <p className="section-eyebrow mb-4">Preguntas frecuentes</p>
             <h2 id="servicios-faq-title" className="max-w-xl text-balance font-display text-3xl font-bold leading-tight text-[color:var(--foreground)] sm:text-4xl">
               Lo importante, antes de empezar.
@@ -164,20 +166,13 @@ export default function ServiciosPage() {
             <p className="mt-4 max-w-md leading-7 text-[color:var(--muted)]">
               Alcance, tiempos, propiedad del código y soporte explicados con claridad desde el principio.
             </p>
-          </div>
+          </MotionSection>
 
           <div>
             {serviciosFaqs.map((faq, index) => (
-              <details key={faq.q} className="group border-t border-[color:var(--foreground)] last:border-b">
-                <summary className="grid cursor-pointer list-none grid-cols-[2rem_1fr_auto] items-start gap-3 py-5 marker:content-none sm:gap-5 sm:py-6">
-                  <span className="pt-1 font-mono text-[10px] font-bold text-[color:var(--primary)]">{String(index + 1).padStart(2, "0")}</span>
-                  <h3 className="font-display text-lg font-bold leading-snug text-[color:var(--foreground)] sm:text-xl">{faq.q}</h3>
-                  <span className="flex h-7 w-7 items-center justify-center border border-[color:var(--foreground)] font-mono text-lg leading-none text-[color:var(--primary)] transition-transform duration-300 group-open:rotate-45" aria-hidden="true">+</span>
-                </summary>
-                <div className="pb-6 pl-11 pr-10 sm:pl-[3.25rem] sm:pr-14">
-                  <p className="max-w-3xl leading-7 text-[color:var(--muted)]">{faq.a}</p>
-                </div>
-              </details>
+              <MotionSection as="div" key={faq.q} delay={Math.min(index * 0.06, 0.3)}>
+                <FaqDisclosure index={index} question={faq.q} answer={faq.a} />
+              </MotionSection>
             ))}
           </div>
         </section>

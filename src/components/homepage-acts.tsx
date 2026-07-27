@@ -421,8 +421,10 @@ function ActTrabajo() {
                       techStack={project.stack.slice(0, 2).join(" · ").toUpperCase()}
                       statusWord={projectStatusWord[project.status]}
                       statusAccent={projectStatusAccent[project.status]}
-                      mockupType={project.image}
-                      brandMark={project.id === "flashfix" ? "flashfix" : undefined}
+                      coverSrc={project.coverSrc}
+                      coverAlt={project.coverAlt}
+                      coverPosition={project.coverPosition}
+                      coverFit={project.coverFit}
                     />
                   </Link>
                 </div>

@@ -14,8 +14,8 @@ import {
   Smartphone,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import Link from "next/link";
 import { motion, useInView, useReducedMotion } from "motion/react";
+import { MagneticButton } from "@/components/magnetic-button";
 import {
   useEffect,
   useRef,
@@ -432,9 +432,9 @@ export function AndroidServiceExperience() {
               Diseño y desarrollo productos Android a medida con Kotlin, Jetpack Compose y KMP: desde el primer flujo hasta la publicación, sin plantillas ni una caja negra entre medias.
             </p>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <Link href="/#contacto" className="inline-flex min-h-12 items-center justify-center gap-2 border-2 border-[color:var(--foreground)] bg-[color:var(--primary)] px-5 text-sm font-semibold text-[color:var(--on-primary)] transition-colors hover:bg-[color:var(--primary-hover)]">
+              <MagneticButton href="/#contacto" rounded="none">
                 Hablemos de tu app <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-              </Link>
+              </MagneticButton>
               <a href="#android-blueprint" className="inline-flex min-h-12 items-center justify-center gap-2 border border-[color:var(--foreground)] px-5 text-sm font-semibold transition-colors hover:bg-[color:var(--foreground)] hover:text-[color:var(--background)]">
                 Ver cómo trabajo <ChevronRight className="h-4 w-4" aria-hidden="true" />
               </a>

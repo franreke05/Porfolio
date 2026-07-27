@@ -3,9 +3,12 @@
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { ArrowRight, Loader2 } from "lucide-react";
+import { motion, useMotionValue, useReducedMotion, useSpring } from "motion/react";
+import type { MouseEvent } from "react";
 import { submitContactMessage } from "@/app/actions";
 import { initialContactState } from "@/lib/contact";
 import { LetterpressStamp } from "@/components/letterpress-stamp";
+import { spring } from "@/lib/motion";
 
 const projectTypes = [
   "App mobile",
@@ -21,27 +24,45 @@ const fieldClass =
 
 function SubmitButton() {
   const { pending } = useFormStatus();
+  const reduceMotion = useReducedMotion();
+  const xValue = useMotionValue(0);
+  const yValue = useMotionValue(0);
+  const x = useSpring(xValue, spring.magnetic);
+  const y = useSpring(yValue, spring.magnetic);
+
+  const handleMove = (event: MouseEvent<HTMLButtonElement>) => {
+    if (reduceMotion || pending || window.matchMedia("(max-width: 767px)").matches) return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    xValue.set((event.clientX - rect.left - rect.width / 2) * 0.1);
+    yValue.set((event.clientY - rect.top - rect.height / 2) * 0.1);
+  };
+
+  const reset = () => { xValue.set(0); yValue.set(0); };
 
   return (
-    <LetterpressStamp className="rounded-lg">
-      <button
-        type="submit"
-        className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border-2 border-[color:var(--foreground)] bg-[color:var(--primary)] px-5 text-sm font-semibold text-[color:var(--on-primary)] transition-colors hover:bg-[color:var(--primary-hover)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--surface)] disabled:cursor-not-allowed disabled:opacity-60"
-        disabled={pending}
-      >
-        {pending ? (
-          <>
-            <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-            Enviando
-          </>
-        ) : (
-          <>
-            Enviar y agendar llamada
-            <ArrowRight className="h-4 w-4" aria-hidden="true" />
-          </>
-        )}
-      </button>
-    </LetterpressStamp>
+    <motion.span style={reduceMotion ? undefined : { x, y }} className="inline-flex">
+      <LetterpressStamp className="rounded-lg">
+        <button
+          type="submit"
+          onMouseMove={handleMove}
+          onMouseLeave={reset}
+          className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border-2 border-[color:var(--foreground)] bg-[color:var(--primary)] px-5 text-sm font-semibold text-[color:var(--on-primary)] transition-colors hover:bg-[color:var(--primary-hover)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--surface)] disabled:cursor-not-allowed disabled:opacity-60"
+          disabled={pending}
+        >
+          {pending ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+              Enviando
+            </>
+          ) : (
+            <>
+              Enviar y agendar llamada
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </>
+          )}
+        </button>
+      </LetterpressStamp>
+    </motion.span>
   );
 }
 

@@ -86,10 +86,10 @@ export function FlashFixInterfaceGallery() {
   return (
     <section
       aria-labelledby="flashfix-interface-title"
-      className="mb-12 overflow-hidden rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)]"
+      className="comic-ink-outline mb-12 overflow-hidden rounded-xl bg-[color:var(--surface)]"
     >
-      <div className="border-b border-[color:var(--border)] px-5 py-7 sm:px-8 sm:py-8">
-        <p className="section-eyebrow">Producto en uso</p>
+      <div className="comic-halftone border-b-[3px] border-[color:var(--foreground)] px-5 py-7 sm:px-8 sm:py-8">
+        <p className="comic-action-word comic-status-progress text-xs">Producto en uso</p>
         <div className="mt-3 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <h2 id="flashfix-interface-title" className="font-display text-2xl font-bold text-[color:var(--foreground)] sm:text-3xl">
@@ -104,7 +104,7 @@ export function FlashFixInterfaceGallery() {
             aria-expanded={isExpanded}
             aria-controls={galleryId}
             onClick={() => setIsExpanded((expanded) => !expanded)}
-            className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 self-start border-2 border-[color:var(--foreground)] bg-[color:var(--background)] px-4 text-sm font-semibold text-[color:var(--foreground)] transition-colors hover:bg-[color:var(--foreground)] hover:text-[color:var(--background)] lg:self-auto"
+            className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 self-start border-2 border-[color:var(--foreground)] bg-[color:var(--primary)] px-4 text-sm font-semibold text-[color:var(--on-primary)] transition-colors hover:bg-[color:var(--primary-hover)] lg:self-auto"
           >
             {isExpanded ? "Ocultar pantallas" : "Ver las 8 pantallas"}
             <ChevronDown
@@ -116,10 +116,15 @@ export function FlashFixInterfaceGallery() {
       </div>
 
       {isExpanded && (
-        <div id={galleryId} className="grid gap-px bg-[color:var(--border)] sm:grid-cols-2 xl:grid-cols-4">
-        {screens.map((screen) => (
-          <figure key={screen.step} className="group bg-[color:var(--background)] p-3 sm:p-4">
-            <div className="overflow-hidden rounded-xl border border-[color:var(--border)] bg-[#e9eefb] shadow-[0_12px_28px_rgba(21,30,53,0.16)]">
+        <div id={galleryId} className="grid gap-6 p-5 sm:grid-cols-2 sm:p-8 xl:grid-cols-4">
+        {screens.map((screen, i) => (
+          <figure
+            key={screen.step}
+            className={`group comic-ink-outline rounded-lg bg-[color:var(--background)] p-2 ${
+              i % 2 === 0 ? "comic-caption-tag-tilt-a" : "comic-caption-tag-tilt-b"
+            }`}
+          >
+            <div className="overflow-hidden rounded-md border-2 border-[color:var(--foreground)] bg-[#e9eefb]">
               <Image
                 src={screen.image}
                 alt={screen.alt}
@@ -127,8 +132,8 @@ export function FlashFixInterfaceGallery() {
                 className="h-auto w-full transition-transform duration-500 ease-out group-hover:scale-[1.025]"
               />
             </div>
-            <figcaption className="px-1 pb-1 pt-4">
-              <p className="font-mono text-[10px] font-bold uppercase tracking-[0.13em] text-[color:var(--accent-cyan)]">
+            <figcaption className="px-1 pb-1 pt-3">
+              <p className="comic-action-word comic-status-progress text-[10px]">
                 {screen.step}
               </p>
               <h3 className="mt-1 text-base font-semibold text-[color:var(--foreground)]">{screen.title}</h3>
