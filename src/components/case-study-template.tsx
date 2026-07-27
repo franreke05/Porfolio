@@ -4,7 +4,7 @@ import { motion } from "motion/react";
 import Link from "next/link";
 import { ArrowLeft, ArrowUpRight, BadgeCheck, ChevronDown, LockKeyhole } from "lucide-react";
 import { ComicCover } from "@/components/comic-cover";
-import { FlashFixInterfaceGallery } from "@/components/flashfix-interface-gallery";
+import { MagneticButton } from "@/components/magnetic-button";
 import { dur, ease, viewport } from "@/lib/motion";
 import type { CaseStudyData } from "@/lib/case-studies";
 import { projectStatusAccent, projectStatusWord, projects } from "@/lib/site-data";
@@ -37,109 +37,6 @@ function Reveal({
     >
       {children}
     </motion.div>
-  );
-}
-
-// ─────────────────────────────────────────────
-// CSS Mockups
-// ─────────────────────────────────────────────
-export function MobileMockup() {
-  return (
-    <div className="relative mx-auto w-[200px]" aria-hidden="true">
-      {/* Phone frame */}
-      <div className="rounded-[28px] border-2 border-[color:var(--border-hover)] bg-[color:var(--background)] p-2 shadow-[0_24px_60px_rgba(0,0,0,0.5)]">
-        {/* Notch */}
-        <div className="mb-2 flex justify-center">
-          <div className="h-2 w-12 rounded-full bg-[color:var(--border-hover)]" />
-        </div>
-        {/* Screen content */}
-        <div className="space-y-2 rounded-[20px] bg-[color:var(--surface)] p-3">
-          {/* Status bar */}
-          <div className="flex items-center justify-between px-1">
-            <div className="h-1.5 w-8 rounded-full bg-[color:var(--muted)]/40" />
-            <div className="h-1.5 w-12 rounded-full bg-[color:var(--muted)]/40" />
-          </div>
-          {/* App header */}
-          <div className="rounded-lg bg-[color:var(--surface-elevated)] p-2">
-            <div className="h-2 w-20 rounded-full bg-[color:var(--primary)]/60" />
-            <div className="mt-1 h-1.5 w-14 rounded-full bg-[color:var(--muted)]/40" />
-          </div>
-          {/* Content rows */}
-          {[80, 65, 90, 55, 75].map((w, i) => (
-            <div key={i} className="flex items-center gap-2 rounded-md border border-[color:var(--border)] bg-[color:var(--background)] p-2">
-              <div className="h-4 w-4 shrink-0 rounded-md bg-[color:var(--accent-cyan)]/30" />
-              <div className="flex-1 space-y-1">
-                <div className={`h-1.5 rounded-full bg-[color:var(--surface-foreground)]/50`} style={{ width: `${w}%` }} />
-                <div className="h-1 w-10 rounded-full bg-[color:var(--muted)]/30" />
-              </div>
-              <div className="h-3 w-6 rounded-full bg-[color:var(--primary)]/40 text-[0px]">.</div>
-            </div>
-          ))}
-          {/* Bottom nav */}
-          <div className="flex justify-around border-t border-[color:var(--border)] pt-2">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className={`h-4 w-4 rounded-md ${i === 1 ? "bg-[color:var(--primary)]/60" : "bg-[color:var(--muted)]/20"}`} />
-            ))}
-          </div>
-        </div>
-        {/* Home indicator */}
-        <div className="mt-2 flex justify-center">
-          <div className="h-1 w-16 rounded-full bg-[color:var(--border-hover)]" />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export function DashboardMockup() {
-  return (
-    <div
-      className="overflow-hidden rounded-xl border border-[color:var(--border)] bg-[color:var(--background)] shadow-[0_24px_60px_rgba(0,0,0,0.4)]"
-      aria-hidden="true"
-    >
-      {/* Top bar */}
-      <div className="flex items-center justify-between border-b border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-3">
-        <div className="flex items-center gap-2">
-          <div className="h-2 w-2 rounded-full bg-[color:var(--error)]/60" />
-          <div className="h-2 w-2 rounded-full bg-[color:var(--primary)]/60" />
-          <div className="h-2 w-2 rounded-full bg-[color:var(--success)]/60" />
-        </div>
-        <div className="h-2 w-24 rounded-full bg-[color:var(--muted)]/30" />
-        <div className="h-5 w-16 rounded-md bg-[color:var(--accent-soft)]" />
-      </div>
-      <div className="flex h-48 sm:h-56">
-        {/* Sidebar */}
-        <div className="w-24 shrink-0 space-y-1 border-r border-[color:var(--border)] bg-[color:var(--surface)] p-2">
-          {["Clientes", "Tickets", "Reportes", "Usuarios", "Config"].map((label, i) => (
-            <div key={label} className={`rounded-md px-2 py-1.5 ${i === 0 ? "bg-[color:var(--accent-soft)]" : ""}`}>
-              <div className={`h-1.5 rounded-full ${i === 0 ? "bg-[color:var(--primary)]" : "bg-[color:var(--muted)]/40"}`} style={{ width: `${60 + i * 5}%` }} />
-            </div>
-          ))}
-        </div>
-        {/* Main content */}
-        <div className="flex-1 space-y-2 p-3 overflow-hidden">
-          <div className="flex items-center justify-between">
-            <div className="h-2 w-20 rounded-full bg-[color:var(--foreground)]/50" />
-            <div className="h-5 w-16 rounded-md bg-[color:var(--accent-cyan)]/20" />
-          </div>
-          {/* Table rows */}
-          <div className="space-y-1.5">
-            <div className="grid grid-cols-4 gap-2 rounded-md bg-[color:var(--surface)] px-3 py-1.5">
-              {[70, 50, 80, 40].map((w, i) => (
-                <div key={i} className="h-1.5 rounded-full bg-[color:var(--muted)]/30" style={{ width: `${w}%` }} />
-              ))}
-            </div>
-            {[1, 2, 3, 4, 5].map((row) => (
-              <div key={row} className="grid grid-cols-4 gap-2 rounded-md border border-[color:var(--border)] px-3 py-1.5">
-                {[85, 60, 45, 30].map((w, i) => (
-                  <div key={i} className={`h-1.5 rounded-full ${i === 2 ? "bg-[color:var(--accent-cyan)]/40" : "bg-[color:var(--surface-foreground)]/30"}`} style={{ width: `${w}%` }} />
-                ))}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
   );
 }
 
@@ -185,12 +82,12 @@ function ComicPanel({
         } bg-[color:var(--surface)]`}
       >
         <div
-          className={`comic-diagonal relative flex items-center gap-4 px-6 py-6 sm:px-8 ${
+          className={`comic-diagonal relative flex items-center gap-4 overflow-hidden px-6 py-6 sm:px-8 ${
             isLive ? "comic-halftone" : "comic-halftone-gold"
           }`}
         >
-          <span className="comic-numeral shrink-0" aria-hidden="true">{number}</span>
-          <div className="min-w-0">
+          <span className="comic-numeral relative z-10 shrink-0" aria-hidden="true">{number}</span>
+          <div className="relative z-10 min-w-0">
             <p className={`comic-action-word text-xs ${isLive ? "comic-status-live" : "comic-status-progress"}`}>
               {eyebrow}
             </p>
@@ -240,14 +137,11 @@ export function CaseStudyTemplate({ data }: { data: CaseStudyData }) {
             </ol>
           </nav>
 
-          <Link
-            href="/#contacto"
-            className="inline-flex items-center gap-2 border-2 border-[color:var(--foreground)] bg-[color:var(--primary)] px-3 py-2 text-sm font-semibold text-[color:var(--on-primary)] transition-colors hover:bg-[color:var(--primary-hover)]"
-          >
+          <MagneticButton href="/#contacto" rounded="none" size="sm">
             <span className="hidden sm:inline">Hablar del proyecto</span>
             <span className="sm:hidden">Contacto</span>
             <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-          </Link>
+          </MagneticButton>
         </div>
       </div>
 
@@ -318,19 +212,15 @@ export function CaseStudyTemplate({ data }: { data: CaseStudyData }) {
               techStack={techStack}
               statusWord={project ? projectStatusWord[project.status] : data.statusLabel.toUpperCase()}
               statusAccent={project ? projectStatusAccent[project.status] : "progress"}
-              mockupType={data.mockupType}
-              brandMark={data.slug === "flashfix" ? "flashfix" : undefined}
+              coverSrc={project?.coverSrc ?? data.coverSrc}
+              coverAlt={project?.coverAlt ?? data.coverAlt}
+              coverPosition={project?.coverPosition}
+              coverFit={project?.coverFit ?? data.coverFit}
             />
           </motion.div>
         </div>
 
         {/* ── Two-column content ── */}
-        {data.slug === "flashfix" && (
-          <Reveal>
-            <FlashFixInterfaceGallery />
-          </Reveal>
-        )}
-
         <div className="grid gap-8 lg:grid-cols-[0.65fr_1.35fr]">
 
           {/* ── Sidebar ── */}
@@ -404,7 +294,7 @@ export function CaseStudyTemplate({ data }: { data: CaseStudyData }) {
             {/* Panel 1 — El problema */}
             <ComicPanel number="01" eyebrow="El conflicto" title="El problema" accent="gold">
               <p className="mb-4 leading-7 text-[color:var(--surface-foreground)]">{data.problem.intro}</p>
-              <ul className="space-y-2">
+              <ul className="space-y-3">
                 {data.problem.bullets.map((b, i) => (
                   <li key={i} className="flex gap-3 rounded-xl border border-[color:var(--border)] bg-[color:var(--background)] p-4">
                     <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-[color:var(--error)]/15 font-mono text-xs font-bold text-[color:var(--error)]">
@@ -428,7 +318,7 @@ export function CaseStudyTemplate({ data }: { data: CaseStudyData }) {
             {/* Panel 3 — El resultado / estado actual */}
             <ComicPanel number="03" eyebrow="El desenlace" title={data.statusLabel === "Demo técnica" ? "Estado actual" : "El resultado"} accent="gold">
               <p className="mb-4 leading-7 text-[color:var(--surface-foreground)]">{data.result.summary}</p>
-              <ul className="space-y-2">
+              <ul className="space-y-3">
                 {data.result.points.map((pt, i) => (
                   <li key={i} className="flex gap-3 rounded-xl border border-[color:var(--border)] bg-[color:var(--background)] p-4">
                     <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[color:var(--success)]" aria-hidden="true" />
@@ -563,13 +453,12 @@ export function CaseStudyTemplate({ data }: { data: CaseStudyData }) {
                 <p className="mx-auto mt-3 max-w-md text-pretty text-[color:var(--muted)]">
                   Si tienes una idea, un problema de gestión o una app en mente, puedo proponerte un camino claro desde el primer mensaje.
                 </p>
-                <Link
-                  href="/#contacto"
-                  className="mt-6 inline-flex min-h-12 items-center justify-center gap-2 border-2 border-[color:var(--foreground)] bg-[color:var(--primary)] px-6 text-sm font-semibold text-[color:var(--on-primary)] transition-colors hover:bg-[color:var(--primary-hover)]"
-                >
-                  Agendar llamada
-                  <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-                </Link>
+                <div className="mt-6">
+                  <MagneticButton href="/#contacto" rounded="none">
+                    Agendar llamada
+                    <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                  </MagneticButton>
+                </div>
               </div>
             </Reveal>
 

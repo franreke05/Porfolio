@@ -63,6 +63,7 @@
   --font-sans:    var(--font-geist-sans);
   --font-mono:    var(--font-geist-mono);
   --font-display: var(--font-fraunces);
+  --font-comic:   var(--font-bangers);
 
   /* Deliberate type scale — headings use this instead of ad hoc Tailwind
      sizes, so the whole site follows one rhythm (~1.25 ratio). */
@@ -301,6 +302,79 @@ button, input, textarea, select { font: inherit; }
   .comic-numeral { opacity: 0.9; }
 }
 
+/* Radiating sunburst rays — the Silver-Age Marvel cover convention of
+   straight energy rays bursting from behind a hero/numeral. Pure CSS
+   conic-gradient (alternating ink/transparent wedges), no image asset.
+   FlashFix-only per the case-study template's own comic-mode gate. */
+.comic-sunburst {
+  background-image: conic-gradient(
+    from 0deg,
+    var(--foreground) 0deg 4deg,
+    transparent 4deg 18deg,
+    var(--foreground) 18deg 22deg,
+    transparent 22deg 36deg,
+    var(--foreground) 36deg 40deg,
+    transparent 40deg 54deg,
+    var(--foreground) 54deg 58deg,
+    transparent 58deg 72deg,
+    var(--foreground) 72deg 76deg,
+    transparent 76deg 90deg,
+    var(--foreground) 90deg 94deg,
+    transparent 94deg 108deg,
+    var(--foreground) 108deg 112deg,
+    transparent 112deg 126deg,
+    var(--foreground) 126deg 130deg,
+    transparent 130deg 144deg,
+    var(--foreground) 144deg 148deg,
+    transparent 148deg 162deg,
+    var(--foreground) 162deg 166deg,
+    transparent 166deg 180deg,
+    var(--foreground) 180deg 184deg,
+    transparent 184deg 198deg,
+    var(--foreground) 198deg 202deg,
+    transparent 202deg 216deg,
+    var(--foreground) 216deg 220deg,
+    transparent 220deg 234deg,
+    var(--foreground) 234deg 238deg,
+    transparent 238deg 252deg,
+    var(--foreground) 252deg 256deg,
+    transparent 256deg 270deg,
+    var(--foreground) 270deg 274deg,
+    transparent 274deg 288deg,
+    var(--foreground) 288deg 292deg,
+    transparent 292deg 306deg,
+    var(--foreground) 306deg 310deg,
+    transparent 310deg 324deg,
+    var(--foreground) 324deg 328deg,
+    transparent 328deg 342deg,
+    var(--foreground) 342deg 346deg,
+    transparent 346deg 360deg
+  );
+  opacity: 0.1;
+}
+
+/* Comic caption tag — the cream/ink "pinned note" box that replaces flat
+   list-item cards in the FlashFix comic-mode narrative: paper fill, thick
+   ink border, hard offset shadow, slight rotation for a hand-placed feel. */
+.comic-caption-tag {
+  background: var(--background);
+  border: 2px solid var(--foreground);
+  box-shadow: 3px 3px 0 0 var(--foreground);
+}
+
+.comic-caption-tag-tilt-a { transform: rotate(-0.6deg); }
+.comic-caption-tag-tilt-b { transform: rotate(0.7deg); }
+
+/* SFX-style marker — the bold italic burst used for numbers/checkmarks
+   inside comic caption tags, standing in for a circle-and-color badge. */
+.comic-sfx-marker {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-style: italic;
+  color: var(--primary);
+  -webkit-text-stroke: 0.6px var(--foreground);
+}
+
 /* Action-word caption — bold italic, status-driven color */
 .comic-action-word {
   font-family: var(--font-display);
@@ -312,6 +386,77 @@ button, input, textarea, select { font: inherit; }
 
 .comic-status-live     { color: var(--accent-cyan); }
 .comic-status-progress { color: var(--primary); }
+
+/* Glitch title — a hover-triggered ink/vermillion "print misregistration"
+   split, adapted from a community reference (a neon cyan/magenta comic-glitch
+   button on 21st.dev): same clip-path + skew mechanic and steps() timing for
+   the jittery, non-smooth feel, but restyled to the site's own two-tone ink
+   palette with zero glow — the reference's box-shadow neon bloom is dropped
+   entirely, since this site never does glow/blur (see the header's own "flat
+   paper, no blur/glow" comment). Scoped to comic-cover titles only. */
+.comic-glitch-title {
+  position: relative;
+  display: inline-block;
+}
+
+.comic-glitch-layer {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.group:hover .comic-glitch-base {
+  animation: comic-glitch-base 0.3s steps(2) infinite;
+}
+
+.group:hover .comic-glitch-layer-primary {
+  opacity: 0.85;
+  color: var(--primary);
+  animation: comic-glitch-1 0.4s steps(2) infinite;
+}
+
+.group:hover .comic-glitch-layer-ink {
+  opacity: 0.55;
+  color: var(--foreground);
+  animation: comic-glitch-2 0.4s steps(2) infinite;
+}
+
+@keyframes comic-glitch-base {
+  0%   { transform: translate(0); }
+  25%  { transform: translate(-1.5px, 1px) skew(-2deg); }
+  50%  { transform: translate(1.5px, -1px) skew(2deg); }
+  75%  { transform: translate(-1px, -1px) skew(-1deg); }
+  100% { transform: translate(0); }
+}
+
+@keyframes comic-glitch-1 {
+  0%   { transform: translate(-3px, -1px); clip-path: polygon(0 20%, 100% 20%, 100% 50%, 0 50%); }
+  25%  { transform: translate(3px, 1px);   clip-path: polygon(0 30%, 100% 30%, 100% 60%, 0 60%); }
+  50%  { transform: translate(-2px, 1px);  clip-path: polygon(0 10%, 100% 10%, 100% 40%, 0 40%); }
+  75%  { transform: translate(2px, -1px);  clip-path: polygon(0 40%, 100% 40%, 100% 70%, 0 70%); }
+  100% { transform: translate(-3px, -1px); clip-path: polygon(0 20%, 100% 20%, 100% 50%, 0 50%); }
+}
+
+@keyframes comic-glitch-2 {
+  0%   { transform: translate(3px, 1px);   clip-path: polygon(0 50%, 100% 50%, 100% 80%, 0 80%); }
+  25%  { transform: translate(-3px, -1px); clip-path: polygon(0 60%, 100% 60%, 100% 90%, 0 90%); }
+  50%  { transform: translate(2px, -1px);  clip-path: polygon(0 40%, 100% 40%, 100% 70%, 0 70%); }
+  75%  { transform: translate(-2px, 1px);  clip-path: polygon(0 70%, 100% 70%, 100% 100%, 0 100%); }
+  100% { transform: translate(3px, 1px);   clip-path: polygon(0 50%, 100% 50%, 100% 80%, 0 80%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .comic-glitch-base,
+  .comic-glitch-layer-primary,
+  .comic-glitch-layer-ink {
+    animation: none !important;
+  }
+  .group:hover .comic-glitch-layer-primary,
+  .group:hover .comic-glitch-layer-ink {
+    opacity: 0 !important;
+  }
+}
 
 /* ─────────────────────────────────────────────
    REDUCED MOTION

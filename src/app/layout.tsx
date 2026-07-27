@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
-import { Fraunces, Geist, Geist_Mono } from "next/font/google";
+import { Bangers, Fraunces, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Footer } from "@/components/footer";
 import { JsonLd } from "@/components/json-ld";
@@ -34,6 +34,16 @@ const fraunces = Fraunces({
   subsets:       ["latin"],
   display:       "swap",
   axes:          ["opsz", "SOFT", "WONK"],
+});
+
+// Kept deliberately local to the comic moments: it has the hand-lettered,
+// energetic voice of an action burst without taking over the portfolio's
+// editorial typography.
+const bangers = Bangers({
+  variable: "--font-bangers",
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
 });
 
 // ── Global metadata (inherited by all pages unless overridden) ──
@@ -100,7 +110,7 @@ export default function RootLayout({
     <html
       lang="es"
       data-scroll-behavior="smooth"
-      className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} ${bangers.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
         {/* Site-wide JSON-LD — Person + ProfessionalService + WebSite */}

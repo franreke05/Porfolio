@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { JsonLd } from "@/components/json-ld";
+import { PainPointsList } from "@/components/pain-points-list";
 import { SITE_NAME, SITE_URL, canonical, faqPageSchema } from "@/lib/seo";
 
 export const metadata: Metadata = {
@@ -211,20 +212,7 @@ export default function AutomatizacionesPymesPage() {
             Estas son las fricciones más comunes que encuentro cuando hablo con
             equipos de pymes sobre cómo gestionan su operación diaria:
           </p>
-          <ul className="space-y-3">
-            {problems.map((p) => (
-              <li
-                key={p}
-                className="flex gap-3 rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4 text-sm leading-6 text-[color:var(--muted)]"
-              >
-                <span
-                  className="mt-0.5 h-2 w-2 shrink-0 rounded-full bg-[color:var(--accent-cyan)]"
-                  aria-hidden="true"
-                />
-                {p}
-              </li>
-            ))}
-          </ul>
+          <PainPointsList items={problems} />
         </section>
 
         {/* How I solve it */}

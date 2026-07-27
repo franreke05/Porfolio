@@ -430,8 +430,10 @@ export default function DesarrolloAppsAndroidPage() {
                       techStack={project.stack.slice(0, 2).join(" · ")}
                       statusWord={projectStatusWord[project.status]}
                       statusAccent={projectStatusAccent[project.status]}
-                      mockupType={project.image}
-                      brandMark={project.id === "flashfix" ? "flashfix" : undefined}
+                      coverSrc={project.coverSrc}
+                      coverAlt={project.coverAlt}
+                      coverPosition={project.coverPosition}
+                      coverFit={project.coverFit}
                     />
                   </div>
                   <div className="flex min-w-0 flex-col py-1 sm:py-3">

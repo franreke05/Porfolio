@@ -12,9 +12,9 @@ import {
   Workflow,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import Link from "next/link";
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { AnimatePresence, motion, useInView, useReducedMotion } from "motion/react";
+import { MagneticButton } from "@/components/magnetic-button";
 import { TabletShell } from "@/components/tablet-shell";
 import { ease } from "@/lib/motion";
 
@@ -534,10 +534,12 @@ export function ServicesTabletExperience({ services }: { services: readonly Serv
                 <p className="font-mono text-[9px] font-bold uppercase tracking-[0.14em] text-[color:var(--primary)]">{screen.eyebrow}</p>
                 <h2 className="mt-2 font-display text-2xl font-bold leading-tight text-[color:var(--foreground)]">{active.title}</h2>
                 <p className="mt-3 text-sm leading-6 text-[color:var(--muted)]">{active.description}</p>
-                <Link href={active.href} className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 border-2 border-[color:var(--foreground)] bg-[color:var(--primary)] px-4 text-sm font-semibold text-[color:var(--on-primary)] transition-colors hover:bg-[color:var(--primary-hover)]">
-                  Ver servicio
-                  <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-                </Link>
+                <div className="mt-5">
+                  <MagneticButton href={active.href} rounded="none">
+                    Ver servicio
+                    <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                  </MagneticButton>
+                </div>
               </motion.div>
           </AnimatePresence>
         </article>

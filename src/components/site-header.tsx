@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useState } from "react";
+import { MagneticButton } from "@/components/magnetic-button";
 import { siteProfile } from "@/lib/site-data";
 
 const navItems = [
@@ -78,13 +79,10 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-2">
           {/* CTA */}
-          <Link
-            href="/#contacto"
-            className="inline-flex min-h-9 items-center justify-center gap-2 border-2 border-[color:var(--foreground)] bg-[color:var(--primary)] px-3.5 text-sm font-semibold text-[color:var(--on-primary)] transition-colors hover:bg-[color:var(--primary-hover)]"
-          >
+          <MagneticButton href="/#contacto" rounded="none" size="sm">
             <Calendar className="h-4 w-4" aria-hidden="true" />
             <span className="hidden sm:inline">Llamada</span>
-          </Link>
+          </MagneticButton>
 
           {/* Mobile menu toggle */}
           <button
