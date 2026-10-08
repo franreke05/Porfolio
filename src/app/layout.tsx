@@ -6,13 +6,7 @@ import { Footer } from "@/components/footer";
 import { JsonLd } from "@/components/json-ld";
 import { LenisProvider } from "@/components/lenis-provider";
 import { SiteHeader } from "@/components/site-header";
-import {
-  SITE_NAME,
-  SITE_URL,
-  personSchema,
-  professionalServiceSchema,
-  websiteSchema,
-} from "@/lib/seo";
+import { SITE_NAME, SITE_URL, STUDIO_NAME, siteGraph } from "@/lib/seo";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -47,60 +41,52 @@ const bangers = Bangers({
 });
 
 // ── Global metadata (inherited by all pages unless overridden) ──
+// Pages build theirs with buildMetadata() from "@/lib/seo", which sets the
+// title, description, canonical, Open Graph and Twitter card in one place.
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
 
-  // Pages export their own title; this template wraps it.
+  // Fallback for pages that only export a plain title.
   title: {
-    default:  `${SITE_NAME} | Desarrollo de apps mobile, CRMs y webs`,
+    default:  STUDIO_NAME,
     template: `%s | ${SITE_NAME}`,
   },
 
-  // Default description — overridden per page.
   description:
-    "Freelance especializado en apps mobile con Kotlin/KMP, CRMs personalizados y webs rápidas con Next.js para empresas y autónomos en España.",
+    "Estudio de producto digital: apps móviles para Android, iOS y coche, backends y software de gestión a medida.",
 
-  // `keywords` is ignored by Google. Omitted intentionally.
-
-  authors:  [{ name: SITE_NAME, url: SITE_URL }],
-  creator:  SITE_NAME,
-  publisher: SITE_NAME,
+  authors:   [{ name: STUDIO_NAME, url: SITE_URL }],
+  creator:   STUDIO_NAME,
+  publisher: STUDIO_NAME,
 
   robots: {
-    index:            true,
-    follow:           true,
+    index:  true,
+    follow: true,
     googleBot: {
-      index:          true,
-      follow:         true,
+      index:  true,
+      follow: true,
       "max-image-preview": "large",
       "max-snippet":       -1,
     },
   },
 
-  // Open Graph defaults — pages override title/description/url.
   openGraph: {
-    siteName: SITE_NAME,
+    siteName: STUDIO_NAME,
     locale:   "es_ES",
     type:     "website",
   },
 
-  // Twitter card defaults.
   twitter: {
     card: "summary_large_image",
   },
 
-  // Canonical defaults to root — each page sets its own.
-  alternates: {
-    canonical: SITE_URL,
-  },
+  // No default canonical on purpose: a page that forgot its own would
+  // silently canonicalise to the home page.
 
   // Mobile status bar + PWA chrome colour
   other: {
     "theme-color": "#f3efe4",
   },
-
-  // Verification placeholders — fill in once verified.
-  // verification: { google: "YOUR_CODE" },
 };
 
 export default function RootLayout({
@@ -108,16 +94,25 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
-      lang="es"
+      lang="es-ES"
       data-scroll-behavior="smooth"
       className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} ${bangers.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
-        {/* Site-wide JSON-LD — Person + ProfessionalService + WebSite */}
-        <JsonLd schemas={[personSchema, professionalServiceSchema, websiteSchema]} />
+        {/* Site-wide JSON-LD — Organization (studio) + Person (founder) + WebSite */}
+        <JsonLd schemas={[siteGraph]} />
+        <a
+          href="#contenido"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[60] focus:border-2 focus:border-[color:var(--foreground)] focus:bg-[color:var(--background)] focus:px-4 focus:py-3 focus:text-sm focus:font-semibold focus:text-[color:var(--foreground)]"
+        >
+          Saltar al contenido
+        </a>
         <LenisProvider />
         <SiteHeader />
-        {children}
+        {/* The one <main> of the site: pages must not render their own. */}
+        <main id="contenido" tabIndex={-1} className="flex-1 outline-none">
+          {children}
+        </main>
         <Footer />
         <Analytics />
       </body>

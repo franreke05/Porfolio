@@ -1,0 +1,70 @@
+/* Co-located styles for the project archetypes (globals.css is lead-owned). */
+
+.dotgrid {
+  background-color: var(--surface);
+  background-image: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--foreground) 26%, transparent) 1px,
+    transparent 1.3px
+  );
+  background-size: 18px 18px;
+}
+
+.inkMuted {
+  color: color-mix(in srgb, var(--ink-fg) 70%, var(--ink-bg));
+}
+
+/* Route polyline: drawn once, static when motion is reduced. */
+.draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw 2.2s cubic-bezier(0.65, 0, 0.35, 1) 0.25s forwards;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.tilt {
+  transform: rotate(-2.5deg);
+  transition: transform 240ms ease;
+}
+
+.tiltLink:hover .tilt,
+.tiltLink:focus-visible .tilt {
+  transform: rotate(-1deg);
+}
+
+.arrow {
+  display: inline-block;
+  transition: transform 180ms ease;
+}
+
+a:hover > .arrow,
+a:focus-visible > .arrow {
+  transform: translateX(4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .draw {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+
+  .tilt,
+  .arrow {
+    transition: none;
+  }
+
+  .tiltLink:hover .tilt,
+  .tiltLink:focus-visible .tilt {
+    transform: rotate(-2.5deg);
+  }
+
+  a:hover > .arrow,
+  a:focus-visible > .arrow {
+    transform: none;
+  }
+}

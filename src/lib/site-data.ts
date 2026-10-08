@@ -1,3 +1,5 @@
+import type { Intent } from "@/lib/leads/model";
+
 export type Service = {
   id: string;
   title: string;
@@ -5,11 +7,23 @@ export type Service = {
   deliverables: string[];
   icon: "mobile" | "crm" | "web" | "support" | "automation" | "growth";
   highlight: string;
+  /** Two-digit ordinal used in pillar headers. */
+  ordinal: string;
+  /** Dedicated service page. */
+  href: string;
+  /** Primary CTA of that service page. */
+  cta: { label: string; intent: Intent };
+  /** Slugs in src/lib/portfolio.ts of the real projects that back this pillar. */
+  proof: string[];
+  /** Used when the proof is not a catalogue project (the web pillar is backed by this site). */
+  proofNote?: string;
+  /** "El mostrador": the comic style we recommend for this pillar. A nickname — the plain title always leads. */
+  style: { name: string; why: string };
 };
 
+/** Legacy shape (imported by components the lead is removing). */
 export type Project = {
   id: string;
-  /** Short slug of this project's dedicated case-study page (src/app/proyectos/{slug}), if it has one — the canonical URL to link to. Falls back to `id` for projects without a dedicated page. */
   caseStudySlug?: string;
   type: "personal" | "client";
   visibility: "public" | "anonymous";
@@ -22,12 +36,9 @@ export type Project = {
   stack: string[];
   metrics: string[];
   image: "mobile" | "dashboard" | "browser" | "subscription";
-  /** Commissioned comic-cover poster art for this project — a full-bleed illustrated "story" referencing the real product logo, never a raw asset or generated mockup. */
   coverSrc: string;
   coverAlt: string;
-  /** Only set when the commissioned art's aspect ratio needs a non-center crop. */
   coverPosition?: string;
-  /** "contain" when the art's aspect ratio is too far from 2:3 to crop without losing something worth keeping. */
   coverFit?: "cover" | "contain";
   cta: "Ver caso" | "Solicitar demo" | "Ver arquitectura";
   links: {
@@ -38,18 +49,19 @@ export type Project = {
 
 export const siteProfile = {
   name: "Francisco Requena Sánchez",
+  studioName: "ORYKAI",
+  studioTagline: "SOFTWARE",
   location: "Almería, España",
   email: "franciscorequenasanchez0@gmail.com",
   phone: "+34642957572",
   displayPhone: "+34 642 95 75 72",
-  role: "Desarrollador full-stack especializado en apps mobile",
-  headline:
-    "Construyo apps móviles, CRMs y webs rápidas para negocios que necesitan ordenar operaciones, captar mejor y dejar atrás herramientas genéricas.",
+  role: "Estudio de producto digital",
+  headline: "Diseñamos y construimos productos digitales de principio a fin.",
   shortBio:
-    "Trabajo especialmente bien cuando el proyecto necesita convertir una idea difusa en una herramienta clara, mantenible y publicable. Mi base está en Kotlin, KMP y Jetpack Compose, y la complemento con CRMs personalizados, webs informativas, automatizaciones y datos SQL.",
-  cta: "Agendar llamada",
+    "Somos un estudio pequeño dirigido por Francisco Requena, con base en Almería y trabajo en remoto. Diseñamos y construimos apps móviles para Android, iOS y coche, backends y software de gestión a medida.",
+  cta: "Reservar reunión",
   authority:
-    "Trabajo mejor cuando el proyecto necesita convertir una idea difusa en una herramienta clara, mantenible y publicable.",
+    "Trabajamos con proyectos de cliente en desarrollo que se pueden ver por dentro: alcance, estado real de cada pieza y lo que todavía falta.",
   links: {
     github: "https://github.com/franreke05",
     linkedin: "https://www.linkedin.com/in/franciscorequenasanchez",
@@ -60,126 +72,115 @@ export const siteProfile = {
   },
 } as const;
 
+/** Legacy export (imported by components the lead is removing). */
 export const trustSignals = [
-  "Kotlin / KMP",
-  "CRMs SQL",
-  "Webs rápidas",
-  "Automatizaciones",
-  "Publicación y mantenimiento",
+  "Apps móviles",
+  "Android, iOS y coche",
+  "Backend",
+  "Software de gestión",
+  "Web",
 ];
 
+/**
+ * The offer: three pillars. Each one names the real project that backs it
+ * (slugs resolve against src/lib/portfolio.ts — never restate project facts here).
+ */
 export const services: Service[] = [
   {
-    id: "apps-mobile",
-    title: "Apps mobile con KMP",
+    id: "apps-moviles",
+    ordinal: "01",
+    title: "Apps móviles",
+    highlight: "Android, iOS y coche",
     summary:
-      "Aplicaciones móviles con arquitectura mantenible, pantallas claras y base preparada para evolucionar sin rehacer el producto.",
+      "Diseñamos y desarrollamos apps para Android e iOS sobre una base de código compartida, con experiencia nativa en Android Auto y Apple CarPlay cuando el producto vive en el coche.",
     deliverables: [
-      "Kotlin Multiplatform y Android",
-      "Jetpack Compose y MVVM",
-      "Integración de APIs REST",
-      "Publicación y mantenimiento",
+      "Alcance, arquitectura y diseño de la experiencia",
+      "Android e iOS con Kotlin Multiplatform",
+      "Android Auto y Apple CarPlay",
+      "Pruebas en dispositivo real y publicación en tiendas",
     ],
     icon: "mobile",
-    highlight: "Especialidad principal",
+    href: "/servicios/desarrollo-apps-android",
+    cta: { label: "Hablar de mi app", intent: "mobile-app" },
+    proof: ["caravantruck-way", "oposibot"],
+    style: { name: "Aventura", why: "Va contigo a todas partes: en el bolsillo y en la pantalla del coche." },
   },
   {
-    id: "crm",
-    title: "CRMs personalizados",
+    id: "software-gestion",
+    ordinal: "02",
+    title: "Software de gestión y backend a medida",
+    highlight: "Backoffice, CRM y automatizaciones",
     summary:
-      "Sistemas internos para ordenar clientes, tareas, incidencias y operaciones sin forzar el negocio a una plantilla genérica.",
+      "Backoffice, CRM y backend hechos para una operación concreta: las reglas de negocio, los permisos y los datos viven en el servidor, y las tareas repetitivas pasan a formar parte del sistema.",
     deliverables: [
-      "Paneles de gestión",
-      "Roles y flujos de trabajo",
-      "Formularios y reportes",
-      "Base de datos SQL",
+      "Backend con reglas de negocio y autorización",
+      "Paneles de administración y portal de cliente",
+      "Roles, permisos y rastro de lo que se hace",
+      "Automatizaciones dentro del propio sistema",
     ],
     icon: "crm",
-    highlight: "Operación diaria",
+    href: "/servicios/crm-a-medida",
+    cta: { label: "Hablar de mi software", intent: "custom-software" },
+    proof: ["oposicontrol", "requenadesk"],
+    style: { name: "Novela gráfica", why: "Tramas largas, con muchos personajes, que tienen que encajar de principio a fin." },
   },
   {
-    id: "webs",
-    title: "Webs informativas",
+    id: "web",
+    ordinal: "03",
+    title: "Web",
+    highlight: "Sitios que explican y convierten",
     summary:
-      "Páginas sobrias, rápidas y fáciles de entender para explicar servicios, generar confianza y convertir visitas en conversaciones.",
+      "Sitios que explican bien lo que haces y llevan a una conversación: estructura clara, carga rápida, accesibilidad y la base técnica de SEO resuelta desde el principio.",
     deliverables: [
-      "Diseño responsive",
-      "SEO técnico base",
-      "Analytics y formularios",
-      "Hosting en Vercel",
+      "Estructura de contenido y diseño a medida",
+      "Desarrollo con Next.js y TypeScript",
+      "Accesibilidad, rendimiento y SEO técnico",
+      "Formularios y reserva de llamadas",
     ],
     icon: "web",
-    highlight: "Primera impresión",
-  },
-  {
-    id: "mantenimiento",
-    title: "Mantenimiento y mejora",
-    summary:
-      "Acompañamiento técnico para evolucionar funcionalidades, corregir incidencias y mantener el proyecto listo para crecer.",
-    deliverables: [
-      "Mejora continua",
-      "Soporte por prioridades",
-      "Optimización de rendimiento",
-      "Documentación básica",
-    ],
-    icon: "support",
-    highlight: "Relación a largo plazo",
-  },
-  {
-    id: "automatizaciones",
-    title: "Automatizaciones",
-    summary:
-      "Pequeños sistemas que eliminan tareas repetitivas, conectan herramientas y reducen trabajo manual en procesos de negocio.",
-    deliverables: [
-      "Integraciones entre servicios",
-      "Procesos internos",
-      "Notificaciones y reportes",
-      "Validaciones de datos",
-    ],
-    icon: "automation",
-    highlight: "Menos trabajo manual",
-  },
-  {
-    id: "crecimiento",
-    title: "SEO, hosting y analytics",
-    summary:
-      "Configuración técnica para que la web cargue bien, mida lo importante y tenga una base correcta para crecer.",
-    deliverables: [
-      "Vercel y dominios",
-      "Vercel Analytics",
-      "Metadata y Open Graph",
-      "Revisión de Core Web Vitals",
-    ],
-    icon: "growth",
-    highlight: "Lanzamiento medible",
+    href: "/servicios/diseno-web-empresas",
+    cta: { label: "Hablar de mi web", intent: "web" },
+    proof: [],
+    proofNote: "Este sitio: lo hemos diseñado y desarrollado nosotros.",
+    style: { name: "Línea clara", why: "Trazo limpio y sin ruido: se entiende a la primera." },
   },
 ];
 
-// All 4 projects below are real, named, currently-active Android/Kotlin
-// projects of Francisco's — reviewed directly from source (build files, git
-// log, README, screen inventory), not fictionalized. EduTrack and FlashFix
-// are working MVPs; OposiControl and OryKai are honestly framed as active
-// work-in-progress, matching their own internal roadmap docs.
+/** Transversal line of the offer — not a fourth pillar. */
+export const afterLaunch: {
+  title: string;
+  text: string;
+  cta: { label: string; intent: Intent };
+  style: { name: string; why: string };
+} = {
+  title: "Seguimos después del lanzamiento",
+  text: "Corregimos incidencias, evolucionamos funcionalidades y retomamos productos que ya están en marcha, también cuando no los hemos construido nosotros.",
+  cta: { label: "Ya tengo un producto en marcha", intent: "existing-project" },
+  style: { name: "Serie continua", why: "Número a número: el trabajo sigue después del primero." },
+};
+
+// Legacy catalogue (imported by components the lead is removing). The source
+// of project facts is src/lib/portfolio.ts; this copy only mirrors it.
 export const projects: Project[] = [
   {
     id: "edutrack",
     caseStudySlug: "edutrack",
     type: "personal",
     visibility: "public",
-    status: "documented-case",
+    status: "technical-demo",
     title: "EduTrack",
-    projectType: "App mobile de productividad académica",
+    projectType: "App Android para controlar las notas",
     problem:
-      "Los estudiantes calculan mal medias, porcentajes y la nota que necesitan para aprobar cuando todo vive en hojas sueltas, calculadoras y capturas de pantalla dispersas.",
+      "Calcular la media con porcentajes distintos por examen, y saber qué nota hace falta para aprobar, acaba en hojas sueltas y calculadoras.",
     solution:
-      "App Android con cursos, asignaturas, notas ponderadas, simulador de nota necesaria y recordatorios de exámenes, con inicio de sesión Firebase y un plan Premium ya definido.",
+      "Una app que organiza cursos y asignaturas, calcula medias ponderadas y responde a la pregunta que importa: qué necesito sacar.",
     result:
-      "12 pantallas en producción y beta pública activa desde hace más de un año (80 commits), con copy de Play Store, checklist de lanzamiento y precios de suscripción ya preparados.",
-    stack: ["Kotlin", "Jetpack Compose", "Firebase Auth", "Firebase Realtime DB", "Play Billing", "DataStore"],
-    metrics: ["12 pantallas", "Beta 0.3", "Firebase", "Play Store listo"],
+      "Producto propio en desarrollo (versión beta 0.3): 12 pantallas funcionales, con el plan Premium en desarrollo y la publicación en Google Play prevista.",
+    stack: ["Kotlin", "Jetpack Compose", "Firebase Auth", "Firebase Realtime Database", "Play Billing", "DataStore"],
+    metrics: ["12 pantallas", "Beta 0.3", "Android", "En desarrollo"],
     image: "mobile",
     coverSrc: "/images/projects/edutrack-cover.webp",
-    coverAlt: "Portada cómic de EduTrack: un lápiz atraviesa un examen suspenso hacia un aprobado",
+    coverAlt: "Ilustración de EduTrack: un lápiz atraviesa un examen suspenso hacia un aprobado",
     cta: "Ver caso",
     links: {},
   },
@@ -190,15 +191,15 @@ export const projects: Project[] = [
     visibility: "public",
     status: "own-system",
     title: "FlashFix",
-    projectType: "Marketplace mobile con backend real",
+    projectType: "Proyecto de fin de grado",
     problem:
-      "Encontrar un taller mecánico cercano de confianza implica llamar a varios talleres a ciegas, sin saber disponibilidad, valoraciones ni poder hablar directamente con ellos.",
+      "Encontrar un taller cercano de confianza obliga a llamar a ciegas, sin saber disponibilidad ni valoraciones.",
     solution:
-      "Marketplace Android que localiza talleres por geolocalización, permite chatear con ellos, valorarlos y gestionar todo desde paneles de usuario, taller y administrador.",
+      "Una app Android que localiza talleres por geolocalización, permite hablar con ellos y valorarlos, con paneles para usuario, taller y administrador.",
     result:
-      "MVP funcional de 17 pantallas con Firebase, Appwrite y Google Maps integrados. Hice mi propia auditoría de código, documenté los problemas reales (estado global, mezcla de Material 2/3, un bug crítico) y empecé a corregirlos: la última entrega migra a Material 3 y cifra las preferencias sensibles.",
+      "Proyecto académico sin cliente: 17 pantallas y 3 roles funcionando, con una auditoría propia del código que llevó a migrar a Material 3 y a cifrar las preferencias sensibles.",
     stack: ["Jetpack Compose", "Firebase", "Room", "Appwrite", "Google Maps", "EncryptedSharedPreferences"],
-    metrics: ["17 pantallas", "MVP", "Auditoría propia", "Multi-rol"],
+    metrics: ["17 pantallas", "3 roles", "Auditoría propia", "Académico"],
     image: "mobile",
     coverSrc: "/images/flashfix-comic-cover-v2.png",
     coverAlt: "Portada de cómic de FlashFix con un coche deportivo, mapas y herramientas mecánicas",
@@ -208,105 +209,102 @@ export const projects: Project[] = [
   {
     id: "oposicontrol",
     caseStudySlug: "oposicontrol",
-    type: "personal",
+    type: "client",
     visibility: "public",
     status: "technical-demo",
     title: "OposiControl",
-    projectType: "Backoffice multiplataforma (KMP)",
+    projectType: "Backoffice y backend de la plataforma OposiBot",
     problem:
-      "Gestionar el contenido de una plataforma de oposiciones — noticias, recursos, tienda, tickets de soporte — sin un panel centralizado obliga a tocar la base de datos a mano y sin control de roles.",
+      "Operar una plataforma de oposiciones —contenido, noticias, recursos, tienda, tickets de soporte, usuarios— tocando la base de datos a mano y sin control de roles.",
     solution:
-      "Backoffice multiplataforma (Android, iOS, escritorio) con Kotlin Multiplatform y Clean Architecture estricta — Domain → Repository → UseCases → ViewModel — sobre Supabase, con más de 300 archivos Kotlin repartidos en 18+ módulos Gradle.",
+      "Un backoffice hecho para esa operación concreta, en Android, iOS y escritorio, sobre un backend que concentra las reglas de negocio, la autorización y el acceso a datos.",
     result:
-      "Arquitectura ya operativa y probada — es la base técnica, no el proyecto entero: el panel de moderación y la tienda siguen en desarrollo activo.",
+      "Software a medida en desarrollo: arquitectura por capas y backend implementados; gestión de contenido, moderación y tienda en desarrollo.",
     stack: ["Kotlin Multiplatform", "Compose Multiplatform", "Koin", "Ktor", "SQLDelight", "Supabase"],
-    metrics: ["KMP", "Clean Architecture", "18+ módulos", "En desarrollo"],
+    metrics: ["KMP", "Arquitectura por capas", "Más de 18 módulos", "En desarrollo"],
     image: "dashboard",
     coverSrc: "/images/projects/oposicontrol-cover.webp",
-    coverAlt: "Portada cómic de OposiControl: una torre de control blindada con un escudo de seguridad ordenando documentos",
+    coverAlt: "Ilustración de OposiControl: una torre de control con un escudo ordenando documentos",
     cta: "Ver arquitectura",
     links: {},
   },
   {
-    id: "orykai",
-    caseStudySlug: "orykai",
+    id: "requenadesk",
+    caseStudySlug: "requenadesk",
     type: "personal",
     visibility: "public",
-    status: "own-system",
-    title: "OryKai",
-    projectType: "CRM multiplataforma (KMP)",
+    status: "technical-demo",
+    title: "RequenaDesk",
+    projectType: "CRM y ticketing multiplataforma",
     problem:
-      "Llevar clientes, tickets, tareas y facturas de mi propia operación freelance en herramientas sueltas no escala ni deja rastro de qué se ha facturado ni a quién.",
+      "Solicitudes, tickets, tareas y facturas repartidos entre herramientas sueltas: nadie sabe qué se pidió, qué se hizo ni qué se facturó.",
     solution:
-      "CRM multiplataforma propio (Kotlin Multiplatform: Android, iOS, escritorio y servidor) con backend Ktor + PostgreSQL, autenticación JWT y generación de facturas en PDF.",
+      "Un único sistema con panel de administración y portal de cliente: solicitudes, tickets, tareas, seguimiento del servicio y facturación.",
     result:
-      "27 pantallas ya construidas entre panel de admin y panel de cliente. El MVP se centra en escritorio y servidor, con Android como panel ligero de revisión — auth, persistencia y adjuntos siguen siendo hitos activos en mi propio roadmap.",
-    stack: ["Kotlin Multiplatform", "Ktor", "PostgreSQL", "Flyway", "JWT", "PDFBox"],
+      "Producto propio en desarrollo que usamos en nuestra operación con clientes: 27 pantallas entre el panel de administración y el portal de cliente. Todavía no está disponible para nuevas altas.",
+    stack: ["Kotlin Multiplatform", "Compose Multiplatform", "Ktor", "PostgreSQL", "Flyway", "JWT", "PDFBox"],
     metrics: ["KMP", "Ktor + PostgreSQL", "27 pantallas", "En desarrollo"],
     image: "dashboard",
+    // Legacy art path kept only so this dead export compiles; the catalogue has no cover for RequenaDesk.
     coverSrc: "/images/projects/orykai-cover.webp",
-    coverAlt: "Portada cómic de OryKai: un dragón dorado envuelve facturas, monedas y un terminal de CRM",
+    coverAlt: "Ilustración de RequenaDesk",
     coverFit: "contain",
     cta: "Ver arquitectura",
     links: {},
   },
 ];
 
-// Honest, in-character status word for the comic-cover indicia — never
-// implies a project is finished when it's documented as in-progress.
+// Legacy status words (see note above). Never implies a release.
 export const projectStatusWord: Record<Project["status"], string> = {
   "technical-demo": "EN DESARROLLO",
-  "documented-case": "BETA PÚBLICA",
-  "own-system": "MVP",
-  "anonymous-project": "ANONIMIZADO",
-  "real-lab": "LABORATORIO",
+  "documented-case": "EN DESARROLLO",
+  "own-system": "MVP ACADÉMICO",
+  "anonymous-project": "EN DESARROLLO",
+  "real-lab": "EN DESARROLLO",
 };
 
 export const projectStatusAccent: Record<Project["status"], "live" | "progress"> = {
   "technical-demo": "progress",
-  "documented-case": "live",
-  "own-system": "live",
+  "documented-case": "progress",
+  "own-system": "progress",
   "anonymous-project": "progress",
   "real-lab": "progress",
 };
 
+/** What we build with. Every item appears in a project of src/lib/portfolio.ts or in this site. */
 export const stackGroups = [
   {
-    title: "Mobile",
-    items: ["KMP", "Kotlin", "Jetpack Compose", "Android Studio", "Swift"],
-  },
-  {
-    title: "Frontend",
-    items: ["React", "Next.js", "HTML", "CSS", "Tailwind CSS", "Motion"],
+    title: "Móvil y coche",
+    items: ["Kotlin Multiplatform", "Compose Multiplatform", "Jetpack Compose", "Android Auto", "Apple CarPlay"],
   },
   {
     title: "Backend y datos",
-    items: ["Python", "Java", "SQL", "PL/SQL", "APIs REST"],
+    items: ["Ktor", "PostgreSQL", "PostGIS", "Flyway", "JWT", "Supabase", "SQLDelight"],
   },
   {
-    title: "Herramientas",
-    items: ["GitHub", "GitLab", "WordPress", "Vercel", "Tickets"],
+    title: "Mapas",
+    items: ["MapLibre", "OpenStreetMap", "Valhalla"],
+  },
+  {
+    title: "Web",
+    items: ["Next.js", "React", "TypeScript", "Tailwind CSS"],
   },
 ];
 
+/**
+ * Founder's background before the studio. Not studio track record: shown
+ * only on /sobre-mi, under the founder's name.
+ */
 export const experienceItems = [
   {
     company: "IMARINA",
-    role: "Desarrollador de Componentes Android",
-    detail:
-      "Apps Android con Kotlin y Jetpack Compose, arquitectura MVVM, integración de APIs REST, mantenimiento y soporte a decisiones técnicas.",
+    role: "Desarrollo de componentes Android",
+    detail: "Apps Android con Kotlin y Jetpack Compose, arquitectura MVVM e integración de APIs REST.",
   },
   {
-    company: "Orizon Software",
-    role: "Aplicación móvil FlashFix",
-    detail:
-      "Optimización de formularios, resolución de incidencias mediante tickets y trabajo con Bootstrap, Python, Java, GitHub y GitLab.",
-  },
-  {
-    company: "Freelance en Malt",
-    role: "Soluciones digitales personalizadas",
-    detail:
-      "Desarrollo y publicación de soluciones adaptadas a ideas de clientes en apps funcionales orientadas a negocio y entretenimiento.",
+    company: "Malt",
+    role: "Trabajo independiente por encargo",
+    detail: "Desarrollo de apps a partir de ideas de clientes, a través de la plataforma.",
   },
 ];
 
@@ -314,21 +312,21 @@ export const processSteps = [
   {
     title: "Diagnóstico",
     output: "Alcance claro",
-    text: "Aterrizamos problema, objetivos, usuarios y procesos reales antes de diseñar pantallas.",
+    text: "Aterrizamos el problema, los objetivos, los usuarios y los procesos reales antes de diseñar pantallas.",
   },
   {
-    title: "Prototipo claro",
+    title: "Prototipo",
     output: "Flujo validado",
-    text: "Definimos estructura, recorrido principal y alcance para construir solo lo que aporta valor.",
+    text: "Definimos la estructura, el recorrido principal y el alcance para construir solo lo que aporta valor.",
   },
   {
-    title: "Desarrollo iterativo",
+    title: "Desarrollo por bloques",
     output: "Bloques revisables",
-    text: "Construyo por módulos: interfaz, lógica, datos, integraciones y ajustes de rendimiento.",
+    text: "Construimos por módulos —interfaz, lógica, datos e integraciones— y cada bloque se revisa antes de seguir.",
   },
   {
-    title: "Lanzamiento y mejora",
-    output: "Medición y mejora",
-    text: "Publicamos, medimos, corregimos puntos débiles y dejamos una base preparada para evolucionar.",
+    title: "Entrega y mejora",
+    output: "Base para evolucionar",
+    text: "Entregamos, corregimos lo que falla en uso real y dejamos una base preparada para seguir creciendo.",
   },
 ];

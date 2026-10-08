@@ -49,6 +49,17 @@
   --ink-bg:   #17130f;
   --ink-fg:   #f3efe4;
   --ink-rule: #3a332a;
+
+  /* Status — one system sitewide. The accent is never a status colour;
+     the glyph shape carries the state as well as the colour. */
+  --status-done: #3f6b4a;
+  --status-dev:  #7a5f30;
+  --status-plan: #6b6152;
+
+  /* Studio ledger scale */
+  --grid-max: 77.5rem;
+  --gutter:   1.5rem;
+  --shadow-hard: 4px 4px 0 var(--foreground);
 }
 
 @theme inline {
@@ -136,9 +147,8 @@ a {
 
 /* Global focus-visible ring — consistent across all interactive elements */
 :focus-visible {
-  outline: 2px solid var(--accent-cyan);
+  outline: 2px solid var(--foreground);
   outline-offset: 3px;
-  border-radius: 4px;
 }
 
 button, input, textarea, select { font: inherit; }
@@ -469,3 +479,56 @@ button, input, textarea, select { font: inherit; }
     scroll-behavior: auto !important;
   }
 }
+
+/* ─────────────────────────────────────────────
+   STUDIO LEDGER PRIMITIVES
+   Shared by every project archetype, the home ledger and the booking flow.
+───────────────────────────────────────────── */
+.label-mono {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--status-color);
+}
+.status::before {
+  content: "";
+  flex: none;
+  width: 0.625rem;
+  height: 0.625rem;
+  border: 1.5px solid var(--status-color);
+}
+.status[data-s="implemented"]    { --status-color: var(--status-done); }
+.status[data-s="in-development"] { --status-color: var(--status-dev); }
+.status[data-s="planned"]        { --status-color: var(--status-plan); }
+.status[data-s="implemented"]::before { background: var(--status-color); }
+.status[data-s="in-development"]::before {
+  background: linear-gradient(90deg, var(--status-color) 50%, transparent 50%);
+}
+.status[data-s="planned"]::before { border-style: dashed; }
+
+/* On the inverted (client work) modules the status colours are lifted so
+   they keep contrast against --ink-bg. */
+.on-ink .status[data-s="implemented"]    { --status-color: #8fc19b; }
+.on-ink .status[data-s="in-development"] { --status-color: #e0b469; }
+.on-ink .status[data-s="planned"]        { --status-color: #a89d8b; }
+
+.ledger-rule { border-top: 2px solid var(--foreground); }
+.on-ink .ledger-rule { border-top-color: var(--ink-fg); }
+
+:where(a, button, input, textarea, select, [tabindex]):focus-visible {
+  outline: 2px solid var(--foreground);
+  outline-offset: 3px;
+}
+.on-ink :where(a, button, [tabindex]):focus-visible { outline-color: var(--ink-fg); }

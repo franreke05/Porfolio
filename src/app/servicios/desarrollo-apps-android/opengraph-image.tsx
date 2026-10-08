@@ -1,15 +1,14 @@
 import { OG_SIZE, renderOgImage } from "@/lib/og-image";
 
-export const runtime     = "edge";
-export const alt         = "Desarrollo de apps Android con Kotlin — Francisco Requena Sánchez";
+export const alt         = "Apps móviles para Android, iOS y coche — ORYKAI SOFTWARE";
 export const size        = OG_SIZE;
 export const contentType = "image/png";
 
 export default function OGImage() {
   return renderOgImage({
-    eyebrow: "Servicios · Mobile",
-    title: "Apps Android con Kotlin Multiplatform",
-    description: "Jetpack Compose, arquitectura MVVM y publicación en Google Play — código tuyo, sin ataduras.",
-    tags: ["Kotlin", "KMP", "Jetpack Compose", "Firebase"],
+    eyebrow: "Servicios · Apps móviles",
+    title: "Apps móviles para Android, iOS y coche.",
+    description: "Una base Kotlin Multiplatform compartida, con Android Auto y Apple CarPlay.",
+    tags: ["Kotlin Multiplatform","Compose Multiplatform","Android Auto","Apple CarPlay"],
   });
 }

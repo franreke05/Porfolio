@@ -55,13 +55,13 @@ const chapters = [
     label: "Diagnóstico",
     hint: "Alcance sin humo",
     eyebrow: "Primero entendemos",
-    title: "Antes de escribir código, cierro el problema real.",
+    title: "Antes de escribir código, cerramos el problema real.",
     summary:
       "Definimos quién usará la app, qué debe resolver y cuáles son los flujos que justifican el primer lanzamiento.",
     points: [
       "Objetivo, usuarios y flujos críticos definidos.",
       "Un MVP sin funciones que todavía no validan nada.",
-      "Riesgos, integraciones y plazo visibles desde el inicio.",
+      "Riesgos e integraciones visibles desde el inicio.",
       "Sin plantillas genéricas ni reuniones que no producen decisiones.",
     ],
     output: "Brief + alcance",
@@ -97,9 +97,9 @@ const chapters = [
     summary:
       "No esperas al final para descubrir el producto. Cada ciclo deja una versión instalable y una decisión revisable.",
     points: [
-      "El repositorio Git es tuyo desde el primer commit.",
-      "Firebase Auth, FCM y Ktor conectados con sistemas reales.",
-      "Pruebas unitarias e instrumentadas en los flujos principales.",
+      "Cada bloque se revisa antes de seguir.",
+      "La app consume un backend que decide identidad y acceso.",
+      "Pruebas en dispositivo real de cada versión candidata.",
       "Avance visible mediante builds, no porcentajes abstractos.",
     ],
     output: "Build instalable",
@@ -112,14 +112,14 @@ const chapters = [
     label: "Publicación",
     hint: "Lista para producción",
     eyebrow: "El cierre también cuenta",
-    title: "La app termina publicada, documentada y bajo tu control.",
+    title: "La publicación en tiendas forma parte del alcance.",
     summary:
-      "Gestiono la firma, la ficha y la revisión de Google Play para que el último tramo no se convierta en otro proyecto.",
+      "Nos encargamos de la firma, la ficha y la revisión de las tiendas para que el último tramo no se convierta en otro proyecto.",
     points: [
-      "Publicación y configuración de producción en Play Store.",
+      "Publicación en Google Play y App Store.",
       "Revisión de firma, permisos y políticas de la plataforma.",
       "Documentación técnica y guía de mantenimiento.",
-      "30 días de soporte para ajustes menores tras el lanzamiento.",
+      "Seguimos después del lanzamiento.",
     ],
     output: "Release 1.0",
     outputLabel: "Producción + documentación",
@@ -128,9 +128,9 @@ const chapters = [
 ] as const satisfies readonly Chapter[];
 
 const stats = [
-  ["6–12", "semanas MVP"],
-  ["100%", "código tuyo"],
-  ["30", "días soporte"],
+  ["KMP", "Android e iOS"],
+  ["Auto", "y CarPlay"],
+  ["Real", "pruebas en dispositivo"],
 ] as const;
 
 function cn(...classes: Array<string | false | undefined>) {
@@ -432,7 +432,7 @@ export function AndroidServiceExperience() {
               Diseño y desarrollo productos Android a medida con Kotlin, Jetpack Compose y KMP: desde el primer flujo hasta la publicación, sin plantillas ni una caja negra entre medias.
             </p>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <MagneticButton href="/#contacto" rounded="none">
+              <MagneticButton href="/contacto?intent=mobile-app" rounded="none">
                 Hablemos de tu app <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
               </MagneticButton>
               <a href="#android-blueprint" className="inline-flex min-h-12 items-center justify-center gap-2 border border-[color:var(--foreground)] px-5 text-sm font-semibold transition-colors hover:bg-[color:var(--foreground)] hover:text-[color:var(--background)]">

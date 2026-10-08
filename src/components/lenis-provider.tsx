@@ -15,7 +15,7 @@ export function LenisProvider() {
     if (reducedMotion || touchOnly) return;
 
     const lenis = new Lenis({
-      duration:    1.2,
+      duration:    1.45,
       easing:      lenisEasing,
       smoothWheel: true,
     });

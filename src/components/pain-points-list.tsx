@@ -1,37 +1,21 @@
-"use client";
-
-import { motion, useReducedMotion } from "motion/react";
-
 type PainPointsListProps = {
   items: readonly string[];
 };
 
-/**
- * "El problema habitual" list, shared by the service detail pages. Replaces
- * a stack of identical flat cream boxes with a numbered, hairline-divided
- * list — the same mono-number + text language already used by the FAQ list
- * and process steps elsewhere on the site, so it reads as one system
- * instead of one more repeated card shape.
- */
+/** Numbered, hairline-divided list of starting situations. Server-rendered. */
 export function PainPointsList({ items }: PainPointsListProps) {
-  const reduceMotion = useReducedMotion();
-
   return (
-    <ul className="divide-y divide-[color:var(--border)] border-y border-[color:var(--border)]">
+    <ul className="border-b border-[color:var(--border)]">
       {items.map((item, index) => (
-        <motion.li
+        <li
           key={item}
-          className="flex gap-4 py-4 sm:gap-5"
-          initial={reduceMotion ? undefined : { opacity: 0, x: -10 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, amount: 0.6 }}
-          transition={{ duration: reduceMotion ? 0 : 0.36, ease: [0.22, 1, 0.36, 1], delay: reduceMotion ? 0 : Math.min(index * 0.07, 0.35) }}
+          className="flex gap-4 border-t border-[color:var(--border)] py-4 first:border-t-0 first:pt-0 sm:gap-5"
         >
-          <span className="shrink-0 pt-0.5 font-mono text-xs font-bold text-[color:var(--primary)]">
+          <span className="shrink-0 pt-1 font-mono text-xs font-bold text-[color:var(--muted)]" aria-hidden="true">
             {String(index + 1).padStart(2, "0")}
           </span>
-          <p className="text-sm leading-6 text-[color:var(--muted)]">{item}</p>
-        </motion.li>
+          <p className="leading-7 text-[color:var(--foreground)]">{item}</p>
+        </li>
       ))}
     </ul>
   );

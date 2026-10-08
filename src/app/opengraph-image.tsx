@@ -1,16 +1,14 @@
-import { SITE_NAME } from "@/lib/seo";
 import { OG_SIZE, renderOgImage } from "@/lib/og-image";
 
-export const runtime     = "edge";
-export const alt         = `${SITE_NAME} — Apps mobile, CRMs y webs para empresas`;
+export const alt         = "ORYKAI SOFTWARE: apps móviles, backends y software a medida";
 export const size        = OG_SIZE;
 export const contentType = "image/png";
 
 export default function OGImage() {
   return renderOgImage({
-    eyebrow: "Portfolio profesional",
-    title: SITE_NAME,
-    description: "Apps mobile · CRMs a medida · Webs rápidas · Automatizaciones",
-    tags: ["Kotlin / KMP", "CRM SQL", "Next.js", "Automatizaciones"],
+    eyebrow: "Estudio de producto",
+    title: "Diseñamos y construimos productos digitales de principio a fin.",
+    description: "Apps móviles para Android, iOS y coche, backends y software de gestión a medida.",
+    tags: ["Apps móviles","Backend","Software de gestión","Web"],
   });
 }

@@ -2,7 +2,13 @@
  * Inline JSON-LD script — server component, zero JS.
  * Pass one or more schema objects; renders a <script> per schema.
  */
-export function JsonLd({ schemas }: { schemas: object[] }) {
+
+/** Escape "<" so a string value can never close the script element. */
+function serialize(schema: object): string {
+  return JSON.stringify(schema).replace(/</g, "\\u003c");
+}
+
+export function JsonLd({ schemas }: { schemas: ReadonlyArray<object> }) {
   return (
     <>
       {schemas.map((schema, i) => (
@@ -10,7 +16,7 @@ export function JsonLd({ schemas }: { schemas: object[] }) {
           key={i}
           type="application/ld+json"
           // biome-ignore lint/security/noDangerouslySetInnerHtml: trusted internal data
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+          dangerouslySetInnerHTML={{ __html: serialize(schema) }}
         />
       ))}
     </>

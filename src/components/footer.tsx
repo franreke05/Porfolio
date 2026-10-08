@@ -1,75 +1,79 @@
 "use client";
 
-import { BriefcaseBusiness, Code2, Mail, MessageCircle } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
-import { motion } from "motion/react";
-import { ContactForm } from "@/components/contact-form";
-import { MotionSection } from "@/components/motion-section";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { contactHref } from "@/lib/portfolio";
 import { siteProfile } from "@/lib/site-data";
 
-/**
- * Persistent contact surface, rendered once in layout.tsx on every route —
- * not a homepage funnel step. The "¿Hablamos?" heading is the one restrained
- * SFX-lettering comic touch allowed outside the project covers.
- */
+const navItems = [
+  ["Nuestro trabajo", "/proyectos"],
+  ["Servicios", "/servicios"],
+  ["Sobre nosotros", "/sobre-mi"],
+  ["Contacto", "/contacto"],
+] as const;
+
+/** Slim site footer: brand line, navigation, public contact details, one CTA. */
 export function Footer() {
+  // The home ends on the last frame of the showroom: its footer content is
+  // signage inside the scene (and plain HTML in the no-WebGL fallback).
+  const pathname = usePathname();
+  if (pathname === "/") return null;
+
   return (
-    <footer id="contacto" className="border-t-2 border-[color:var(--foreground)] bg-[color:var(--surface)] px-5 py-16 sm:px-8 lg:px-12 lg:py-20 xl:px-16 2xl:px-24">
-      <div className="grid w-full gap-12 lg:grid-cols-[0.85fr_1.15fr]">
-        <MotionSection as="div">
+    <footer className="border-t-2 border-[color:var(--foreground)] bg-[color:var(--surface)]">
+      <div className="mx-auto w-full max-w-[var(--grid-max)] px-5 py-10 sm:px-8 lg:py-12">
+        <div className="grid gap-8 md:grid-cols-[minmax(0,1.2fr)_minmax(0,0.7fr)_minmax(0,1.1fr)] md:gap-10">
           <div>
-            <p className="section-eyebrow mb-4">Contacto</p>
-            <h2 className="comic-action-word text-4xl text-[color:var(--foreground)] sm:text-5xl">
-              ¿Hablamos?
-            </h2>
-            <p className="mt-5 max-w-md text-pretty leading-7 text-[color:var(--muted)]">
-              No hay precios cerrados porque cada app, CRM o web depende del alcance real. El
-              primer paso es entender el problema y decidir la ruta más sensata.
-            </p>
-            <div className="mt-7 grid gap-3">
-              <ContactLink href={siteProfile.links.mail} icon={Mail} label={siteProfile.email} />
-              <ContactLink href={siteProfile.links.whatsapp} icon={MessageCircle} label={siteProfile.displayPhone} external />
-              <ContactLink href={siteProfile.links.linkedin} icon={BriefcaseBusiness} label="LinkedIn" external />
-              <ContactLink href={siteProfile.links.github} icon={Code2} label="GitHub" external />
-            </div>
+            <p className="text-base font-bold tracking-[-0.01em]">ORYKAI</p>
+            <p className="label-mono mt-1 text-[color:var(--muted)]">SOFTWARE</p>
+            <Link
+              href={contactHref("general")}
+              className="mt-5 inline-flex min-h-11 items-center border-2 border-[color:var(--foreground)] px-4 text-sm font-semibold transition-colors duration-150 hover:bg-[color:var(--foreground)] hover:text-[color:var(--background)]"
+            >
+              Reservar reunión
+            </Link>
           </div>
-        </MotionSection>
 
-        <MotionSection as="div" delay={0.08}>
-          <ContactForm />
-        </MotionSection>
-      </div>
+          <nav aria-label="Pie de página">
+            <ul>
+              {navItems.map(([label, href]) => (
+                <li key={href}>
+                  <Link
+                    href={href}
+                    className="inline-flex min-h-9 items-center text-sm underline-offset-4 hover:underline"
+                  >
+                    {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
 
-      <div className="mt-16 flex w-full flex-col gap-3 border-t border-[color:var(--border)] pt-6 text-sm text-[color:var(--muted)] sm:flex-row sm:items-center sm:justify-between">
-        <p>© 2026 {siteProfile.name}. Portfolio personal.</p>
-        <p className="font-mono text-xs">Next.js · Vercel · TypeScript</p>
+          <address className="not-italic">
+            <p className="label-mono text-[color:var(--muted)]">Contacto directo</p>
+            <p className="mt-2">
+              <a
+                href={siteProfile.links.mail}
+                className="inline-flex min-h-9 items-center break-all text-sm underline underline-offset-4"
+              >
+                {siteProfile.email}
+              </a>
+            </p>
+            <p>
+              <a
+                href={`tel:${siteProfile.phone}`}
+                className="inline-flex min-h-9 items-center text-sm underline underline-offset-4"
+              >
+                {siteProfile.displayPhone}
+              </a>
+            </p>
+          </address>
+        </div>
+
+        <p className="mt-8 border-t border-[color:var(--border-hover)] pt-5 text-xs text-[color:var(--muted)]">
+          © 2026 ORYKAI SOFTWARE
+        </p>
       </div>
     </footer>
-  );
-}
-
-function ContactLink({
-  href,
-  icon: Icon,
-  label,
-  external,
-}: {
-  href: string;
-  icon: LucideIcon;
-  label: string;
-  external?: boolean;
-}) {
-  return (
-    <motion.a
-      href={href}
-      target={external ? "_blank" : undefined}
-      rel={external ? "noreferrer" : undefined}
-      className="flex items-center gap-3 rounded-lg border border-[color:var(--border)] bg-[color:var(--background)] p-3 text-sm text-[color:var(--surface-foreground)] transition-colors hover:border-[color:var(--foreground)] hover:bg-[color:var(--foreground)] hover:text-[color:var(--background)]"
-    >
-      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-[color:var(--border)] bg-[color:var(--surface)] text-[color:var(--primary)]">
-        <Icon className="h-4 w-4" aria-hidden="true" />
-      </span>
-      <span className="min-w-0 break-words">{label}</span>
-    </motion.a>
   );
 }

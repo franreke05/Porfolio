@@ -1,0 +1,267 @@
+/* Scroll comic: everything is CSS/SVG, all text is real DOM text. */
+
+.reader {
+  --accent: #e9ad3c;
+  --page: #fbf7ec;
+  --caption: #fdeeb5;
+  --ink: var(--foreground);
+  background-color: var(--surface);
+  background-image: radial-gradient(circle, rgba(27, 23, 18, 0.07) 1px, transparent 1.4px);
+  background-size: 8px 8px;
+  color: var(--ink);
+}
+
+/* ── Panel ─────────────────────────────────────────── */
+.panel {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--page);
+  border: 3px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.halftone {
+  background-image: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--accent) 75%, transparent) 1.5px,
+    transparent 2px
+  );
+  background-size: 10px 10px;
+}
+
+.halftoneFade::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--accent) 80%, transparent) 1.6px,
+    transparent 2.1px
+  );
+  background-size: 10px 10px;
+  mask-image: linear-gradient(135deg, #000 0%, transparent 62%);
+}
+
+.sunburst::before {
+  content: "";
+  position: absolute;
+  inset: -60%;
+  z-index: -1;
+  background: repeating-conic-gradient(
+    from 0deg,
+    var(--accent) 0deg 7deg,
+    color-mix(in srgb, var(--accent) 55%, #fff) 7deg 14deg
+  );
+}
+
+.inkPanel {
+  background: var(--ink-bg);
+  color: var(--ink-fg);
+}
+
+.inkPanel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--accent) 55%, transparent) 1.6px,
+    transparent 2.1px
+  );
+  background-size: 11px 11px;
+  mask-image: linear-gradient(200deg, #000 0%, transparent 58%);
+}
+
+.accentPanel {
+  background: var(--accent);
+}
+
+/* ── Lettering ─────────────────────────────────────── */
+.bangers {
+  font-family: var(--font-bangers), "Impact", "Haettenschweiler", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.035em;
+}
+
+.chapterWord {
+  composes: bangers;
+  display: inline-block;
+  font-size: clamp(2.6rem, 11vw, 5.5rem);
+  line-height: 0.92;
+  color: var(--page);
+  -webkit-text-stroke: 2px var(--ink);
+  paint-order: stroke fill;
+  text-shadow: 4px 4px 0 var(--ink);
+  transform: rotate(-3deg);
+  text-wrap: balance;
+}
+
+.sfx {
+  composes: bangers;
+  display: inline-block;
+  font-size: clamp(3rem, 15vw, 7.5rem);
+  line-height: 0.9;
+  color: var(--accent);
+  -webkit-text-stroke: 2px var(--ink);
+  paint-order: stroke fill;
+  text-shadow: 5px 5px 0 var(--ink);
+  transform: rotate(-5deg);
+}
+
+.inkPanel .sfx {
+  -webkit-text-stroke: 0;
+  text-shadow: 4px 4px 0 var(--primary);
+}
+
+.numeral {
+  composes: bangers;
+  font-size: 2.5rem;
+  line-height: 0.9;
+  color: var(--accent);
+  -webkit-text-stroke: 1.5px var(--ink);
+  paint-order: stroke fill;
+  text-shadow: 2px 2px 0 var(--ink);
+}
+
+.tag {
+  display: inline-block;
+  background: var(--ink);
+  color: var(--page);
+  padding: 0.25rem 0.6rem;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ── Caption boxes ─────────────────────────────────── */
+.captionBox {
+  background: var(--caption);
+  border: 2.5px solid var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+  padding: 0.75rem 1rem;
+}
+
+.headlineBox {
+  background: var(--page);
+  border: 3px solid var(--ink);
+  box-shadow: 5px 5px 0 var(--ink);
+  padding: 1rem 1.25rem;
+}
+
+.tiltA {
+  transform: rotate(-1.2deg);
+}
+
+.tiltB {
+  transform: rotate(0.9deg);
+}
+
+/* ── Speech bubbles ────────────────────────────────── */
+.bubble {
+  position: relative;
+  background: #fff;
+  border: 2.5px solid var(--ink);
+  border-radius: 1.6rem;
+  padding: 0.9rem 1.2rem;
+  color: var(--foreground);
+}
+
+.bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -11px;
+  left: 30px;
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  border-right: 2.5px solid var(--ink);
+  border-bottom: 2.5px solid var(--ink);
+  transform: rotate(45deg) skew(12deg, 12deg);
+}
+
+.bubbleRight::after {
+  left: auto;
+  right: 30px;
+}
+
+.speaker {
+  width: 2.75rem;
+  height: 2.75rem;
+  flex: none;
+  border: 2.5px solid var(--ink);
+  border-radius: 999px;
+  background: var(--accent);
+  overflow: hidden;
+}
+
+/* ── Chapter indicator ─────────────────────────────── */
+.indicator {
+  scrollbar-width: none;
+}
+
+.indicator::-webkit-scrollbar {
+  display: none;
+}
+
+.chip[aria-current="true"] {
+  background: var(--accent);
+  color: var(--foreground);
+}
+
+/* ── Scroll reveals: progressive enhancement only ──── */
+@keyframes panel-in {
+  from {
+    opacity: 0.45;
+    transform: translateY(28px) rotate(-1.2deg) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0.4;
+    transform: scale(0.86) rotate(2deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: panel-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 20%;
+    }
+
+    .pop {
+      animation: pop-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 28%;
+    }
+  }
+}
+
+/* Mobile: one panel fills one screen, content centred inside it. */
+@media (max-width: 47.99rem) {
+  .fill {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+  }
+
+  .fill > .panel {
+    flex: 1;
+    justify-content: center;
+    align-content: center;
+  }
+}

@@ -46,3 +46,6 @@ next-env.d.ts
 
 # local Claude Code session state / cross-project skill config (not project content)
 .claude/
+
+# local dev adapters (generated, never commit)
+.dev-outbox/

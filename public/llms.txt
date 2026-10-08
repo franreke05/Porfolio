@@ -1,31 +1,48 @@
-# Francisco Requena Sánchez — Desarrollador de apps mobile, CRMs y webs
+# ORYKAI SOFTWARE
 
-> Francisco Requena Sánchez es un desarrollador freelance afincado en Almería, España (disponible en remoto), especializado en apps Android con Kotlin Multiplatform (KMP) y Jetpack Compose, CRMs a medida con PostgreSQL, webs rápidas con Next.js y automatizaciones de negocio para pymes. Construye el sistema completo — app o CRM, web y despliegue — sin plantillas genéricas, y se encarga también del mantenimiento posterior.
+> Somos un estudio de producto pequeño, dirigido por Francisco Requena, con base en Almería (España) y trabajo en remoto. Diseñamos y construimos productos digitales de principio a fin: apps móviles para Android, iOS y coche, backends y software de gestión a medida.
 
-Contacto: franciscorequenasanchez0@gmail.com · +34 642 95 75 72 · Almería, España · Remoto.
+Cada proyecto se muestra con su estado real: implementado, en desarrollo o previsto. Los proyectos de cliente están hoy en desarrollo; no publicamos nombres de clientes, cifras de usuarios, valoraciones ni precios. Idioma del sitio: español (es-ES).
+
+## Trabajo para clientes
+
+- [CaravanTruck Way](https://francisco-requena.vercel.app/proyectos/caravantruck-way): navegación GPS offline para autocaravanas, camiones y furgonetas, con rutas según el perfil del vehículo y experiencia nativa en Android Auto y Apple CarPlay. Diseño y desarrollo completos a cargo del estudio. En desarrollo.
+- [OposiBot](https://francisco-requena.vercel.app/proyectos/oposibot): app móvil de estudio para opositores, en Android e iOS con Kotlin Multiplatform, con un backend como única autoridad sobre los datos. Desarrollo de la app móvil a cargo del estudio. En desarrollo.
+
+## Productos propios
+
+- [RequenaDesk](https://francisco-requena.vercel.app/proyectos/requenadesk): CRM y ticketing multiplataforma con portal de cliente y facturas en PDF. Lo usamos en nuestra propia operación con clientes; todavía no está disponible para nuevas altas. En desarrollo.
+- [EduTrack](https://francisco-requena.vercel.app/proyectos/edutrack): app Android para estudiantes, con notas ponderadas, simulador de la nota necesaria y recordatorios de examen. Producto propio, sin cliente externo. En desarrollo (versión beta 0.3); la publicación en Google Play está prevista.
+
+## Software de gestión a medida
+
+- [OposiControl](https://francisco-requena.vercel.app/proyectos/oposicontrol): backoffice multiplataforma y backend que gobiernan contenido, tienda, soporte y permisos de la plataforma OposiBot. No es un CRM genérico: está hecho para esa operación concreta. En desarrollo.
+
+## Caso de estudio
+
+- [AgendNote](https://francisco-requena.vercel.app/proyectos/agendnote): agenda y tareas en Kotlin Multiplatform, documentada como proceso: auditorías de diseño, arquitectura y seguridad, y de 39 a 90 tests. Proyecto propio; la verificación en iOS está prevista.
+
+## Académico
+
+- [FlashFix](https://francisco-requena.vercel.app/proyectos/flashfix): proyecto de fin de grado, un marketplace de talleres con 17 pantallas y 3 roles, contado como cómic interactivo junto a su propia auditoría. MVP académico, sin cliente.
 
 ## Servicios
 
-- [Desarrollo de apps Android con Kotlin Multiplatform](https://francisco-requena.vercel.app/servicios/desarrollo-apps-android): apps nativas con Jetpack Compose, MVVM y arquitectura preparada para escalar.
-- [CRM a medida](https://francisco-requena.vercel.app/servicios/crm-a-medida): sistemas internos con PostgreSQL, paneles, roles, flujos de trabajo y reportes — sin licencias genéricas ni funcionalidades sin usar.
-- [Diseño y desarrollo web para empresas](https://francisco-requena.vercel.app/servicios/diseno-web-empresas): webs rápidas con Next.js, SEO técnico y enfoque en conversión.
-- [Automatizaciones para pymes](https://francisco-requena.vercel.app/servicios/automatizaciones-pymes): integraciones entre herramientas y procesos que eliminan trabajo manual repetitivo.
+- [Apps móviles para Android, iOS y coche](https://francisco-requena.vercel.app/servicios/desarrollo-apps-android): diseño y desarrollo sobre una base Kotlin Multiplatform compartida, con Android Auto y Apple CarPlay cuando el producto vive en el coche.
+- [Software de gestión y backend a medida](https://francisco-requena.vercel.app/servicios/crm-a-medida): backoffice, CRM y backend hechos para una operación concreta, con las reglas de negocio, los permisos y los datos en el servidor. Las automatizaciones forman parte de este servicio, no se ofrecen sueltas.
+- [Diseño y desarrollo web](https://francisco-requena.vercel.app/servicios/diseno-web-empresas): sitios con Next.js, estructura clara, carga rápida, accesibilidad y SEO técnico. La referencia es este mismo sitio.
+- [Todos los servicios](https://francisco-requena.vercel.app/servicios): los tres pilares y las preguntas frecuentes sobre presupuesto, plazos y forma de trabajo. No publicamos precios cerrados ni plazos antes de definir el alcance.
 
-También ofrece mantenimiento y mejora continua tras el lanzamiento, y configuración de SEO técnico, hosting y analytics — ver [todos los servicios](https://francisco-requena.vercel.app/servicios), que incluye también las preguntas frecuentes sobre presupuesto, plazos y forma de trabajo.
+## Contacto
 
-## Casos de proyecto
+- [Contacto](https://francisco-requena.vercel.app/contacto): reservar una reunión online, pedir que te llamemos o escribirnos.
+- Correo: franciscorequenasanchez0@gmail.com
+- Teléfono: +34 642 95 75 72
+- Ubicación: Almería, España. Trabajo en remoto.
 
-Proyectos reales, con nombre propio — no casos anonimizados. EduTrack y FlashFix son MVPs funcionales; OposiControl y OryKai están honestamente en desarrollo activo. Ver la [galería completa de proyectos](https://francisco-requena.vercel.app/proyectos), presentada como portadas de cómic con el estado real de cada uno.
+## Optional
 
-- [EduTrack](https://francisco-requena.vercel.app/proyectos/edutrack): app Android en beta pública (Kotlin, Jetpack Compose, Firebase) para calcular notas, medias ponderadas y nota necesaria para aprobar.
-- [FlashFix](https://francisco-requena.vercel.app/proyectos/flashfix): marketplace Android (Firebase, Appwrite, Google Maps) que conecta usuarios con talleres mecánicos cercanos por geolocalización, con chat y valoraciones.
-- [OposiControl](https://francisco-requena.vercel.app/proyectos/oposicontrol): backoffice multiplataforma (Kotlin Multiplatform, Clean Architecture, Supabase) para gestionar una plataforma de oposiciones — en desarrollo.
-- [OryKai](https://francisco-requena.vercel.app/proyectos/orykai): CRM multiplataforma propio (Kotlin Multiplatform, Ktor, PostgreSQL) para clientes, tickets y facturación — en desarrollo.
-
-## Más información
-
-- [Página principal](https://francisco-requena.vercel.app/): presentación breve, proyectos destacados, servicios y formulario de contacto.
-- [Sobre mí](https://francisco-requena.vercel.app/sobre-mi): perfil técnico completo, experiencia, stack y proceso de trabajo en cuatro fases.
-- [Currículum (PDF)](https://francisco-requena.vercel.app/francisco-requena-cv.pdf)
+- [Proyectos](https://francisco-requena.vercel.app/proyectos): los siete proyectos en cinco apartados, con el trabajo para clientes primero.
+- [El estudio](https://francisco-requena.vercel.app/sobre-mi): quiénes somos, cómo trabajamos y con qué construimos.
 - [GitHub](https://github.com/franreke05)
 - [LinkedIn](https://www.linkedin.com/in/franciscorequenasanchez)

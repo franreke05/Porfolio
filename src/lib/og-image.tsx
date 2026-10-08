@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { SITE_URL } from "@/lib/seo";
 
 export const OG_SIZE = { width: 1200, height: 630 } as const;
 
@@ -13,7 +14,7 @@ const PRIMARY = "#c1391f";
 
 /**
  * Shared per-route Open Graph image layout — same visual family as the root
- * src/app/opengraph-image.tsx (top bar, FR mark, eyebrow, title, tag chips),
+ * src/app/opengraph-image.tsx (top bar, brand mark, eyebrow, title, tag chips),
  * parameterized so each service/project page gets its own on-brand preview
  * instead of the one generic site-wide image. Flat editorial paper/ink
  * system, no glow/gradient blur — matches the live site's visual language.
@@ -75,10 +76,10 @@ export function renderOgImage(opts: {
                 letterSpacing: "-0.5px",
               }}
             >
-              FR
+              O
             </div>
             <span style={{ color: MUTED, fontSize: 15, letterSpacing: "0.05em" }}>
-              francisco-requena.vercel.app
+              {new URL(SITE_URL).host}
             </span>
           </div>
 

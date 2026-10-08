@@ -1,0 +1,317 @@
+/* FlashFix comic — co-located styles. Comic vocabulary (halftone, tilt,
+   red offset shadows) lives here and only here. Transform/opacity only. */
+
+.story {
+  overflow-x: clip;
+  background-color: var(--background);
+  background-image: radial-gradient(circle, rgba(27, 23, 18, 0.07) 1px, transparent 1.5px);
+  background-size: 7px 7px;
+  color: var(--foreground);
+}
+
+.scene {
+  scroll-margin-top: 7.25rem;
+}
+
+/* ── Panels ───────────────────────────────────────────── */
+.panel {
+  border: 3px solid var(--foreground);
+  background: var(--background);
+  box-shadow: 6px 6px 0 0 var(--primary);
+}
+
+.panelInk {
+  border: 3px solid var(--foreground);
+  background: var(--ink-bg);
+  color: var(--ink-fg);
+  box-shadow: 6px 6px 0 0 var(--primary);
+}
+
+.panelOnInk {
+  border: 3px solid var(--ink-fg);
+  background: var(--ink-bg);
+  color: var(--ink-fg);
+  box-shadow: 6px 6px 0 0 var(--primary);
+}
+
+.caption {
+  border: 2px solid var(--foreground);
+  background: var(--background);
+  color: var(--foreground);
+  box-shadow: 3px 3px 0 0 var(--foreground);
+}
+
+.captionInk {
+  border: 2px solid var(--foreground);
+  background: var(--foreground);
+  color: var(--background);
+  box-shadow: 3px 3px 0 0 var(--primary);
+}
+
+.halftoneRed {
+  background-image: radial-gradient(circle, rgba(193, 57, 31, 0.3) 1.2px, transparent 1.8px);
+  background-size: 8px 8px;
+}
+
+.halftoneInk {
+  background-image: radial-gradient(circle, rgba(243, 239, 228, 0.12) 1.2px, transparent 1.8px);
+  background-size: 8px 8px;
+}
+
+.speed {
+  background-image: repeating-linear-gradient(
+    102deg,
+    transparent 0 14px,
+    rgba(193, 57, 31, 0.16) 14px 16px,
+    transparent 16px 34px
+  );
+}
+
+/* ── Lettering ────────────────────────────────────────── */
+.display {
+  font-family: var(--font-bangers), var(--font-fraunces), Impact, sans-serif;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 0.92;
+  text-wrap: balance;
+}
+
+.displayShadow {
+  text-shadow: 3px 3px 0 var(--primary);
+}
+
+.displayOutline {
+  color: var(--primary);
+  text-shadow:
+    2px 2px 0 var(--foreground),
+    -1px -1px 0 var(--foreground),
+    1px -1px 0 var(--foreground),
+    -1px 1px 0 var(--foreground);
+}
+
+/* Speech bubble with a tail — real text, drawn in CSS. */
+.bubble {
+  position: relative;
+  border: 3px solid var(--foreground);
+  border-radius: 50% / 46%;
+  background: #fffdf6;
+  color: var(--foreground);
+  text-align: center;
+}
+
+.bubble::after {
+  content: "";
+  position: absolute;
+  left: 58%;
+  bottom: -15px;
+  width: 22px;
+  height: 22px;
+  border-right: 3px solid var(--foreground);
+  border-bottom: 3px solid var(--foreground);
+  background: #fffdf6;
+  transform: skewX(28deg) rotate(45deg);
+}
+
+/* Starburst for SFX words. */
+.burst {
+  background: var(--primary);
+  color: var(--on-primary);
+  clip-path: polygon(
+    50% 0%, 61% 14%, 79% 6%, 79% 24%, 98% 26%, 87% 42%, 100% 56%, 83% 64%,
+    88% 84%, 69% 80%, 60% 100%, 48% 85%, 32% 98%, 29% 79%, 9% 82%, 16% 62%,
+    0% 50%, 15% 39%, 4% 21%, 24% 22%, 27% 4%, 41% 15%
+  );
+}
+
+/* ── Red pen (audit sheet) ────────────────────────────── */
+.sheet {
+  border: 3px solid var(--foreground);
+  background-color: #fbf8ef;
+  background-image: repeating-linear-gradient(
+    180deg,
+    transparent 0 31px,
+    rgba(27, 23, 18, 0.1) 31px 32px
+  );
+  box-shadow: 6px 6px 0 0 var(--primary);
+}
+
+.pen {
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-style: italic;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.penTilt {
+  display: inline-block;
+  transform: rotate(-2deg);
+  transform-origin: left center;
+}
+
+.circled {
+  position: relative;
+  display: inline-block;
+  padding: 0.1em 0.55em;
+  white-space: nowrap;
+}
+
+.circled::after {
+  content: "";
+  position: absolute;
+  inset: -0.15em -0.2em;
+  border: 2.5px solid var(--primary);
+  border-radius: 50% 46% 52% 48% / 55% 48% 52% 45%;
+  transform: rotate(-3deg);
+  pointer-events: none;
+}
+
+.struck {
+  text-decoration: line-through;
+  text-decoration-color: var(--primary);
+  text-decoration-thickness: 3px;
+}
+
+.tick {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  flex: none;
+  border: 2.5px solid var(--foreground);
+  background: #fffdf6;
+  color: var(--primary);
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-style: italic;
+  font-weight: 800;
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.stamp {
+  display: inline-block;
+  border: 3px double var(--primary);
+  color: var(--primary);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transform: rotate(-4deg);
+}
+
+/* ── Chapter indicator ────────────────────────────────── */
+.chapters {
+  scrollbar-width: none;
+}
+
+.chapters::-webkit-scrollbar {
+  display: none;
+}
+
+.chapterLink {
+  color: var(--background);
+  opacity: 0.72;
+  transition:
+    opacity 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.chapterLink:hover {
+  opacity: 1;
+}
+
+.chapterLink[aria-current] {
+  opacity: 1;
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.chapterLink:focus-visible {
+  outline: 2px solid var(--background);
+  outline-offset: -4px;
+}
+
+/* ── Motion ───────────────────────────────────────────── */
+@media (min-width: 768px) {
+  .tiltA {
+    rotate: -1.1deg;
+  }
+  .tiltB {
+    rotate: 1deg;
+  }
+  .tiltC {
+    rotate: -0.5deg;
+  }
+}
+
+.cta {
+  border: 3px solid var(--foreground);
+  background: var(--primary);
+  color: var(--on-primary);
+  box-shadow: 5px 5px 0 0 var(--foreground);
+  transition:
+    transform 0.12s ease,
+    background-color 0.12s ease;
+}
+
+.cta:hover {
+  background: var(--primary-hover);
+  transform: translate(-1px, -1px);
+}
+
+.cta:active {
+  transform: translate(3px, 3px);
+}
+
+/* Panels settle into place as they enter the viewport. Scroll-driven,
+   compositor-only, and absent entirely without support or with reduced
+   motion — the default state is always the finished, readable one. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: ffReveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+    }
+
+    .revealPop {
+      animation: ffPop linear both;
+      animation-timeline: view();
+      animation-range: entry 10% entry 90%;
+    }
+  }
+}
+
+@keyframes ffReveal {
+  from {
+    opacity: 0.25;
+    transform: translateY(36px) scale(0.975);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes ffPop {
+  from {
+    opacity: 0;
+    transform: scale(0.6) rotate(-8deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta,
+  .chapterLink {
+    transition: none;
+  }
+  .cta:hover,
+  .cta:active {
+    transform: none;
+  }
+}

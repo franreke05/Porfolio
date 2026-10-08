@@ -1,181 +1,149 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { FaqDisclosure } from "@/components/faq-disclosure";
 import { JsonLd } from "@/components/json-ld";
-import { MotionSection } from "@/components/motion-section";
-import { ServicesTabletExperience, type ServiceTabletOffering } from "@/components/services-tablet-experience";
-import { SITE_NAME, SITE_URL, canonical, faqPageSchema } from "@/lib/seo";
+import { Mostrador, type MostradorIssue } from "@/components/mostrador/mostrador";
+import {
+  AfterLaunchBand,
+  Breadcrumb,
+  LedgerSection,
+  PrimaryCta,
+  pageContainer,
+} from "@/components/services-tablet-experience";
+import { StatusBadge } from "@/components/ui/status-badge";
+import { contactHref, getProject, projectHref } from "@/lib/portfolio";
+import { services } from "@/lib/site-data";
+import { breadcrumbSchema, buildMetadata, faqPageSchema, servicesIndexSchema } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Servicios de desarrollo digital",
-  description:
-    "Apps Android con Kotlin, CRMs a medida con PostgreSQL, webs profesionales con Next.js y automatizaciones para pymes. Desarrollo freelance en España.",
-  alternates: {
-    canonical: canonical("/servicios"),
-  },
-  openGraph: {
-    title: `Servicios de desarrollo digital | ${SITE_NAME}`,
-    description:
-      "Apps Android, CRMs a medida, webs profesionales y automatizaciones para pymes. Freelance disponible en remoto.",
-    url: `${SITE_URL}/servicios`,
-    type: "website",
-  },
-  twitter: {
-    title: `Servicios | ${SITE_NAME}`,
-    description:
-      "Apps Android, CRMs, webs y automatizaciones para pymes. Freelance en España.",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
+const DESCRIPTION =
+  "Apps móviles para Android, iOS y coche, software de gestión y backend a medida, y web: tres pilares, cada uno con el proyecto real que lo respalda.";
 
-const serviciosIndexSchema = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Inicio", item: SITE_URL },
-    {
-      "@type": "ListItem",
-      position: 2,
-      name: "Servicios",
-      item: `${SITE_URL}/servicios`,
-    },
-  ],
-};
+export const metadata: Metadata = buildMetadata({
+  title: "Servicios",
+  description: DESCRIPTION,
+  path: "/servicios",
+});
 
-const services = [
+const faqs = [
   {
-    href: "/servicios/desarrollo-apps-android",
-    code: "AP",
-    title: "Desarrollo de apps Android",
-    tagline: "Kotlin, Jetpack Compose y KMP",
-    description:
-      "Apps Android nativas con arquitectura MVVM, integración de Firebase y publicación en Google Play Store. Código tuyo desde el primer commit.",
+    q: "¿Cómo se presupuesta un proyecto?",
+    a: "No publicamos precios cerrados, porque cada proyecto depende de su alcance. Empezamos por una conversación para entender el problema y, a partir de ahí, proponemos un alcance y un presupuesto.",
   },
   {
-    href: "/servicios/crm-a-medida",
-    code: "CR",
-    title: "CRM a medida",
-    tagline: "PostgreSQL, roles y flujos personalizados",
-    description:
-      "Sistemas internos diseñados para tu proceso, no para el promedio. Sin licencias mensuales, sin funcionalidades que nunca vas a usar.",
+    q: "¿Cuánto tarda el desarrollo?",
+    a: "Depende del alcance. Todos los proyectos siguen los mismos cuatro pasos —diagnóstico, prototipo, desarrollo por bloques y entrega— y el plazo se fija después del diagnóstico, no antes.",
   },
   {
-    href: "/servicios/diseno-web-empresas",
-    code: "WB",
-    title: "Diseño web para empresas",
-    tagline: "Next.js, SEO técnico y rendimiento",
-    description:
-      "Webs profesionales que cargan rápido, posicionan bien y convierten visitas en contactos. Adaptadas a tu negocio, no a una plantilla.",
+    q: "¿Dónde estáis y cómo trabajáis?",
+    a: "Estamos en Almería y trabajamos en remoto. Puedes reservar una reunión online, pedir que te llamemos o escribirnos.",
   },
   {
-    href: "/servicios/automatizaciones-pymes",
-    code: "AU",
-    title: "Automatizaciones para pymes",
-    tagline: "Menos tareas repetitivas, más tiempo útil",
-    description:
-      "Integraciones entre herramientas, formularios automáticos, notificaciones y reportes que se generan solos. Tu equipo enfocado en lo que importa.",
-  },
-] as const satisfies readonly ServiceTabletOffering[];
-
-const serviciosFaqs = [
-  {
-    q: "¿Cómo funciona el presupuesto de un proyecto?",
-    a: "No hay precios cerrados porque cada app, CRM o web depende del alcance real del proyecto. El primer paso siempre es una llamada para entender el problema y, a partir de ahí, proponer un camino y un presupuesto claros.",
+    q: "¿Qué tecnologías usáis?",
+    a: "En móvil, Kotlin Multiplatform y Compose Multiplatform. En backend y datos, Ktor y PostgreSQL. En web, Next.js, React y TypeScript.",
   },
   {
-    q: "¿Cuánto tiempo tarda el desarrollo?",
-    a: "Depende del alcance de cada proyecto. Todos siguen el mismo proceso de cuatro fases — diagnóstico, prototipo claro, desarrollo iterativo y lanzamiento — y el plazo se confirma después del diagnóstico inicial, no antes.",
-  },
-  {
-    q: "¿Trabajas en remoto o solo en Almería?",
-    a: "Trabajo en remoto con empresas y autónomos de toda España, aunque estoy afincado en Almería. La coordinación se hace por llamada, email y WhatsApp durante todo el proyecto.",
-  },
-  {
-    q: "¿Qué tecnologías usas?",
-    a: "En mobile, Kotlin Multiplatform (KMP) y Jetpack Compose. En backend y datos, Ktor, PostgreSQL y SQL. En web, Next.js, TypeScript y Tailwind CSS. El stack completo está detallado en la sección Sobre mí.",
-  },
-  {
-    q: "¿Das soporte después del lanzamiento?",
-    a: "Sí. Todo lo que publico queda con mantenimiento: corrección de incidencias, mejoras y evolución de funcionalidades. Es uno de los servicios que ofrezco junto al desarrollo inicial.",
-  },
-  {
-    q: "¿Los proyectos que muestras son reales?",
-    a: "Sí, con nombre propio y código real — nada anonimizado. EduTrack y FlashFix son MVPs funcionales en producción; OposiControl y OryKai están en desarrollo activo, y lo digo así de claro en cada caso en lugar de aparentar que están más terminados de lo que están.",
+    q: "¿Los proyectos que enseñáis son reales?",
+    a: "Sí, y cada uno aparece con su estado real: implementado, en desarrollo o previsto. Los proyectos de cliente están hoy en desarrollo y lo contamos así, pieza a pieza.",
   },
 ];
+
+/** Counter issues: one per pillar, with its proof resolved from the catalogue on the server. */
+const issues: MostradorIssue[] = services.map((service) => ({
+  id: service.id,
+  ordinal: service.ordinal,
+  title: service.title,
+  tagline: service.highlight,
+  summary: service.summary,
+  deliverables: service.deliverables,
+  href: service.href,
+  cta: { label: service.cta.label, href: contactHref(service.cta.intent) },
+  style: service.style,
+  proof: service.proof
+    .map((slug) => getProject(slug))
+    .filter((project) => project !== undefined)
+    .map((project) => ({
+      slug: project.slug,
+      name: project.name,
+      descriptor: project.descriptor,
+      href: projectHref(project.slug),
+      badge: <StatusBadge status={project.status} />,
+    })),
+  proofNote: service.proofNote,
+}));
 
 export default function ServiciosPage() {
   return (
     <>
-      <JsonLd schemas={[serviciosIndexSchema, faqPageSchema(serviciosFaqs)]} />
+      <JsonLd
+        schemas={[
+          servicesIndexSchema(DESCRIPTION),
+          breadcrumbSchema([{ name: "Servicios", path: "/servicios" }]),
+          faqPageSchema(faqs),
+        ]}
+      />
 
-      <div className="mx-auto w-full max-w-[1600px] px-5 pb-20 pt-28 sm:px-8 lg:px-12 xl:px-16 2xl:px-20">
-        {/* Breadcrumb */}
-        <nav aria-label="Breadcrumb" className="mb-8">
-          <ol className="flex items-center gap-2 text-sm text-[color:var(--muted)]">
-            <li>
-              <Link
-                href="/"
-                className="hover:text-[color:var(--foreground)] transition"
-              >
-                Inicio
-              </Link>
-            </li>
-            <li aria-hidden="true" className="text-[color:var(--border-hover)]">
-              /
-            </li>
-            <li
-              className="text-[color:var(--foreground)]"
-              aria-current="page"
-            >
-              Servicios
-            </li>
-          </ol>
-        </nav>
+      <div className={pageContainer}>
+        <Breadcrumb items={[{ label: "Inicio", href: "/" }, { label: "Servicios" }]} />
 
-        {/* Header */}
-        <header className="mb-10 grid gap-6 lg:grid-cols-[1.05fr_0.75fr] lg:items-end lg:gap-14">
-          <MotionSection as="div">
-            <p className="section-eyebrow mb-4">Lo que construyo</p>
-            <h1 className="max-w-[15ch] font-display text-4xl font-bold leading-[0.98] tracking-tight text-[color:var(--foreground)] sm:text-5xl xl:text-6xl">
-              Servicios de desarrollo digital
+        <header className="mb-10 grid gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-end lg:gap-14">
+          <div>
+            <p className="label-mono text-[color:var(--muted)]">El mostrador</p>
+            <h1 className="mt-4 text-balance font-display text-[2.35rem] font-bold leading-[1.02] tracking-tight text-[color:var(--foreground)] sm:text-5xl lg:text-6xl">
+              Servicios: apps móviles, software de gestión y web.
             </h1>
-          </MotionSection>
-          <MotionSection as="div" delay={0.1} className="max-w-2xl text-lg leading-relaxed text-[color:var(--muted)] lg:pb-1">
-            Trabajo con empresas y autónomos que necesitan sistemas digitales
-            reales: apps que funcionan, paneles que se usan y webs que generan
-            contactos. Sin intermediarios, sin equipos inflados, sin promesas
-            genéricas.
-          </MotionSection>
+          </div>
+          <p className="max-w-xl text-lg leading-relaxed text-[color:var(--surface-foreground)]">
+            Somos un estudio pequeño: quien diseña y construye tu producto es quien habla contigo. Hacemos tres
+            cosas, y cada una se apoya en un proyecto real que puedes ver por dentro.
+          </p>
         </header>
 
-        {/* Interactive service explorer */}
-        <section aria-label="Listado de servicios">
-          <ServicesTabletExperience services={services} />
-        </section>
-
-        <section className="mt-24 grid gap-10 lg:grid-cols-[0.62fr_1.38fr] lg:gap-16" aria-labelledby="servicios-faq-title">
-          <MotionSection as="div" className="self-start lg:sticky lg:top-28">
-            <p className="section-eyebrow mb-4">Preguntas frecuentes</p>
-            <h2 id="servicios-faq-title" className="max-w-xl text-balance font-display text-3xl font-bold leading-tight text-[color:var(--foreground)] sm:text-4xl">
-              Lo importante, antes de empezar.
+        <section aria-labelledby="mostrador-titulo">
+          <div className="ledger-rule mb-6 grid gap-3 pt-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-end lg:gap-14">
+            <h2
+              id="mostrador-titulo"
+              className="text-balance font-display text-[1.75rem] font-bold leading-[1.08] tracking-tight text-[color:var(--foreground)] sm:text-4xl"
+            >
+              Tres servicios, tres estilos de cómic
             </h2>
-            <p className="mt-4 max-w-md leading-7 text-[color:var(--muted)]">
-              Alcance, tiempos, propiedad del código y soporte explicados con claridad desde el principio.
+            <p className="max-w-xl leading-7 text-[color:var(--muted)]">
+              En el mostrador recomendamos por estilos. Cada número es un servicio: ábrelo para ver qué incluye y qué
+              proyecto real lo respalda.
             </p>
-          </MotionSection>
-
-          <div>
-            {serviciosFaqs.map((faq, index) => (
-              <MotionSection as="div" key={faq.q} delay={Math.min(index * 0.06, 0.3)}>
-                <FaqDisclosure index={index} question={faq.q} answer={faq.a} />
-              </MotionSection>
-            ))}
           </div>
+          <Mostrador issues={issues} />
         </section>
+
+        <AfterLaunchBand withCta />
+
+        <section
+          aria-labelledby="publica-el-tuyo"
+          className="mt-16 grid gap-6 lg:mt-20 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end lg:gap-12"
+        >
+          <div>
+            <h2
+              id="publica-el-tuyo"
+              className="text-balance font-display text-[1.75rem] font-bold leading-[1.08] tracking-tight text-[color:var(--foreground)] sm:text-4xl"
+            >
+              ¿El siguiente número es el tuyo?
+            </h2>
+            <p className="mt-3 max-w-2xl leading-7 text-[color:var(--surface-foreground)]">
+              Cuéntanos qué quieres construir. Si construimos tu producto y estás de acuerdo, también tendrá su cómic
+              en la cartelera.
+            </p>
+          </div>
+          <PrimaryCta href={contactHref("general")}>Publica el tuyo</PrimaryCta>
+        </section>
+
+        <LedgerSection
+          id="servicios-faq"
+          label="Preguntas frecuentes"
+          title="Lo importante, antes de empezar"
+          intro="Presupuesto, plazos, forma de trabajar y estado real de lo que enseñamos."
+        >
+          {faqs.map((faq, index) => (
+            <FaqDisclosure key={faq.q} index={index} question={faq.q} answer={faq.a} />
+          ))}
+        </LedgerSection>
       </div>
     </>
   );

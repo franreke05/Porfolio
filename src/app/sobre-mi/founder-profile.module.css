@@ -1,0 +1,605 @@
+/*
+ * Founder profile (/sobre-mi). Graphite panel, cream type, sand/gold accents.
+ * Everything is visible and static by default; motion is layered on top only
+ * inside `prefers-reduced-motion: no-preference`, and the scroll-driven parts
+ * only inside `@supports (animation-timeline: view())`.
+ */
+
+@property --fp-live {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --fp-done {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 1;
+}
+
+.panel {
+  --fp-bg: #1d1915;
+  --fp-fg: #f3efe4;
+  --fp-muted: #b9ad98;
+  --fp-gold: #d9a85b;
+  --fp-rule: rgba(243, 239, 228, 0.16);
+  --fp-dot: 0.75rem;
+
+  position: relative;
+  margin-top: 3rem;
+  /* clip, not hidden: hidden would make the panel the scroll container of the view() timelines. */
+  overflow: clip;
+  border-radius: 3px;
+  background:
+    radial-gradient(120% 90% at 0% 0%, rgba(217, 168, 91, 0.16), transparent 58%),
+    var(--fp-bg);
+  color: var(--fp-fg);
+  padding: 1.5rem 1.25rem 2rem;
+}
+
+.panel a:focus-visible {
+  outline: 2px solid var(--fp-gold);
+  outline-offset: 4px;
+}
+
+/* Mobile: small portrait beside the name; the rest runs full width below. */
+.top {
+  display: grid;
+  grid-template-columns: minmax(0, 34%) minmax(0, 1fr);
+  column-gap: 1.125rem;
+  align-items: start;
+}
+
+.body {
+  display: contents;
+}
+
+.stage {
+  grid-row: 1 / span 3;
+}
+
+.lead,
+.facts,
+.actions {
+  grid-column: 1 / -1;
+}
+
+/* ── Portrait ─────────────────────────────────────────────────────────── */
+
+.stage {
+  --tilt-x: 0deg;
+  --tilt-y: 0deg;
+  --shift-x: 0px;
+  --shift-y: 0px;
+
+  width: 100%;
+  max-width: 17rem;
+  padding: 0.625rem 0.625rem 0 0;
+  perspective: 900px;
+}
+
+.frame {
+  position: relative;
+  transform: rotateX(var(--tilt-x)) rotateY(var(--tilt-y));
+  transform-style: preserve-3d;
+}
+
+/* Offset hairline behind the photo: the "clean frame". */
+.frame::before {
+  content: "";
+  position: absolute;
+  inset: -0.625rem -0.625rem 0.625rem 0.625rem;
+  border: 1px solid var(--fp-gold);
+  border-radius: 2px;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.photo {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 2px;
+  background: #2a241e;
+  box-shadow: 0 24px 48px -24px rgba(0, 0, 0, 0.7);
+}
+
+.image {
+  object-fit: cover;
+  object-position: 42% 50%;
+  transform: translate3d(var(--shift-x), var(--shift-y), 0) scale(1.14);
+  transform-origin: 44% 56%;
+}
+
+.sweep {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 38%,
+    rgba(255, 240, 214, 0.26) 50%,
+    transparent 62%
+  );
+  transform: translateX(-110%);
+  pointer-events: none;
+}
+
+/* ── Name, role, facts ────────────────────────────────────────────────── */
+
+.eyebrow,
+.fact dt,
+.stepMeta {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.eyebrow {
+  color: var(--fp-gold);
+}
+
+.name {
+  margin-top: 0.5rem;
+  font-family: var(--font-display), serif;
+  font-size: clamp(1.5rem, 7.4vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+}
+
+.word {
+  display: inline-block;
+  white-space: pre;
+}
+
+.role {
+  margin-top: 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--fp-gold);
+}
+
+.lead {
+  margin-top: 1.5rem;
+  max-width: 34rem;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--fp-fg);
+}
+
+.facts {
+  margin-top: 1.75rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem 1.25rem;
+}
+
+.fact {
+  border-top: 1px solid var(--fp-rule);
+  padding-top: 0.75rem;
+}
+
+.fact dt {
+  color: var(--fp-muted);
+}
+
+.fact dd {
+  margin-top: 0.375rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.actions {
+  margin-top: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.5rem;
+}
+
+.cta {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  gap: 0.625rem;
+  border-radius: 999px;
+  background: var(--fp-gold);
+  padding: 0 1.5rem;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #1b1712;
+  transition: background-color 180ms ease;
+}
+
+.cta:hover {
+  background: #e6bb76;
+}
+
+.ctaArrow {
+  display: inline-block;
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.back {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  font-size: 0.875rem;
+  color: var(--fp-muted);
+  text-decoration: underline;
+  text-decoration-color: var(--fp-rule);
+  text-underline-offset: 5px;
+  transition: color 180ms ease, text-decoration-color 180ms ease;
+}
+
+.back:hover {
+  color: var(--fp-fg);
+  text-decoration-color: var(--fp-gold);
+}
+
+/* ── Cómo trabajamos ──────────────────────────────────────────────────── */
+
+.method {
+  margin-top: 2.5rem;
+  border-top: 1px solid var(--fp-rule);
+  padding-top: 2rem;
+  scroll-margin-top: 6rem;
+}
+
+.methodTitle {
+  font-family: var(--font-display), serif;
+  font-size: 1.625rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.methodIntro {
+  margin-top: 0.625rem;
+  max-width: 34rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--fp-muted);
+}
+
+.stepsWrap {
+  position: relative;
+  margin-top: 2rem;
+}
+
+/* Mobile: vertical rail down the left; desktop (below): horizontal. */
+.track {
+  position: absolute;
+  top: calc(var(--fp-dot) / 2);
+  bottom: 0;
+  left: calc(var(--fp-dot) / 2 - 1px);
+  width: 2px;
+  background: var(--fp-rule);
+}
+
+.line {
+  position: absolute;
+  inset: 0;
+  background: var(--fp-gold);
+  transform-origin: 0 0;
+}
+
+.steps {
+  display: grid;
+  gap: 1.75rem;
+}
+
+.step {
+  position: relative;
+  padding-left: 2rem;
+  opacity: calc(0.5 + 0.5 * max(var(--fp-live), var(--fp-done)));
+}
+
+.dot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--fp-dot);
+  height: var(--fp-dot);
+  border-radius: 50%;
+  border: 2px solid var(--fp-gold);
+  background: color-mix(
+    in srgb,
+    var(--fp-gold) calc(max(var(--fp-live), var(--fp-done)) * 100%),
+    var(--fp-bg)
+  );
+  box-shadow: 0 0 0 calc(var(--fp-live) * 6px) rgba(217, 168, 91, 0.22);
+  transform: scale(calc(1 + var(--fp-live) * 0.3));
+}
+
+.stepMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.75rem;
+  color: var(--fp-muted);
+}
+
+.stepMeta span:first-child {
+  color: var(--fp-gold);
+}
+
+.stepTitle {
+  margin-top: 0.5rem;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.stepText {
+  margin-top: 0.375rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--fp-muted);
+}
+
+/* ── Layout ≥ 640 / 1024 ──────────────────────────────────────────────── */
+
+@media (min-width: 640px) {
+  .panel {
+    padding: 2.5rem 2.25rem 2.75rem;
+  }
+
+  .top {
+    grid-template-columns: 15rem minmax(0, 1fr);
+    column-gap: 2.5rem;
+  }
+
+  .body {
+    display: block;
+  }
+
+  .name {
+    margin-top: 0.75rem;
+    font-size: clamp(2.25rem, 5vw, 3.5rem);
+  }
+
+  .lead {
+    margin-top: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .panel {
+    padding: 3.5rem 3.5rem 3.5rem;
+  }
+
+  .top {
+    grid-template-columns: 20rem minmax(0, 1fr);
+    column-gap: 4rem;
+    align-items: center;
+  }
+
+  .stage {
+    max-width: 20rem;
+  }
+
+  .facts {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .method {
+    margin-top: 3.5rem;
+    padding-top: 2.5rem;
+    display: grid;
+    grid-template-columns: minmax(0, 0.3fr) minmax(0, 1fr);
+    gap: 3rem;
+  }
+
+  .stepsWrap {
+    margin-top: 0.375rem;
+  }
+
+  .track {
+    top: calc(var(--fp-dot) / 2 - 1px);
+    bottom: auto;
+    left: 0;
+    right: 0;
+    width: auto;
+    height: 2px;
+  }
+
+  .steps {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+
+  .step {
+    padding-left: 0;
+    padding-top: 1.75rem;
+  }
+
+  .stepMeta {
+    flex-direction: column;
+  }
+}
+
+/* ── Motion ───────────────────────────────────────────────────────────── */
+
+@keyframes fpReveal {
+  from {
+    clip-path: inset(0 0 100% 0);
+    opacity: 0.2;
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+@keyframes fpRise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.5em, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fpFact {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fpDrawY {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes fpDrawX {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* idle → active (the line is on this step) → done */
+@keyframes fpStep {
+  0% {
+    --fp-live: 0;
+    --fp-done: 0;
+  }
+  18%,
+  82% {
+    --fp-live: 1;
+    --fp-done: 0;
+  }
+  100% {
+    --fp-live: 0;
+    --fp-done: 1;
+  }
+}
+
+/* The last step stays active once the line has arrived. */
+@keyframes fpStepLast {
+  0% {
+    --fp-live: 0;
+    --fp-done: 0;
+  }
+  30%,
+  100% {
+    --fp-live: 1;
+    --fp-done: 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .photo {
+    animation: fpReveal 560ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .word {
+    animation: fpRise 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(120ms + var(--i, 0) * 90ms);
+  }
+
+  .eyebrow {
+    animation: fpRise 420ms ease-out both;
+  }
+
+  .role {
+    animation: fpRise 520ms cubic-bezier(0.22, 1, 0.36, 1) 320ms both;
+  }
+
+  .lead {
+    animation: fpRise 520ms cubic-bezier(0.22, 1, 0.36, 1) 420ms both;
+  }
+
+  .sweep {
+    transition: transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .stage:hover .sweep {
+    transform: translateX(110%);
+  }
+
+  .cta:hover .ctaArrow {
+    transform: translateX(4px);
+  }
+
+  @supports (animation-timeline: view()) {
+    .fact {
+      animation: fpFact linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 22%;
+    }
+
+    .fact:nth-child(2) {
+      animation-range: entry 40% cover 26%;
+    }
+
+    .fact:nth-child(3) {
+      animation-range: entry 70% cover 30%;
+    }
+
+    .fact:nth-child(4) {
+      animation-range: entry 100% cover 34%;
+    }
+
+    /* Mobile rail: the tip of the line sits ~62% down the viewport. */
+    .line {
+      animation: fpDrawY linear both;
+      animation-timeline: view(block 0% 38%);
+      animation-range: entry 0% entry 100%;
+    }
+
+    .step {
+      animation: fpStep linear both;
+      animation-timeline: view(block 0% 38%);
+      animation-range: entry 0% entry 100%;
+    }
+
+    .step:last-child {
+      animation-name: fpStepLast;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) and (min-width: 1024px) {
+  @supports (animation-timeline: view()) {
+    /* Desktop: the line crosses one column per ~10% of the strip's travel. */
+    .line {
+      animation-name: fpDrawX;
+      animation-timeline: view();
+      animation-range: cover 16% cover 52%;
+    }
+
+    .step {
+      animation-timeline: view();
+      animation-range: cover 14% cover 27%;
+    }
+
+    .step:nth-child(2) {
+      animation-range: cover 23% cover 36%;
+    }
+
+    .step:nth-child(3) {
+      animation-range: cover 32% cover 45%;
+    }
+
+    .step:nth-child(4) {
+      animation-range: cover 41% cover 50%;
+    }
+  }
+}

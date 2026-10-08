@@ -1,0 +1,1138 @@
+/*
+ * The home has three states, set on .root by the client wrapper:
+ *   static     server render / no WebGL: warm hero + stacked sections
+ *   still      reduced motion: the 3D opening frame + stacked sections
+ *   immersive  the scroll-driven walk through the showroom
+ * Everything below is written static-first; "immersive" only repositions
+ * the same DOM as an overlay on the sticky scene.
+ */
+
+.root {
+  --cream: #f5eee1;
+  --sand: #f2b961;
+  --edge: clamp(1.25rem, 9.7vw, 11rem);
+  position: relative;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.root[data-mode="immersive"] {
+  height: 580vh;
+}
+
+.stage {
+  position: relative;
+}
+
+.root[data-mode="immersive"] .stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+}
+
+/* ── The scene window ── */
+
+.viewport {
+  position: relative;
+  height: 100svh;
+  min-height: 34rem;
+  overflow: hidden;
+  isolation: isolate;
+  color: var(--cream);
+  background:
+    radial-gradient(90% 70% at 4% 34%, rgba(255, 214, 150, 0.34) 0%, rgba(255, 214, 150, 0) 60%),
+    linear-gradient(160deg, #6a4b30 0%, #3b291a 46%, #1e150e 100%);
+}
+
+.root[data-mode="immersive"] .viewport {
+  position: absolute;
+  inset: 0;
+  height: auto;
+  min-height: 0;
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.9s ease;
+}
+
+.canvas[data-ready="true"] {
+  opacity: 1;
+}
+
+.shade,
+.captionShade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.shade {
+  background:
+    linear-gradient(90deg, rgba(20, 13, 7, 0.16) 0%, rgba(20, 13, 7, 0.24) 20%, rgba(20, 13, 7, 0.1) 40%, rgba(20, 13, 7, 0) 52%),
+    linear-gradient(180deg, rgba(20, 13, 7, 0.36) 0%, rgba(20, 13, 7, 0) 18%);
+}
+
+.captionShade {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  background:
+    radial-gradient(70% 62% at 0% 100%, rgba(20, 13, 7, 0.78) 0%, rgba(20, 13, 7, 0.4) 46%, rgba(20, 13, 7, 0) 74%),
+    linear-gradient(180deg, rgba(20, 13, 7, 0.4) 0%, rgba(20, 13, 7, 0) 16%);
+}
+
+.root[data-mode="immersive"]:not([data-caption="-1"]) .captionShade,
+.root[data-mode="immersive"][data-away="true"] .captionShade {
+  opacity: 1;
+}
+
+/* ── Hero copy ── */
+
+.hero {
+  position: absolute;
+  left: var(--edge);
+  top: 20.4%;
+  width: min(27rem, calc(100% - 2.5rem));
+  will-change: opacity, transform;
+}
+
+.micro {
+  font-size: 0.6875rem;
+  letter-spacing: 0.34em;
+  color: rgba(245, 238, 225, 0.82);
+}
+
+.title {
+  margin-top: 1.1rem;
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(2.15rem, 2.78vw, 3.7rem);
+  line-height: 1.17;
+  letter-spacing: -0.005em;
+  color: var(--cream);
+  text-shadow: 0 1px 18px rgba(20, 13, 7, 0.35);
+}
+
+.title span {
+  display: block;
+  white-space: nowrap;
+}
+
+.title em {
+  font-style: normal;
+  color: var(--sand);
+}
+
+.body {
+  margin-top: 1.15rem;
+  max-width: 21.5rem;
+  font-size: clamp(1rem, 1.02vw, 1.2rem);
+  line-height: 1.42;
+  color: rgba(245, 238, 225, 0.94);
+  text-shadow: 0 1px 12px rgba(20, 13, 7, 0.45);
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-top: 1.6rem;
+  min-height: 3.1rem;
+  padding: 0 1.6rem;
+  border-radius: 999px;
+  background: var(--sand);
+  color: #21170d;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  transition: background-color 0.18s ease, transform 0.18s ease;
+}
+
+.cta:hover {
+  background: #f7c67a;
+}
+
+.cta:focus-visible,
+.caption a:focus-visible,
+.tick:focus-visible,
+.sheet a:focus-visible,
+.sheet button:focus-visible {
+  outline: 2px solid var(--cream);
+  outline-offset: 3px;
+}
+
+/* ── Sections: stacked page (static / still) ── */
+
+.sections {
+  margin: 0 auto;
+  max-width: var(--grid-max);
+  padding: clamp(3.5rem, 8vw, 6.5rem) clamp(1.25rem, 4vw, 2rem);
+  display: grid;
+  gap: clamp(2rem, 4vw, 3.25rem) clamp(1.5rem, 4vw, 4rem);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.caption {
+  border-top: 1px solid var(--border-hover);
+  padding-top: 1.25rem;
+}
+
+.caption h2 {
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(1.5rem, 2.2vw, 2rem);
+  line-height: 1.15;
+}
+
+.caption p {
+  margin-top: 0.7rem;
+  max-width: 30rem;
+  color: var(--surface-foreground);
+  line-height: 1.5;
+}
+
+.caption a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.75rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+}
+
+.catalogue {
+  grid-column: 1 / -1;
+}
+
+.projects {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.75rem;
+  margin-top: 0.6rem;
+}
+
+.closing {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  border-top: 1px solid var(--border-hover);
+  padding-top: 1.5rem;
+}
+
+.closing p {
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-size: clamp(1.35rem, 2vw, 1.75rem);
+}
+
+/* ── Sections: captions over the scene (immersive) ── */
+
+.root[data-mode="immersive"] .sections {
+  position: absolute;
+  left: var(--edge);
+  bottom: clamp(1.75rem, 8svh, 5rem);
+  width: min(23rem, calc(100% - 5.5rem));
+  height: 0;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  display: block;
+  color: var(--cream);
+  pointer-events: none;
+}
+
+.root[data-mode="immersive"] .caption {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  border: 0;
+  padding: 0;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+.root[data-mode="immersive"][data-caption="0"] .caption[data-index="0"],
+.root[data-mode="immersive"][data-caption="1"] .caption[data-index="1"],
+.root[data-mode="immersive"][data-caption="2"] .caption[data-index="2"],
+.root[data-mode="immersive"][data-caption="3"] .caption[data-index="3"],
+.root[data-mode="immersive"][data-caption="4"] .caption[data-index="4"] {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.root[data-mode="immersive"] .caption h2 {
+  font-size: 1.3rem;
+  text-shadow: 0 1px 14px rgba(20, 13, 7, 0.5);
+}
+
+.root[data-mode="immersive"] .caption p {
+  margin-top: 0.45rem;
+  font-size: 0.9375rem;
+  line-height: 1.42;
+  color: rgba(245, 238, 225, 0.9);
+  text-shadow: 0 1px 12px rgba(20, 13, 7, 0.55);
+}
+
+.root[data-mode="immersive"] .caption a {
+  color: var(--sand);
+  font-size: 0.9375rem;
+  margin-top: 0.15rem;
+}
+
+.root[data-mode="immersive"] .projects {
+  gap: 0 1.1rem;
+  margin-top: 0.35rem;
+}
+
+.root[data-mode="immersive"] .projects a {
+  min-height: 2.25rem;
+  margin-top: 0;
+  color: var(--cream);
+  font-weight: 500;
+  text-decoration-color: rgba(242, 185, 97, 0.7);
+  text-shadow: 0 1px 12px rgba(20, 13, 7, 0.6);
+}
+
+.root[data-mode="immersive"] .closing {
+  display: none;
+}
+
+/* ── Progress ticks ── */
+
+.ticks {
+  display: none;
+}
+
+.root[data-mode="immersive"] .ticks {
+  position: absolute;
+  right: clamp(0.5rem, 2vw, 1.75rem);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.15rem;
+  z-index: 2;
+}
+
+.tick {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.7rem;
+  min-height: 2.25rem;
+  min-width: 2.75rem;
+  padding: 0 0.25rem;
+  color: var(--cream);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+}
+
+.tick span:first-child {
+  opacity: 0;
+  transform: translateX(6px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  text-shadow: 0 1px 10px rgba(20, 13, 7, 0.7);
+  white-space: nowrap;
+}
+
+.tick span:last-child {
+  width: 1rem;
+  height: 1.5px;
+  background: rgba(245, 238, 225, 0.6);
+  box-shadow: 0 0 6px rgba(20, 13, 7, 0.5);
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.tick:hover span:first-child,
+.tick:focus-visible span:first-child,
+.tick[aria-current="step"] span:first-child {
+  opacity: 1;
+  transform: none;
+}
+
+.tick[aria-current="step"] span:last-child {
+  width: 1.9rem;
+  background: var(--sand);
+}
+
+@media (max-width: 767px) {
+  .hero {
+    top: auto;
+    bottom: 2.5rem;
+    left: 1.25rem;
+  }
+
+  .shade {
+    background:
+      linear-gradient(0deg, rgba(20, 13, 7, 0.86) 0%, rgba(20, 13, 7, 0.62) 34%, rgba(20, 13, 7, 0) 62%),
+      linear-gradient(180deg, rgba(20, 13, 7, 0.5) 0%, rgba(20, 13, 7, 0) 18%);
+  }
+
+  .captionShade {
+    background:
+      linear-gradient(0deg, rgba(20, 13, 7, 0.86) 0%, rgba(20, 13, 7, 0.5) 22%, rgba(20, 13, 7, 0) 42%),
+      linear-gradient(180deg, rgba(20, 13, 7, 0.45) 0%, rgba(20, 13, 7, 0) 16%);
+  }
+
+  .title {
+    margin-top: 0.8rem;
+  }
+
+  .sections {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .root[data-mode="immersive"] .sections {
+    left: 1.25rem;
+    bottom: 2rem;
+  }
+
+  .tick span:first-child {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .canvas,
+  .caption,
+  .captionShade,
+  .tick span {
+    transition: none !important;
+  }
+}
+
+/* ── Revision: closing stage, legibility, subtler ticks ── */
+
+.root[data-mode="immersive"] {
+  height: 750vh;
+}
+
+/* A restrained photographic vignette; also keeps the floating header legible
+   on every frame without a bar or a box. */
+.vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(16, 10, 6, 0.6) 0%, rgba(16, 10, 6, 0.3) 9%, rgba(16, 10, 6, 0) 21%),
+    radial-gradient(120% 95% at 55% 48%, rgba(16, 10, 6, 0) 62%, rgba(16, 10, 6, 0.3) 100%);
+}
+
+.hero {
+  top: 19.6%;
+}
+
+.body span {
+  display: block;
+}
+
+.cta {
+  margin-top: 1.45rem;
+}
+
+.contact {
+  grid-column: 1 / -1;
+}
+
+.contact .cta {
+  margin-top: 1rem;
+  text-decoration: none;
+}
+
+.contactList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.75rem;
+  margin-top: 1rem;
+}
+
+.copyright {
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.root[data-mode="immersive"][data-caption="5"] .caption[data-index="5"] {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.root[data-mode="immersive"] .contact .cta {
+  color: #21170d;
+  margin-top: 0.8rem;
+}
+
+.root[data-mode="immersive"] .contactList,
+.root[data-mode="immersive"] .copyright {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Ticks: hairlines at the very edge; the label only on hover or focus. */
+.tick {
+  min-width: 2rem;
+  min-height: 1.75rem;
+}
+
+.tick span:last-child {
+  width: 0.6rem;
+  height: 1px;
+  background: rgba(245, 238, 225, 0.38);
+  box-shadow: none;
+}
+
+.tick[aria-current="step"] span:first-child {
+  opacity: 0;
+  transform: translateX(6px);
+}
+
+.tick:hover span:first-child,
+.tick:focus-visible span:first-child {
+  opacity: 1;
+  transform: none;
+}
+
+.tick[aria-current="step"] span:last-child {
+  width: 1.1rem;
+  background: rgba(242, 185, 97, 0.85);
+}
+
+@media (max-width: 767px) {
+  .body span {
+    display: inline;
+  }
+
+  .hero {
+    top: auto;
+  }
+}
+
+/* QA: the bare render, for comparison against the clean plate. */
+.root[data-qa="true"] .hero,
+.root[data-qa="true"] .shade,
+.root[data-qa="true"] .vignette,
+.root[data-qa="true"] .captionShade,
+.root[data-qa="true"] .sections,
+.root[data-qa="true"] .ticks {
+  display: none;
+}
+
+/* ── Integrated home: names only, founder, in-place sheets ── */
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.kicker {
+  margin: 0 0 0.45rem;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.caption .kicker {
+  max-width: none;
+  line-height: 1.3;
+}
+
+/* Stacked page: where the owner's content will go. */
+.pendingNote {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  margin-top: 0.9rem;
+  max-width: 24rem;
+  aspect-ratio: 16 / 5;
+  padding: 0.5rem 0.65rem;
+  background:
+    linear-gradient(to top right, transparent calc(50% - 0.5px), rgba(60, 45, 30, 0.22) calc(50% - 0.5px), rgba(60, 45, 30, 0.22) calc(50% + 0.5px), transparent calc(50% + 0.5px)),
+    linear-gradient(to bottom right, transparent calc(50% - 0.5px), rgba(60, 45, 30, 0.22) calc(50% - 0.5px), rgba(60, 45, 30, 0.22) calc(50% + 0.5px), transparent calc(50% + 0.5px)),
+    #f3ecdf;
+  border: 1px solid rgba(60, 45, 30, 0.12);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(50, 38, 26, 0.72);
+}
+
+.sections [id] {
+  scroll-margin-top: 5.5rem;
+}
+
+.founder {
+  grid-column: 1 / -1;
+}
+
+.caption .founderLink {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-top: 0.9rem;
+}
+
+.founderLink img {
+  width: 5.5rem;
+  height: auto;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+}
+
+.founderLink span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.root[data-mode="immersive"] .kicker {
+  margin-bottom: 0.3rem;
+  color: rgba(245, 238, 225, 0.72);
+  text-shadow: 0 1px 10px rgba(20, 13, 7, 0.7);
+}
+
+.root[data-mode="immersive"] .pendingNote,
+.root[data-mode="immersive"] .founderLink img {
+  display: none;
+}
+
+.root[data-mode="immersive"] .caption .founderLink {
+  margin-top: 0.15rem;
+}
+
+.root[data-mode="immersive"][data-caption="6"] .caption[data-index="6"] {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+/* While a sheet is open the stage's own caption and ticks step back. */
+.root[data-mode="immersive"][data-sheet="open"] .sections,
+.root[data-mode="immersive"][data-sheet="open"] .ticks {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.root[data-mode="immersive"][data-sheet="open"] .caption {
+  pointer-events: none;
+}
+
+/* The sheet: a warm dark graphite leaf of the room. Right on desktop, bottom on a phone. */
+.sheetLayer {
+  --cream: #f5eee1;
+  --sand: #f2b961;
+  --leaf: #221c17;
+  --hair: rgba(245, 238, 225, 0.13);
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  color: var(--cream);
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  animation: scrimIn 0.4s ease both;
+}
+
+.sheetLayer[data-tone="detail"] .scrim {
+  background: linear-gradient(270deg, rgba(14, 9, 5, 0.6) 0%, rgba(14, 9, 5, 0.16) 48%, rgba(14, 9, 5, 0) 74%);
+}
+
+.sheetLayer[data-tone="contact"] .scrim {
+  background: rgba(14, 9, 5, 0.56);
+}
+
+.sheet {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(30rem, 44vw);
+  display: flex;
+  flex-direction: column;
+  background: var(--leaf);
+  border-left: 1px solid var(--hair);
+  box-shadow: -28px 0 70px rgba(8, 5, 3, 0.38);
+  animation: sheetIn 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.sheetClose {
+  position: absolute;
+  top: 1.15rem;
+  right: 1.25rem;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--hair);
+  border-radius: 999px;
+  color: var(--cream);
+  cursor: pointer;
+  transition: border-color 0.18s ease, background-color 0.18s ease, transform 0.18s ease;
+}
+
+.sheetClose svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+.sheetClose:hover {
+  border-color: rgba(245, 238, 225, 0.5);
+  background: rgba(245, 238, 225, 0.06);
+}
+
+.sheetClose:active {
+  transform: scale(0.94);
+}
+
+.sheetScroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 1.9rem 2rem 1.75rem;
+  animation: leafIn 0.45s ease both;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  min-height: 1.25rem;
+  padding-right: 3.5rem;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--sand);
+}
+
+.eyebrow span + span {
+  color: rgba(245, 238, 225, 0.6);
+  letter-spacing: 0.12em;
+}
+
+.sheetTitle {
+  margin-top: 1.6rem;
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(1.7rem, 2.1vw, 2.15rem);
+  line-height: 1.14;
+  letter-spacing: -0.005em;
+  text-wrap: balance;
+}
+
+.blocks {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1.6rem;
+}
+
+.block {
+  min-width: 0;
+}
+
+.blockLabel {
+  margin-bottom: 0.5rem;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(245, 238, 225, 0.62);
+}
+
+.pending {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 2px;
+  background: #f1eadd;
+}
+
+.pending svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: rgba(60, 45, 30, 0.26);
+  stroke-width: 0.75;
+}
+
+.pending span {
+  position: absolute;
+  left: 0.6rem;
+  bottom: 0.5rem;
+  padding: 0.1rem 0.3rem;
+  background: #f1eadd;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.5625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(50, 38, 26, 0.78);
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.media {
+  position: relative;
+  overflow: hidden;
+  border-radius: 2px;
+  background: rgba(245, 238, 225, 0.06);
+}
+
+.media img {
+  object-fit: cover;
+}
+
+.blockText,
+.blockList {
+  display: grid;
+  gap: 0.6rem;
+  color: rgba(245, 238, 225, 0.9);
+  line-height: 1.55;
+}
+
+.blockList {
+  padding-left: 1.1rem;
+  list-style: disc;
+}
+
+.sheetFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 2rem 1.35rem;
+  border-top: 1px solid var(--hair);
+}
+
+.pager {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.pager button {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--hair);
+  border-radius: 999px;
+  color: var(--cream);
+  cursor: pointer;
+  transition: border-color 0.18s ease, background-color 0.18s ease, transform 0.18s ease;
+}
+
+.pager button:hover {
+  border-color: rgba(245, 238, 225, 0.5);
+  background: rgba(245, 238, 225, 0.06);
+}
+
+.pager button:active {
+  transform: scale(0.94);
+}
+
+.pager svg,
+.sheetAction svg,
+.sheetLink svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+.sheetAction {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-height: 3rem;
+  margin-left: auto;
+  padding: 0 1.4rem;
+  border-radius: 999px;
+  background: var(--sand);
+  color: #21170d;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.18s ease, transform 0.18s ease;
+}
+
+.sheetAction svg {
+  transition: transform 0.22s ease;
+}
+
+.sheetAction:hover {
+  background: #f7c67a;
+}
+
+.sheetAction:hover svg {
+  transform: translate(2px, -2px);
+}
+
+.sheetAction:active {
+  transform: scale(0.97);
+}
+
+.sheetLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.75rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+  text-decoration-color: rgba(242, 185, 97, 0.7);
+}
+
+/* Contact sheet: three large choices. */
+.about {
+  margin-top: 0.75rem;
+  color: rgba(245, 238, 225, 0.92);
+}
+
+.about span {
+  margin-right: 0.35rem;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(245, 238, 225, 0.6);
+}
+
+.choices {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1.9rem;
+}
+
+.choices li {
+  animation: choiceIn 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.choices li:nth-child(1) {
+  animation-delay: 0.14s;
+}
+
+.choices li:nth-child(2) {
+  animation-delay: 0.21s;
+}
+
+.choices li:nth-child(3) {
+  animation-delay: 0.28s;
+}
+
+.choice {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  min-height: 5.5rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--hair);
+  border-radius: 0.5rem;
+  background: rgba(245, 238, 225, 0.035);
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.choiceIcon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border: 1px solid var(--hair);
+  border-radius: 999px;
+  color: var(--sand);
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.25s ease;
+}
+
+.choiceIcon svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.choiceText {
+  flex: 1 1 auto;
+  display: grid;
+  gap: 0.15rem;
+}
+
+.choiceText strong {
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-weight: 400;
+  font-size: 1.4rem;
+  line-height: 1.15;
+}
+
+.choiceText span {
+  font-size: 0.875rem;
+  color: rgba(245, 238, 225, 0.72);
+}
+
+.choiceArrow {
+  flex: none;
+  width: 1.2rem;
+  height: 1.2rem;
+  color: rgba(245, 238, 225, 0.55);
+  transition: transform 0.25s ease, color 0.2s ease;
+}
+
+.choice:hover,
+.choice:focus-visible {
+  background: rgba(245, 238, 225, 0.075);
+  border-color: rgba(242, 185, 97, 0.75);
+}
+
+.choice:hover .choiceIcon,
+.choice:focus-visible .choiceIcon {
+  background: var(--sand);
+  border-color: var(--sand);
+  color: #21170d;
+  transform: rotate(-6deg);
+}
+
+.choice:hover .choiceArrow,
+.choice:focus-visible .choiceArrow {
+  transform: translateX(5px);
+  color: var(--sand);
+}
+
+.choice:active {
+  transform: scale(0.985);
+}
+
+@keyframes scrimIn {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes sheetIn {
+  from {
+    opacity: 0;
+    transform: translate3d(2.5rem, 0, 0);
+  }
+}
+
+@keyframes sheetUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 2.5rem, 0);
+  }
+}
+
+@keyframes leafIn {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes choiceIn {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.9rem, 0);
+  }
+}
+
+@media (max-width: 768px) {
+  .sheetLayer[data-tone="detail"] .scrim {
+    background: linear-gradient(0deg, rgba(14, 9, 5, 0.6) 0%, rgba(14, 9, 5, 0.12) 62%, rgba(14, 9, 5, 0) 80%);
+  }
+
+  .sheet {
+    top: auto;
+    left: 0;
+    width: 100%;
+    max-height: 62svh;
+    border-left: 0;
+    border-top: 1px solid var(--hair);
+    border-radius: 1rem 1rem 0 0;
+    box-shadow: 0 -24px 60px rgba(8, 5, 3, 0.4);
+    animation-name: sheetUp;
+  }
+
+  .sheetLayer[data-tone="contact"] .sheet {
+    max-height: 86svh;
+  }
+
+  .sheetScroll {
+    padding: 1.4rem 1.25rem 1.25rem;
+  }
+
+  .sheetClose {
+    top: 0.75rem;
+    right: 0.85rem;
+  }
+
+  .sheetTitle {
+    margin-top: 1.1rem;
+  }
+
+  .sheetFoot {
+    padding: 0.8rem 1.25rem calc(0.9rem + env(safe-area-inset-bottom));
+  }
+
+  .choice {
+    min-height: 4.75rem;
+  }
+
+  .founder,
+  .root[data-mode="immersive"] .projects {
+    max-width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scrim,
+  .sheet,
+  .sheetScroll,
+  .choices li {
+    animation: none !important;
+  }
+
+  .choice,
+  .choiceIcon,
+  .choiceArrow,
+  .sheetAction,
+  .sheetAction svg,
+  .sheetClose,
+  .pager button {
+    transition: none !important;
+  }
+
+  .choice:hover .choiceIcon,
+  .choice:hover .choiceArrow,
+  .sheetAction:hover svg {
+    transform: none;
+  }
+}

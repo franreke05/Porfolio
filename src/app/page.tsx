@@ -1,29 +1,29 @@
 import type { Metadata } from "next";
-import { HomepageActs } from "@/components/homepage-acts";
-import { SITE_NAME, SITE_URL, trimDesc } from "@/lib/seo";
+import { JsonLd } from "@/components/json-ld";
+import { HeroCopy, ShowroomSections } from "@/components/showroom/semantic";
+import { ShowroomExperience } from "@/components/showroom/showroom-experience";
+import { buildMetadata, homeJsonLd } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: {
-    absolute: `${SITE_NAME} | Desarrollo de apps mobile, CRMs y webs para empresas`,
-  },
-  description: trimDesc(
-    "Freelance en Almería especializado en apps Android con Kotlin/KMP, CRMs personalizados con PostgreSQL y webs rápidas con Next.js. Sistemas completos, publicados y mantenidos.",
-  ),
-  alternates: {
-    canonical: SITE_URL,
-  },
-  openGraph: {
-    title:       `${SITE_NAME} | Apps mobile, CRMs y webs para empresas`,
-    description: "Apps Android, CRMs a medida y webs rápidas para empresas que necesitan sistemas digitales reales, no plantillas genéricas.",
-    url:          SITE_URL,
-    type:         "website",
-  },
-  twitter: {
-    title:       `${SITE_NAME} | Apps mobile, CRMs y webs`,
-    description: "Freelance especializado en Kotlin/KMP, CRMs SQL y Next.js. Almería, disponible en remoto.",
-  },
-};
+const HOME_TITLE = "ORYKAI SOFTWARE | Productos digitales que dejan huella";
+const HOME_DESCRIPTION =
+  "ORYKAI SOFTWARE diseña y desarrolla software real para personas y empresas: posicionamiento y creación de páginas webs, automatizaciones con IA y apps personalizadas.";
 
+export const metadata: Metadata = buildMetadata({
+  title: HOME_TITLE,
+  absoluteTitle: true,
+  description: HOME_DESCRIPTION,
+  path: "/",
+});
+
+/**
+ * The home is one place: the ORYKAI showroom. The copy below is rendered on
+ * the server as ordinary HTML; the 3D scene is a client island that stages it.
+ */
 export default function Home() {
-  return <HomepageActs />;
+  return (
+    <>
+      <JsonLd schemas={homeJsonLd} />
+      <ShowroomExperience hero={<HeroCopy />} sections={<ShowroomSections />} />
+    </>
+  );
 }

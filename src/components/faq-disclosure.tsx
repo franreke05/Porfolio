@@ -1,9 +1,3 @@
-"use client";
-
-import { motion } from "motion/react";
-import { useState } from "react";
-import { spring } from "@/lib/motion";
-
 type FaqDisclosureProps = {
   index: number;
   question: string;
@@ -11,33 +5,26 @@ type FaqDisclosureProps = {
 };
 
 /**
- * A single FAQ accordion item — native <details>/<summary> for free
- * keyboard/AT support, with the +/× indicator on a spring instead of a
- * linear CSS transition, so it settles with a little overshoot instead of
- * stopping dead at 45deg.
+ * One FAQ item on native <details>/<summary>: keyboard and assistive-tech
+ * support for free, the answer is in the HTML, and the indicator is CSS only.
  */
 export function FaqDisclosure({ index, question, answer }: FaqDisclosureProps) {
-  const [open, setOpen] = useState(false);
-
   return (
-    <details
-      className="group border-t border-[color:var(--foreground)] last:border-b"
-      onToggle={(event) => setOpen(event.currentTarget.open)}
-    >
-      <summary className="grid cursor-pointer list-none grid-cols-[2rem_1fr_auto] items-start gap-3 py-5 marker:content-none sm:gap-5 sm:py-6">
-        <span className="pt-1 font-mono text-[10px] font-bold text-[color:var(--primary)]">{String(index + 1).padStart(2, "0")}</span>
-        <h3 className="font-display text-lg font-bold leading-snug text-[color:var(--foreground)] sm:text-xl">{question}</h3>
-        <motion.span
-          className="flex h-7 w-7 items-center justify-center border border-[color:var(--foreground)] font-mono text-lg leading-none text-[color:var(--primary)]"
-          animate={{ rotate: open ? 45 : 0 }}
-          transition={spring.tilt}
+    <details className="group border-t border-[color:var(--foreground)] last:border-b">
+      <summary className="grid cursor-pointer list-none grid-cols-[1.75rem_minmax(0,1fr)_auto] items-start gap-3 py-5 marker:content-none sm:gap-5 [&::-webkit-details-marker]:hidden">
+        <span className="pt-1.5 font-mono text-[11px] font-bold text-[color:var(--muted)]" aria-hidden="true">
+          {String(index + 1).padStart(2, "0")}
+        </span>
+        <h3 className="text-lg font-semibold leading-snug text-[color:var(--foreground)]">{question}</h3>
+        <span
+          className="flex h-7 w-7 items-center justify-center border border-[color:var(--foreground)] font-mono text-lg leading-none text-[color:var(--foreground)] transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none"
           aria-hidden="true"
         >
           +
-        </motion.span>
+        </span>
       </summary>
-      <div className="pb-6 pl-11 pr-10 sm:pl-[3.25rem] sm:pr-14">
-        <p className="max-w-3xl leading-7 text-[color:var(--muted)]">{answer}</p>
+      <div className="pb-6 pl-10 pr-10 sm:pl-12 sm:pr-14">
+        <p className="max-w-2xl leading-7 text-[color:var(--muted)]">{answer}</p>
       </div>
     </details>
   );
