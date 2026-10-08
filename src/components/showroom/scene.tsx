@@ -116,13 +116,16 @@ function createMaterials(t: ShowroomTextures) {
     panel: std({ map: t.graphite, color: "#bfbcb8", roughness: 1, roughnessMap: t.mottle }),
     alu: std({ color: "#7c7a78", roughness: 0.45, roughnessMap: t.mottle, metalness: 0.5 }),
     glow: new MeshBasicMaterial({ color: "#ffb070", alphaMap: t.occlusion, transparent: true, opacity: 0.38, depthWrite: false, blending: AdditiveBlending }),
+    // Plate-only proxies (see model.ts): present for the projection, absent from the modelled room.
+    hull: new MeshBasicMaterial({ colorWrite: false, depthWrite: false }),
     ao: new MeshBasicMaterial({ color: "#1a120b", alphaMap: t.occlusion, transparent: true, opacity: 0.6, depthWrite: false, toneMapped: false }),
     // Catalogue placeholders stand in full light at the far end: matte off-white, no self-light.
     slotBoard: std({ map: t.placeholder, color: "#8a8784", roughness: 1 }),
     caseBoard: std({ map: t.placeholderWide, color: "#d6d3ce", roughness: 0.95, emissive: "#ffffff", emissiveMap: t.placeholderWide, emissiveIntensity: 0.08 }),
     sunPatch: new MeshBasicMaterial({ map: t.sunPatch, color: "#ffc48e", transparent: true, opacity: 0.6, depthWrite: false, blending: AdditiveBlending }),
     sunWash: new MeshBasicMaterial({ map: t.sunPatch, color: "#ffb878", transparent: true, opacity: 0.34, depthWrite: false, blending: AdditiveBlending }),
-    leaf: std({ color: "#ffffff", roughness: 0.7, side: DoubleSide }),
+    // Dithered opacity: the plate pass grows the foliage in as its plant cards thin out.
+    leaf: std({ color: "#ffffff", roughness: 0.7, side: DoubleSide, alphaHash: true }),
     rug: std({ map: t.rug, color: "#b4b6bc", roughness: 1, bumpMap: t.rug, bumpScale: 0.6 }),
   };
   return materials;
@@ -280,7 +283,7 @@ function Rig({ storeRef, still, mobile, onReady }: Pick<ShowroomSceneProps, "sto
     // few centimetres and re-aims at a pivot on the far side of the room, so
     // the distance holds still while the lounge and the counter slide over it.
     const weight = still ? 0 : Math.max(0, 1 - store.current / 0.08);
-    const limit = 0.05;
+    const limit = 0.03;
     const ease = 1 - Math.exp(-delta * 4);
     r.yaw += (store.pointer.x * limit * weight - r.yaw) * ease;
     r.pitch += (store.pointer.y * limit * 0.5 * weight - r.pitch) * ease;
@@ -611,7 +614,7 @@ function World({ storeRef, mobile, still, qa, onOpenEntry, onPlaque, onReady }: 
           material={materials[key]}
           castShadow={SHADOWED[key]?.[0] ?? false}
           receiveShadow={SHADOWED[key]?.[1] ?? false}
-          renderOrder={key === "glass" || key === "pane" ? 3 : key === "ao" || key === "glow" ? 1 : 0}
+          renderOrder={key === "glass" || key === "pane" ? 3 : key === "hull" ? 2 : key === "ao" || key === "glow" ? 1 : 0}
           onUpdate={(mesh) => mesh.layers.set(key === "glass" || key === "pane" ? LAYER_GLASS : 0)}
         />
       ))}

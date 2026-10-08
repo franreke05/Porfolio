@@ -30,6 +30,7 @@ export type MaterialKey =
   | "panel"
   | "alu"
   | "glow"
+  | "hull"
   | "ao";
 
 export type LeafCluster = { at: [number, number, number]; radius: [number, number, number]; count: number; size: number };
@@ -43,7 +44,11 @@ export const slotX = (count: number, index: number) => (index - (count - 1) / 2)
 
 export function buildModel() {
   const parts = {} as Record<MaterialKey, BufferGeometry[]>;
+  // Props that stand free in front of the architecture are tagged per vertex
+  // (`fg`): the plate projection keeps a clean background behind them.
+  let fg = 0;
   const add = (key: MaterialKey, ...geometries: BufferGeometry[]) => {
+    geometries.forEach((geometry) => geometry.setAttribute("fg", new BufferAttribute(new Float32Array(geometry.attributes.position.count).fill(fg), 1)));
     (parts[key] ??= []).push(...geometries);
   };
   const leaves: LeafCluster[] = [];
@@ -123,6 +128,7 @@ export function buildModel() {
   TRACKS.forEach(([a, b, c, d, e, f]) => add("metal", box(a, b, c, d, e, f)));
 
   /* ── Pendant ── */
+  fg = 1;
   const dome = new SphereGeometry(PENDANT.radius, 36, 12, 0, Math.PI * 2, 0, Math.PI / 2);
   dome.scale(1, PENDANT.rise, 1);
   const rimDisc = new CircleGeometry(PENDANT.radius - 0.012, 36);
@@ -138,6 +144,14 @@ export function buildModel() {
   add("metal", dome, cyl(PENDANT.x, PENDANT.z, domeTop - 0.03, domeTop + 0.11, 0.058, 0.058, 14));
   add("metal", stick([PENDANT.x, domeTop + 0.11, PENDANT.z], [PENDANT.x, H, PENDANT.z], 0.008));
   add("led", rimDisc);
+  // Plate-only hulls: a touch larger than the prop, so the photograph keeps its
+  // own outline on them. They carry the plate and are never drawn in the modelled room.
+  const shell = new SphereGeometry(PENDANT.radius * 1.04, 36, 12, 0, Math.PI * 2, 0, Math.PI / 2);
+  shell.scale(1, PENDANT.rise, 1);
+  shell.applyMatrix4(lean);
+  add("hull", shell, cyl(PENDANT.x, PENDANT.z, domeTop - 0.03, domeTop + 0.12, 0.066, 0.066, 14));
+
+  fg = 0;
 
   /* ── Counter ── */
   const zr = -C.recess;
@@ -179,6 +193,7 @@ export function buildModel() {
   }
 
   // On the counter: monitor (seen from behind), small box, pen pot, plant, lamp, books.
+  fg = 1;
   const top = C.height;
   const M = DESK.monitor;
   add(
@@ -196,12 +211,16 @@ export function buildModel() {
     box(DESK.box.x0, DESK.box.x1, top, top + DESK.box.h, DESK.box.z - 0.06, DESK.box.z + 0.06),
     cyl(DESK.dish.x, DESK.dish.z, top, top + DESK.dish.h, DESK.dish.r, DESK.dish.r * 0.8, 20),
   );
+  // The bunch of pens is finer than two sticks: one hull over the pot.
+  add("hull", cyl(pen.x, pen.z, top + pen.h - 0.01, top + pen.h * 2.2, pen.r * 0.95, pen.r * 0.85, 14));
   lamp(add, DESK.lamp.x, top, DESK.lamp.z, DESK.lamp.h);
   add("paper", box(DESK.books.x0, DESK.books.x1, top, top + DESK.books.h, DESK.books.z - 0.1, DESK.books.z + 0.1, 1.6, 0.003));
   add("book", box(DESK.uprightBooks.x0, DESK.uprightBooks.x1, top, top + DESK.uprightBooks.h, DESK.uprightBooks.z - 0.08, DESK.uprightBooks.z + 0.08, 1.6, 0.003));
   const pot = DESK.pot;
-  add("ceramic", cyl(pot.x, pot.z, top, top + pot.h, pot.r, pot.r * 0.8, 24));
+  add("ceramic", cyl(pot.x, pot.z, top, top + pot.h - 0.008, pot.r * 0.9, pot.r * 0.8, 24));
   tree(add, leaves, [pot.x, top + pot.h, pot.z], 0.5, 0.32, 300, 0.05);
+
+  fg = 0;
 
   /* ── Wood display unit ── */
   const U = UNIT;
@@ -234,9 +253,11 @@ export function buildModel() {
     add("board", place(new BoxGeometry(U.board.w, U.board.h, 0.014), [x, upper + U.board.h / 2 + 0.002, uz + 0.225], [-U.board.lean, 0, 0])),
   );
   // Small pot on the long shelf, hanging plant on the short one.
+  fg = 1;
   add("ceramic", cyl(1.81, uz + 0.18, upper, upper + 0.12, 0.06, 0.05, 20));
   leaves.push({ at: [1.81, upper + 0.2, uz + 0.18], radius: [0.12, 0.1, 0.1], count: 70, size: 0.04 });
   add("ceramic", cyl(1.72, uz + 0.17, short.y + 0.04, short.y + 0.16, 0.07, 0.055, 20));
+  fg = 0;
   leaves.push({ at: [1.7, short.y + 0.26, uz + 0.2], radius: [0.16, 0.14, 0.12], count: 90, size: 0.045 });
   // It trails over the shelf edge, as a hanging plant does.
   leaves.push({ at: [1.65, short.y - 0.3, uz + 0.28], radius: [0.1, 0.36, 0.06], count: 110, size: 0.04 });
@@ -319,6 +340,8 @@ export function buildModel() {
     [S.x1 - 0.06, S.z1 - 0.06],
   ].forEach(([x, z]) => add("metal", cyl(x, z, 0, 0.2, 0.016, 0.012, 10)));
 
+  // The sofa is backdrop to the table and the plants standing in front of it.
+  fg = 1;
   const T = LOUNGE.table;
   add("stone", cyl(T.x, T.z, T.h - 0.07, T.h, T.r, T.r - 0.012, 48), cyl(T.x + T.baseShift[0], T.z + T.baseShift[1], 0, T.h - 0.07, T.base, T.base * 1.04, 40));
   add("ceramic", cyl(T.x - 0.17, T.z + 0.11, T.h, T.h + 0.17, 0.11, 0.09, 20));
@@ -329,6 +352,7 @@ export function buildModel() {
   add("concrete", cyl(L.x, L.z, 0, L.h, L.r, L.base, 32));
   tree(add, leaves, [L.x, L.h - 0.02, L.z], 0.9, 0.5, 420, 0.055);
 
+  fg = 0;
   // Far wall: one framed print, to give the back wall scale.
   const A = LOUNGE.art;
   const fz = z0 + 0.03;
